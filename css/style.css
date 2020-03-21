@@ -27,6 +27,9 @@ body {
 	min-width: 760px;
 	padding-top: 140px;
 }
+ul {
+	padding: 0;
+}
 p {
 	color: #252525;
 	line-height: 24px;
@@ -65,6 +68,7 @@ p a:hover {
 }
 #header ul {
 	margin-bottom: 10px;
+	width:100%;
 
 }
 #header ul li {
@@ -96,8 +100,17 @@ p a:hover {
 	text-align: left;
 	margin-bottom: 10px;
 }
+#contact_me {
+  font-family: "mooka";
+	font-size: 16px;
+}
+
+#resume {
+  font-family: "mooka";
+	font-size: 13px;
+}
 #body img{
-	width: 80%;
+	width: 90%;
 	margin-bottom: 100px;
 }
 #body h1 {
@@ -106,7 +119,7 @@ p a:hover {
 	font-family: din light;
 	font-size: 30px;
 	font-weight: normal;
-	margin: 0;
+	margin: 0 0 0 0px;
 	padding: 0;
 	text-transform: uppercase;
 }
