@@ -1,4 +1,9 @@
 /* Website Template by freewebsitetemplates.com */
+video {
+    display: block;
+    margin: 0 auto;
+}
+
 @font-face {
 	font-family: 'poller_oneregular';
 	src: url('../fonts/pollerone/pollerone-webfont.eot');
