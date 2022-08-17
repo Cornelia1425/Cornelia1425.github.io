@@ -1,10 +1,13 @@
 /* Website Template by freewebsitetemplates.com */
 
+P { text-align: center }
+H2 { text-align: center }
+/*
 div {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 div, iframe {
     /*width: 100px;
