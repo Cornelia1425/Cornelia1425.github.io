@@ -7,12 +7,16 @@ body {
 	position: relative;
 	width: 100%;
 }
+
+/*
 #header a.logo {
 	width: 80%;
 }
 #header a.logo img {
 	width: 100%;
 }
+*/
+
 #mobile-navigation {
 	background: url(../images/mobile-menu.png) no-repeat 0 0;
 	display: block;
