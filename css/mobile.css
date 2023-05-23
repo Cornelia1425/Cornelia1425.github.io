@@ -1,8 +1,15 @@
 /* Website Template by freewebsitetemplates.com */
+/*
 html, body {
     height:100%;
-} 
+} */
 
+.responsive {
+	width: 100%;
+	height: auto;
+}
+
+	
 body {
 	min-width: 0;
 }
