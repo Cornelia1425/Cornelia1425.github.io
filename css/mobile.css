@@ -102,7 +102,7 @@ body {
 	width: 90%;
 }
 #body > div img {
-	margin: 24px 0 30px;
+	margin: 0 auto;
 	width: 98%
 }
 #body > div .article {
