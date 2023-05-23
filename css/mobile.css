@@ -1,4 +1,8 @@
 /* Website Template by freewebsitetemplates.com */
+html, body {
+    height:100%;
+} 
+
 body {
 	min-width: 0;
 }
@@ -16,12 +20,15 @@ body {
 	width: 100%;
 }
 */
+
+/*
 @media only screen and (max-width:480px){
     img{
         width: 100%;
         height: auto;
     }
 }
+*/
 
 #mobile-navigation {
 	background: url(../images/mobile-menu.png) no-repeat 0 0;
