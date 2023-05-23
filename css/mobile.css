@@ -2,12 +2,13 @@
 /*
 html, body {
     height:100%;
-} */
+} 
 
 .responsive {
 	width: 100%;
 	height: auto;
 }
+*/
 
 	
 body {
@@ -28,14 +29,14 @@ body {
 }
 */
 
-/*
-@media only screen and (max-width:480px){
-    img{
-        width: 100%;
-        height: auto;
-    }
+
+
+img{
+    width: 100%;
+    height: auto;
 }
-*/
+
+
 
 #mobile-navigation {
 	background: url(../images/mobile-menu.png) no-repeat 0 0;
