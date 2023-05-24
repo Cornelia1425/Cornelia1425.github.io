@@ -108,8 +108,8 @@ p a:hover {
 #header ul li a {
 	color: #252525;
 	display: inline-block;
-	font-family: "gil san";
-	font-size: 14px;
+	font-family: "mooka";
+	font-size: 20px;
 	font-weight: normal;
 	margin: 0;
 	padding: 0 0 3px;
@@ -117,7 +117,7 @@ p a:hover {
 	text-transform: uppercase;
 }
 #header ul li a:hover, #header ul li.selected a {
-	color: #a639ff;
+	color: #1d65d1;
 }
 #body {
 	margin-bottom: 20px;
