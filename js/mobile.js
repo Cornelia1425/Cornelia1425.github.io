@@ -9,10 +9,10 @@ window.onload = function(){
 		var a = getNavi.getAttribute('style');
 		if(a){
 			getNavi.removeAttribute('style');
-			document.getElementById('mobile-navigation').style.backgroundImage='url(images/open.png)';
+			document.getElementById('mobile-navigation').style.backgroundImage='url(images/open1.png)';
 		} else {
 			getNavi.style.display='block';
-			document.getElementById('mobile-navigation').style.backgroundImage='url(images/close.png)';
+			document.getElementById('mobile-navigation').style.backgroundImage='url(images/close1.png)';
 		}
 	};
 	var getElm = getNavi.getElementsByTagName("LI");
