@@ -108,8 +108,8 @@ p a:hover {
 #header ul li a {
 	color: #252525;
 	display: inline-block;
-	font-family: "gil san", Gadget, sans-serif;
-	font-size: 12px;
+	font-family: "gil san";
+	font-size: 14px;
 	font-weight: normal;
 	margin: 0;
 	padding: 0 0 3px;
