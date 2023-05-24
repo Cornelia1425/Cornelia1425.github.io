@@ -75,7 +75,7 @@ body {
 	text-align: left;
 }
 #header ul li a:hover, #header ul li.selected a {
-	background: rgba(0, 0, 0, 0.9);
+	background: rgba(170, 170, 170, 0.9);
 	color: #fff;
 }
 #header ul ul {
