@@ -46,7 +46,7 @@ video {
 
 body {
 	background: #fff;
-	font-family: "Gil sans", sans-serif;
+	font-family: "poppins", sans-serif;
 	font-size: 16px;
 	font-weight: normal;
 	line-height: 1;
@@ -108,7 +108,7 @@ p a:hover {
 #header ul li a {
 	color: #252525;
 	display: inline-block;
-	font-family: "gil sans";
+	font-family: "poppins";
 	font-size: 14px;
 	font-weight: normal;
 	margin: 0;
@@ -128,20 +128,23 @@ p a:hover {
 	text-align: left;
 	margin-bottom: 10px;
 }
+
 #contact_me {
   font-family: "mooka";
-	font-size: 16px;
+	font-size: 20px;
 }
 
 #resume {
-  font-family: "mooka";
+  font-family: "poppins";
 	font-size: 16px;
 }
 
-#projecttitle {
-	font-family: "gill sans";
-	  font-size: 50px;
+/*
+#project_title {
+	font-family: din light;
+	  font-size: 20px;
   }
+  */
 
 #body img{
 	width: 90%;
@@ -179,7 +182,7 @@ p a:hover {
 	width: 560px;
 }
 #body > div .article h2 {
-	font-family: "Gil sans", Gadget, sans-serif;
+	font-family: sans-serif;
 	font-size: 25px;
 	font-weight: normal;
 	margin: 0 0 30px;
@@ -249,6 +252,8 @@ p a:hover {
 	padding: 0;
 	text-transform: uppercase;
 }
+
+
 #body div ul li div p {
 	padding: 30px 30px 18px;
 }
@@ -374,7 +379,7 @@ p a:hover {
 #body form input, #body form textarea {
 	/*border: 2px solid #252525;*/
 	color: #252525;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "gil sans", sans-serif;
 	font-size: 15px;
 	font-weight: normal;
 	margin: 0 0 37px;
@@ -409,12 +414,14 @@ p a:hover {
 	padding: 0;
 }
 #footer div {
+	font-family: "Gil sans", Gadget, sans-serif;
 	margin-top: 80px;
 	overflow: hidden;
 	padding: 10px 0 10px;
 	width: 100%;
 }
 #footer div p {
+	font-family: "Gil sans", Gadget, sans-serif;
 	color: #000000;
 	float: left;
 	line-height: 30px;
