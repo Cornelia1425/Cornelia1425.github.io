@@ -46,7 +46,7 @@ video {
 
 body {
 	background: #fff;
-	font-family: "poppins", sans-serif;
+	font-family: Verdana, sans-serif;
 	font-size: 16px;
 	font-weight: normal;
 	line-height: 1;
@@ -108,7 +108,7 @@ p a:hover {
 #header ul li a {
 	color: #252525;
 	display: inline-block;
-	font-family: "poppins";
+	font-family: Verdana;
 	font-size: 14px;
 	font-weight: normal;
 	margin: 0;
@@ -130,12 +130,12 @@ p a:hover {
 }
 
 #contact_me {
-  font-family: "mooka";
+  font-family: Verdana;
 	font-size: 20px;
 }
 
 #resume {
-  font-family: "poppins";
+  font-family: Verdana;
 	font-size: 16px;
 }
 
