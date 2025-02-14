@@ -111,7 +111,7 @@ p a:hover {
 #header ul li a {
 	color: #252525;
 	display: inline-block;
-	font-family: Verdana;
+	font-family: Montserrat;
 	font-size: 14px;
 	font-weight: normal;
 	margin: 0;
@@ -120,7 +120,8 @@ p a:hover {
 	text-transform: uppercase;
 }
 #header ul li a:hover, #header ul li.selected a {
-	color: #1d65d1;
+	color: #6a25cc
+	/* color: #1d65d1; */
 }
 #body {
 	margin-bottom: 20px;
@@ -133,7 +134,7 @@ p a:hover {
 }
 
 #contact_me {
-  font-family: Verdana;
+  font-family: Montserrat;
 	font-size: 20px;
 }
 
@@ -417,14 +418,14 @@ p a:hover {
 	padding: 0;
 }
 #footer div {
-	font-family: "Gil sans", Gadget, sans-serif;
+	font-family: Montserrat, sans-serif;
 	margin-top: 80px;
 	overflow: hidden;
 	padding: 10px 0 10px;
 	width: 100%;
 }
 #footer div p {
-	font-family: "Gil sans", Gadget, sans-serif;
+	font-family: Montserrat, sans-serif;
 	color: #000000;
 	float: left;
 	line-height: 30px;
