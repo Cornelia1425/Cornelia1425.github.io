@@ -481,3 +481,7 @@ p a:hover {
 #footer div ul li #linkedin:hover {
 	background-position: -36px -105px;
 }
+
+html {
+  scroll-behavior: smooth;
+}

@@ -33,6 +33,14 @@ body {
 */
 
 
+html {
+  scroll-behavior: smooth;
+  
+  /* Optional: Control smoothness */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* For iOS momentum scrolling */
+}
+
 
 
 
