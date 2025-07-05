@@ -134,7 +134,7 @@ img {
 }
 .main-content {
   flex: 1;
-  margin-top: 70px;
+  margin-top: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -478,7 +478,7 @@ img {
   justify-items: center;
   align-items: start;
   width: 100%;
-  margin: 3rem 0;
+  margin: 0 0 3rem 0;
 }
 
 .axie-gallery-img {
@@ -605,7 +605,7 @@ img {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   color: #333;
   text-align: center;
 }
@@ -816,4 +816,28 @@ h1, h2, h3 {
   .manifesto-text {
     font-size: 0.95rem;
   }
+}
+
+/* About page keeps original spacing */
+.about .main-content {
+  margin-top: 70px;
+}
+
+/* Add extra spacing for other pages */
+.page-template .main-content {
+  margin-top: 200px;
+}
+
+/* More spacing for pages with header (except home and about) */
+.main-content.with-header {
+  margin-top: 125px;
+}
+
+/* Specific spacing for home and about pages - higher specificity */
+.home .main-content.with-header {
+  margin-top: 75px !important;
+}
+
+.about .main-content.with-header {
+  margin-top: 75px !important;
 }
