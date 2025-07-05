@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import './PageTemplate.css';
 
 const axieImages = [
@@ -19,6 +19,39 @@ const AxieGallery: React.FC = () => {
   const closeModal = () => setModalIdx(null);
   const showPrev = () => modalIdx !== null && setModalIdx(modalIdx - 1);
   const showNext = () => modalIdx !== null && setModalIdx(modalIdx + 1);
+
+  // Keyboard event handler
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (modalIdx === null) return;
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          if (modalIdx > 0) {
+            showPrev();
+          }
+          break;
+        case 'ArrowRight':
+          if (modalIdx < axieImages.length - 1) {
+            showNext();
+          }
+          break;
+        case 'Escape':
+          closeModal();
+          break;
+      }
+    };
+
+    // Add event listener when modal is open
+    if (modalIdx !== null) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [modalIdx]);
 
   return (
     <div className="page-template">

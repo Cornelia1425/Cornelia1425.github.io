@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // import './PageTemplate.css';
 
 const architectureClusters = [
@@ -38,6 +38,65 @@ const architectureClusters = [
 ];
 
 const Architecture: React.FC = () => {
+  const [modalData, setModalData] = useState<{ clusterIdx: number; imageIdx: number } | null>(null);
+
+  const openModal = (clusterIdx: number, imageIdx: number) => setModalData({ clusterIdx, imageIdx });
+  const closeModal = () => setModalData(null);
+  
+  const showPrev = () => {
+    if (!modalData) return;
+    const { clusterIdx, imageIdx } = modalData;
+    const cluster = architectureClusters[clusterIdx];
+    
+    if (imageIdx > 0) {
+      setModalData({ clusterIdx, imageIdx: imageIdx - 1 });
+    } else if (clusterIdx > 0) {
+      const prevCluster = architectureClusters[clusterIdx - 1];
+      setModalData({ clusterIdx: clusterIdx - 1, imageIdx: prevCluster.images.length - 1 });
+    }
+  };
+  
+  const showNext = () => {
+    if (!modalData) return;
+    const { clusterIdx, imageIdx } = modalData;
+    const cluster = architectureClusters[clusterIdx];
+    
+    if (imageIdx < cluster.images.length - 1) {
+      setModalData({ clusterIdx, imageIdx: imageIdx + 1 });
+    } else if (clusterIdx < architectureClusters.length - 1) {
+      setModalData({ clusterIdx: clusterIdx + 1, imageIdx: 0 });
+    }
+  };
+
+  // Keyboard event handler
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (modalData === null) return;
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          showPrev();
+          break;
+        case 'ArrowRight':
+          showNext();
+          break;
+        case 'Escape':
+          closeModal();
+          break;
+      }
+    };
+
+    // Add event listener when modal is open
+    if (modalData !== null) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [modalData]);
+
   return (
     <div className="page-template">
       <div className="container">
@@ -52,12 +111,29 @@ const Architecture: React.FC = () => {
                     src={`/images/2_architecture/${img}`}
                     alt={`${cluster.name} ${idx + 1}`}
                     className="axie-gallery-img"
+                    onClick={() => cluster.images.length > 1 && openModal(clusterIdx, idx)}
+                    style={{ cursor: cluster.images.length > 1 ? 'pointer' : 'default' }}
                   />
                 ))}
               </div>
             </div>
           ))}
         </div>
+        
+        {modalData && (
+          <div className="gallery-modal-overlay" onClick={closeModal}>
+            <div className="gallery-modal-content" onClick={e => e.stopPropagation()}>
+              <button className="gallery-modal-close" onClick={closeModal}>&times;</button>
+              <button className="gallery-modal-arrow gallery-modal-arrow-left" onClick={showPrev} aria-label="Previous image">&#8592;</button>
+              <img 
+                src={`/images/2_architecture/${architectureClusters[modalData.clusterIdx].images[modalData.imageIdx]}`} 
+                alt={`Large preview ${modalData.imageIdx + 1}`} 
+                className="gallery-modal-img" 
+              />
+              <button className="gallery-modal-arrow gallery-modal-arrow-right" onClick={showNext} aria-label="Next image">&#8594;</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
