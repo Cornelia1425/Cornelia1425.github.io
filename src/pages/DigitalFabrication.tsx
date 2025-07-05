@@ -1,14 +1,23 @@
 import React from 'react';
 // import './PageTemplate.css';
 
+const digitalFabImages = [
+  '0.jpg', '1.jpg', '2.jpg', '3.jpg', '4.jpg',
+];
+
 const DigitalFabrication: React.FC = () => {
   return (
     <div className="page-template">
       <div className="container">
-        <h1 className="page-title">Digital Fabrication</h1>
-        <div className="content-placeholder">
-          <p>Digital fabrication projects coming soon...</p>
-          <p>This section will showcase your innovative manufacturing and prototyping work.</p>
+        <div className="digital-fab-gallery">
+          {digitalFabImages.map((img, idx) => (
+            <img
+              key={img}
+              src={`/images/4_digitalfabrication/${img}`}
+              alt={`Digital Fabrication ${idx + 1}`}
+              className="digital-fab-img"
+            />
+          ))}
         </div>
       </div>
     </div>
