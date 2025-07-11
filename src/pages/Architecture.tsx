@@ -45,8 +45,7 @@ const Architecture: React.FC = () => {
   const showPrev = () => {
     if (!modalData) return;
     const { clusterIdx, imageIdx } = modalData;
-    const cluster = architectureClusters[clusterIdx];
-    
+
     if (imageIdx > 0) {
       setModalData({ clusterIdx, imageIdx: imageIdx - 1 });
     } else if (clusterIdx > 0) {

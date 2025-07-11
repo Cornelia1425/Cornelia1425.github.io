@@ -41,8 +41,7 @@ const GraphicDesign: React.FC = () => {
   const showPrev = () => {
     if (!modalData) return;
     const { clusterIdx, imageIdx } = modalData;
-    const cluster = graphicDesignClusters[clusterIdx];
-    
+
     if (imageIdx > 0) {
       setModalData({ clusterIdx, imageIdx: imageIdx - 1 });
     } else if (clusterIdx > 0) {

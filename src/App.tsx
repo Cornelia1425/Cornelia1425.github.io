@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -8,7 +8,9 @@ import Architecture from './pages/Architecture';
 import GraphicDesign from './pages/GraphicDesign';
 import DigitalFabrication from './pages/DigitalFabrication';
 import About from './pages/About';
+import Developer from './pages/Developer';
 import './App.css';
+import { createContext, useContext, useState } from 'react';
 
 // Create context for site state
 interface SiteContextType {
@@ -42,6 +44,7 @@ function App() {
               <Route path="/graphic-design" element={<GraphicDesign />} />
               <Route path="/digital-fabrication" element={<DigitalFabrication />} />
               <Route path="/about" element={<About />} />
+              <Route path="/developer" element={<Developer />} />
             </Routes>
           </main>
           {isSiteOpen && <Footer />}
