@@ -5,6 +5,7 @@
   "type": "module",
   "homepage": "https://www.yiranshu.com",
   "scripts": {
+    "homepage": "https://yourusername.github.io/Cornelia1425.github.io",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
