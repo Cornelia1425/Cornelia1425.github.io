@@ -4,22 +4,26 @@ const developerProjects = [
   {
     img: '0_sector77.png',
     title: 'Sector77 Spaceship Museum',
-    link: 'https://sector77.vercel.app/'
+    link: 'https://sector77.vercel.app/',
+    description: '2025 Solana & Icon Trading Hackathon 3rd Place. A futuristic space museum with interactive exhibits.'
   },
   {
     img: '1_moptopuniversal.png',
     title: 'MOPTOP Universal Dance Program',
-    link: 'https://www.moptopuniversal.com/'
+    link: 'https://www.moptopuniversal.com/',
+    description: 'A site for MOPTOP at Peridance, honoring street dance pioneers. A passion project passing down dance knowledge to new generations.'
   },
   {
     img: '2_thespells.png',
     title: 'The Spells',
-    link: 'https://thespells.xyz/'
+    link: 'https://thespells.xyz/',
+    description: 'An interactive tribute to J.K. Rowling, where muggles explore and search for spells.'
   },
   {
     img: '3_architheatre.png',
     title: 'Architheatre',
-    link: 'https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing'
+    link: 'https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing',
+    description: 'A digital journal showcasing architecture and travel through visuals and stories.'
   }
 ];
 
@@ -37,6 +41,7 @@ const Developer: React.FC = () => {
                   className="developer-img"
                 />
                 <div className="developer-title">{project.title}</div>
+                <div className="developer-description">{project.description}</div>
               </a>
             </div>
           ))}
