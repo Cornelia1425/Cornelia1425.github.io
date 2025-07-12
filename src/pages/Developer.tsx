@@ -5,7 +5,7 @@ const developerProjects = [
     img: '0_sector77.png',
     title: 'Sector77 Spaceship Museum',
     link: 'https://sector77.vercel.app/',
-    description: '2025 Solana & Icon Trading Hackathon 3rd Place. A futuristic space museum with interactive exhibits.'
+    description: '2025 July Solana & Icon Trading Hackathon 3rd Tier Winner. A futuristic space museum with interactive exhibits.'
   },
   {
     img: '1_moptopuniversal.png',
