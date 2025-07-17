@@ -2,28 +2,40 @@ import React from 'react';
 
 const developerProjects = [
   {
-    img: '0_sector77.png',
+    img: '6_dancetogether.png',
+    title: 'Dance Galaxy',
+    link: 'https://dancetogather.vercel.app/',
+    description: 'A global dance metaverse - mint, trade, and vibe. Built in a day with Fractal Tech NYC.'
+  },
+  {
+    img: '5_sector77.png',
     title: 'Sector77 Spaceship Museum',
     link: 'https://sector77.vercel.app/',
-    description: '2025 July Solana & Icon Trading Hackathon 3rd Tier Winner. A futuristic space museum with interactive exhibits.'
+    description: '3rd-Tier Solana & Icon-Trading hackathon winner: an interactive NFT museum for space explorers.'
   },
   {
-    img: '1_moptopuniversal.png',
+    img: '3_stickerland.png',
+    title: 'Sticker Land',
+    link: 'https://drive.google.com/file/d/1svaiGH5VdaAVe_B2BjUyOHQYs8QMK9MY/view?usp=sharing',
+    description: 'Digital sticker marketplace - a Flatiron Bootcamp full-stack group project.'
+  },
+  {
+    img: '4_moptopuniversal.png',
     title: 'MOPTOP Universal Dance Program',
     link: 'https://www.moptopuniversal.com/',
-    description: 'A site for MOPTOP at Peridance, honoring street dance pioneers. A passion project passing down dance knowledge to new generations.'
+    description: 'Preserving street dance culture through education. A passion project for Peridance.'
   },
   {
-    img: '2_thespells.png',
-    title: 'The Spells',
-    link: 'https://thespells.xyz/',
-    description: 'An interactive tribute to J.K. Rowling, where muggles explore and search for spells.'
-  },
-  {
-    img: '3_architheatre.png',
+    img: '2_architheatre.png',
     title: 'Architheatre',
     link: 'https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing',
-    description: 'A digital journal showcasing architecture and travel through visuals and stories.'
+    description: 'Visual storytelling at the intersection of architecture and travel.'
+  },
+  {
+    img: '1_thespells.png',
+    title: 'The Spells',
+    link: 'https://thespells.xyz/',
+    description: 'An interactive Harry Potter tribute - discover magic like a muggle.'
   }
 ];
 
