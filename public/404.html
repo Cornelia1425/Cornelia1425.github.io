@@ -1,4 +1,10 @@
 <script>
-  // Redirect all 404s to index.html for React Router
-  window.location.replace('/index.html');
+  // Redirect all subpages to their hash version for React Router SPA support on GitHub Pages
+  var path = window.location.pathname;
+  if (path !== '/' && path !== '/index.html') {
+    var hashPath = '#' + path;
+    window.location.replace('/' + hashPath);
+  } else {
+    window.location.replace('/index.html');
+  }
 </script>

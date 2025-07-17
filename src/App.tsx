@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -10,7 +10,7 @@ import DigitalFabrication from './pages/DigitalFabrication';
 import About from './pages/About';
 import Developer from './pages/Developer';
 import './App.css';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 // Create context for site state
 interface SiteContextType {
@@ -29,27 +29,35 @@ export const useSiteContext = () => {
 };
 
 function App() {
-  const [isSiteOpen, setIsSiteOpen] = useState(false);
+  const location = useLocation();
+  const [isSiteOpen, setIsSiteOpen] = useState(() => {
+    // Open site if not on home page
+    return Boolean(location.hash && location.hash !== '#/');
+  });
+
+  useEffect(() => {
+    if (location.hash && location.hash !== '#/') {
+      setIsSiteOpen(true);
+    }
+  }, [location]);
 
   return (
     <SiteContext.Provider value={{ isSiteOpen, setIsSiteOpen }}>
-      <Router>
-        <div className={`App ${isSiteOpen ? 'site-open' : 'site-closed'}`}>
-          <Header />
-          <main className={`main-content ${isSiteOpen ? 'with-header' : 'without-header'}`}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/axie-gallery" element={<AxieGallery />} />
-              <Route path="/architecture" element={<Architecture />} />
-              <Route path="/graphic-design" element={<GraphicDesign />} />
-              <Route path="/digital-fabrication" element={<DigitalFabrication />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/developer" element={<Developer />} />
-            </Routes>
-          </main>
-          {isSiteOpen && <Footer />}
-        </div>
-      </Router>
+      <div className={`App ${isSiteOpen ? 'site-open' : 'site-closed'}`}>
+        <Header />
+        <main className={`main-content ${isSiteOpen ? 'with-header' : 'without-header'}`}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/axie-gallery" element={<AxieGallery />} />
+            <Route path="/architecture" element={<Architecture />} />
+            <Route path="/graphic-design" element={<GraphicDesign />} />
+            <Route path="/digital-fabrication" element={<DigitalFabrication />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/developer" element={<Developer />} />
+          </Routes>
+        </main>
+        {isSiteOpen && <Footer />}
+      </div>
     </SiteContext.Provider>
   );
 }
