@@ -5,7 +5,7 @@ const developerProjects = [
     img: '6_dancetogether.png',
     title: 'Dance Galaxy',
     link: 'https://dancetogather.vercel.app/',
-    description: 'A global dance metaverse - mint, trade, and vibe. Built in a day with Fractal Tech NYC.'
+    description: 'A dance metaverse - mint, trade, and vibe. Built in a day with Fractal Tech NYC.'
   },
   {
     img: '5_sector77.png',
