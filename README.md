@@ -1,4 +1,4 @@
-# Yiran Shu - Creative Portfolio
+# Yiran Shu - Portfolio
 
 A modern React portfolio website showcasing architecture, design, and digital fabrication work.
 
