@@ -36,6 +36,24 @@ const developerProjects = [
     title: 'The Spells',
     link: 'https://thespells.xyz/',
     description: 'An interactive Harry Potter tribute - discover magic like a muggle.'
+  },
+  {
+    img: '7_mymindpalace.png',
+    title: 'My Mind Palace',
+    link: 'https://mymindpalace.vercel.app/',
+    description: 'A digital space for organizing thoughts and memories.'
+  },
+  {
+    img: '8_solanachat.png',
+    title: 'Solana Chat',
+    link: 'https://solana-chat-0cd33720.base44.app/',
+    description: 'Real-time messaging platform built on Solana blockchain.'
+  },
+  {
+    img: '9_solanawallet.png',
+    title: 'Solana Wallet Collection',
+    link: 'https://www.yiranshu.com/solanawalletapp/',
+    description: 'Connect your wallet and start building on Solana.'
   }
 ];
 
