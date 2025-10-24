@@ -14,22 +14,16 @@ const developerProjects = [
     description: '3rd-Tier Solana & Icon-Trading hackathon winner: an interactive NFT museum for space explorers.'
   },
   {
-    img: '3_stickerland.png',
-    title: 'Sticker Land',
-    link: 'https://drive.google.com/file/d/1svaiGH5VdaAVe_B2BjUyOHQYs8QMK9MY/view?usp=sharing',
-    description: 'Digital sticker marketplace - a Flatiron Bootcamp full-stack group project.'
-  },
-  {
     img: '4_moptopuniversal.png',
     title: 'MOPTOP Universal Dance Program',
     link: 'https://www.moptopuniversal.com/',
     description: 'Preserving street dance culture through education. A passion project for Peridance.'
   },
   {
-    img: '2_architheatre.png',
-    title: 'Architheatre',
-    link: 'https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing',
-    description: 'Visual storytelling at the intersection of architecture and travel.'
+    img: '7_mymindpalace.png',
+    title: 'My Mind Palace',
+    link: 'https://mymindpalace.vercel.app/',
+    description: 'A digital space for organizing thoughts and memories.'
   },
   {
     img: '1_thespells.png',
@@ -38,10 +32,16 @@ const developerProjects = [
     description: 'An interactive Harry Potter tribute - discover magic like a muggle.'
   },
   {
-    img: '7_mymindpalace.png',
-    title: 'My Mind Palace',
-    link: 'https://mymindpalace.vercel.app/',
-    description: 'A digital space for organizing thoughts and memories.'
+    img: '2_architheatre.png',
+    title: 'Architheatre',
+    link: 'https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing',
+    description: 'Visual storytelling at the intersection of architecture and travel.'
+  },
+  {
+    img: '3_stickerland.png',
+    title: 'Sticker Land',
+    link: 'https://drive.google.com/file/d/1svaiGH5VdaAVe_B2BjUyOHQYs8QMK9MY/view?usp=sharing',
+    description: 'Digital sticker marketplace - a Flatiron Bootcamp full-stack group project.'
   },
   {
     img: '8_solanachat.png',
