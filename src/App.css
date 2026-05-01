@@ -2,8 +2,10 @@
 
 :root {
   --paper-base: #f2f5f1;
-  /* Paper grain — lower baseFrequency = larger specks; dual layers on body with soft-light + overlay */
-  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.58' numOctaves='3' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.92'/%3E%3C/svg%3E");
+  /* Grain: tuned so desktop stays subtle; second layer uses same asset with soft-light only */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.58' numOctaves='3' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.38'/%3E%3C/svg%3E");
+  /* Phone / small viewports: one even lighter pass (high-DPI makes repeat grain harsh) */
+  --paper-grain-mobile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.58' numOctaves='3' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.18'/%3E%3C/svg%3E");
 }
 
 /* GLOBAL RESET & BASE STYLES */
@@ -54,11 +56,35 @@ body {
   background-attachment: scroll;
   background-blend-mode:
     soft-light,
-    overlay,
+    soft-light,
     normal,
     normal,
     normal;
   line-height: 1.6;
+}
+
+/* Narrow screens: single faint grain, larger tile — avoids ugly “sandpaper” on phones */
+@media (max-width: 768px) {
+  body {
+    background-image:
+      var(--paper-grain-mobile),
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(255, 255, 255, 0.12) 0%, transparent 52%),
+      radial-gradient(ellipse 100% 60% at 85% 90%, rgba(200, 210, 195, 0.08) 0%, transparent 55%),
+      linear-gradient(
+        165deg,
+        rgba(239, 242, 236, 0.82) 0%,
+        var(--paper-base) 42%,
+        rgba(230, 232, 228, 0.82) 100%
+      );
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    background-size:
+      min(280px, 72vw) min(280px, 72vw),
+      auto,
+      auto,
+      auto;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    background-blend-mode: soft-light, normal, normal, normal;
+  }
 }
 
 h1, h2, h3, h4, h5, h6, .page-title {
@@ -472,20 +498,26 @@ img {
     height: 180px;
   }
   
-  /* Mobile header fixes */
+  /* Mobile header: gap under open/close icon; extra depth below nav for bar fill */
   .header-container {
-    height: 86px;
-    padding: 0 20px;
+    padding: 0 20px 0;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
   }
+  .site-open .header-container {
+    height: 140px;
+  }
+  .site-closed .header-container {
+    height: 88px;
+  }
   
   .nav {
     position: absolute;
-    top: 66px;
+    top: 92px;
     left: 0;
     right: 0;
+    padding-bottom: 16px;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -501,14 +533,14 @@ img {
   .nav-list {
     display: flex;
     gap: 1.5rem;
-    padding: 0 1rem;
+    padding: 0 1rem 4px;
     min-width: max-content;
     justify-content: center;
   }
   
   .nav-link {
     font-size: 0.8rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.4rem 0.5rem 0.85rem;
     white-space: nowrap;
   }
   
@@ -1178,20 +1210,26 @@ h1, h2, h3 {
     transform: translateX(-50%);
   }
   
-  /* Mobile header fixes */
+  /* Mobile header: gap under open/close icon; extra depth below nav for bar fill */
   .header-container {
-    height: 86px;
-    padding: 0 20px;
+    padding: 0 20px 0;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
   }
+  .site-open .header-container {
+    height: 140px;
+  }
+  .site-closed .header-container {
+    height: 88px;
+  }
   
   .nav {
     position: absolute;
-    top: 66px;
+    top: 92px;
     left: 0;
     right: 0;
+    padding-bottom: 16px;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -1207,19 +1245,28 @@ h1, h2, h3 {
   .nav-list {
     display: flex;
     gap: 1.5rem;
-    padding: 0 1rem;
+    padding: 0 1rem 4px;
     min-width: max-content;
     justify-content: center;
   }
   
   .nav-link {
     font-size: 0.8rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.4rem 0.5rem 0.85rem;
     white-space: nowrap;
   }
   
   .logo-image {
     height: calc(32px * 1.7);
+  }
+
+  .main-content.with-header {
+    margin-top: 152px;
+  }
+
+  .home .main-content.with-header,
+  .main-content.with-header:has(.contact-page) {
+    margin-top: 108px !important;
   }
 }
 
