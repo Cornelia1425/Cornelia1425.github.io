@@ -92,123 +92,31 @@ const GraphicDesign: React.FC = () => {
   }, [modalData]);
 
   return (
-    <div className="page-template">
-      <div className="container">
-        <div className="architecture-clusters">
-          {graphicDesignClusters.map((cluster, clusterIdx) => (
-            <div key={clusterIdx} className="architecture-cluster">
-              <h2 className="cluster-title">{cluster.title}</h2>
-              {cluster.title === "Menna Branding Design" ? (
-                <div className="menna-custom-layout">
-                  {/* First two images in one row (smaller) */}
-                  <div className="menna-small-row">
-                    {cluster.images.slice(0, 2).map((img, idx) => (
-                      <img
-                        key={img}
-                        src={`/images/3_graphicdesign/${img}`}
-                        alt={`${cluster.title} ${idx + 1}`}
-                        className="axie-gallery-img menna-small-img"
-                        onClick={() => openModal(clusterIdx, idx)}
-                        style={{ cursor: 'pointer' }}
-                      />
-                    ))}
-                  </div>
-                  {/* Next two images each on their own row (bigger) */}
-                  {cluster.images.slice(2).map((img, idx) => (
-                    <div key={img} className="menna-large-row">
-                      <img
-                        src={`/images/3_graphicdesign/${img}`}
-                        alt={`${cluster.title} ${idx + 3}`}
-                        className="axie-gallery-img menna-large-img"
-                        onClick={() => openModal(clusterIdx, idx + 2)}
-                        style={{ cursor: 'pointer' }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : cluster.title === "Summer Breeze" ? (
-                <div className="summer-breeze-custom-layout">
-                  {/* Second image on its own row */}
-                  <div className="summer-breeze-large-row">
-                    <img
-                      src={`/images/3_graphicdesign/${cluster.images[1]}`}
-                      alt={`${cluster.title} 2`}
-                      className="axie-gallery-img summer-breeze-large-img"
-                      onClick={() => openModal(clusterIdx, 1)}
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </div>
-                  {/* Third image on its own row */}
-                  <div className="summer-breeze-large-row">
-                    <img
-                      src={`/images/3_graphicdesign/${cluster.images[2]}`}
-                      alt={`${cluster.title} 3`}
-                      className="axie-gallery-img summer-breeze-large-img"
-                      onClick={() => openModal(clusterIdx, 2)}
-                      style={{ cursor: 'pointer' }}
-                    />
-                  </div>
-                </div>
-              ) : cluster.title === "Alien Babies" ? (
-                <div className="alien-babies-custom-layout">
-                  <div className="alien-babies-row">
-                    {cluster.images.map((img, idx) => (
-                      <img
-                        key={img}
-                        src={`/images/3_graphicdesign/${img}`}
-                        alt={`${cluster.title} ${idx + 1}`}
-                        className="axie-gallery-img alien-babies-img"
-                        onClick={() => openModal(clusterIdx, idx)}
-                        style={{ cursor: 'pointer' }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ) : cluster.title === "Soul Conference Visuals" ? (
-                <div className="soul-conference-custom-layout">
-                  {/* First two images in one row */}
-                  <div className="soul-conference-first-row">
-                    {cluster.images.slice(0, 2).map((img, idx) => (
-                      <img
-                        key={img}
-                        src={`/images/3_graphicdesign/${img}`}
-                        alt={`${cluster.title} ${idx + 1}`}
-                        className="axie-gallery-img soul-conference-first-img"
-                        onClick={() => openModal(clusterIdx, idx)}
-                        style={{ cursor: 'pointer' }}
-                      />
-                    ))}
-                  </div>
-                  {/* Next three images in another row */}
-                  <div className="soul-conference-second-row">
-                    {cluster.images.slice(2).map((img, idx) => (
-                      <img
-                        key={img}
-                        src={`/images/3_graphicdesign/${img}`}
-                        alt={`${cluster.title} ${idx + 3}`}
-                        className="axie-gallery-img soul-conference-second-img"
-                        onClick={() => openModal(clusterIdx, idx + 2)}
-                        style={{ cursor: 'pointer' }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="axie-gallery-grid">
+    <div className="page-template graphic-design-page">
+      <div className="container graphic-design-container">
+        <div className="architecture-clusters graphic-design-clusters">
+          {graphicDesignClusters.map((cluster, clusterIdx) => {
+            const n = cluster.images.length;
+            const layoutKey = n <= 1 ? 1 : Math.min(n, 5);
+            const multi = n > 1;
+            return (
+              <div key={clusterIdx} className="architecture-cluster graphic-design-cluster">
+                <h2 className="cluster-title">{cluster.title}</h2>
+                <div className={`gd-inner gd-inner--${layoutKey}`}>
                   {cluster.images.map((img, idx) => (
                     <img
                       key={img}
                       src={`/images/3_graphicdesign/${img}`}
                       alt={`${cluster.title} ${idx + 1}`}
-                      className="axie-gallery-img"
-                      onClick={() => cluster.images.length > 1 && openModal(clusterIdx, idx)}
-                      style={{ cursor: cluster.images.length > 1 ? 'pointer' : 'default' }}
+                      className="axie-gallery-img gd-thumb"
+                      onClick={() => multi && openModal(clusterIdx, idx)}
+                      style={{ cursor: multi ? 'pointer' : 'default' }}
                     />
                   ))}
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
         
         {modalData && (

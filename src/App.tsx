@@ -1,13 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import AxieGallery from './pages/AxieGallery';
 import Architecture from './pages/Architecture';
-import GraphicDesign from './pages/GraphicDesign';
 import DigitalFabrication from './pages/DigitalFabrication';
-import About from './pages/About';
+import Contact from './pages/Contact';
 import Developer from './pages/Developer';
 import './App.css';
 import { createContext, useContext, useState, useEffect } from 'react';
@@ -20,6 +18,8 @@ interface SiteContextType {
 
 const SiteContext = createContext<SiteContextType | undefined>(undefined);
 
+// Hook is consumed by Header/Footer; kept here next to provider for a single module boundary.
+// eslint-disable-next-line react-refresh/only-export-components -- Vite fast refresh: non-component export
 export const useSiteContext = () => {
   const context = useContext(SiteContext);
   if (context === undefined) {
@@ -50,9 +50,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/axie-gallery" element={<AxieGallery />} />
             <Route path="/architecture" element={<Architecture />} />
-            <Route path="/graphic-design" element={<GraphicDesign />} />
+            <Route path="/graphic-design" element={<Navigate to="/" replace />} />
             <Route path="/digital-fabrication" element={<DigitalFabrication />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<Navigate to="/contact" replace />} />
             <Route path="/developer" element={<Developer />} />
           </Routes>
         </main>

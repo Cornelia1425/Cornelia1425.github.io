@@ -1,90 +1,110 @@
-import React, { useState, useEffect } from 'react';
-// import './PageTemplate.css';
-
-const axieImages = [
-  '1_handdrawing.jpg',
-  '2_handdrawing.jpg',
-  '3_handdrawing.jpg',
-  '4_axie.jpg',
-  '5_axie.jpg',
-  '6_axie.jpg',
-  '7_axie.jpg',
-  '8_axie.jpg',
-];
+import React, { useState, useEffect, useCallback } from 'react';
+import { AXIE_GALLERY_IMAGES } from '../data/axieGalleryImages';
 
 const AxieGallery: React.FC = () => {
   const [modalIdx, setModalIdx] = useState<number | null>(null);
+  const total = AXIE_GALLERY_IMAGES.length;
 
   const openModal = (idx: number) => setModalIdx(idx);
-  const closeModal = () => setModalIdx(null);
-  const showPrev = () => modalIdx !== null && setModalIdx(modalIdx - 1);
-  const showNext = () => modalIdx !== null && setModalIdx(modalIdx + 1);
+  const closeModal = useCallback(() => setModalIdx(null), []);
+  const showPrev = useCallback(() => {
+    setModalIdx((i) => (i !== null && i > 0 ? i - 1 : i));
+  }, []);
+  const showNext = useCallback(() => {
+    setModalIdx((i) => (i !== null && i < total - 1 ? i + 1 : i));
+  }, [total]);
 
-  // Keyboard event handler
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (modalIdx === null) return;
+    if (modalIdx === null) return;
 
+    const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'ArrowLeft':
-          if (modalIdx > 0) {
-            showPrev();
-          }
+          setModalIdx((i) => (i !== null && i > 0 ? i - 1 : i));
           break;
         case 'ArrowRight':
-          if (modalIdx < axieImages.length - 1) {
-            showNext();
-          }
+          setModalIdx((i) =>
+            i !== null && i < total - 1 ? i + 1 : i
+          );
           break;
         case 'Escape':
-          closeModal();
+          setModalIdx(null);
           break;
       }
     };
 
-    // Add event listener when modal is open
-    if (modalIdx !== null) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
-
-    // Cleanup event listener
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [modalIdx]);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [modalIdx, total]);
 
   return (
-    <div className="page-template">
-      <div className="container">
-        <div className="axie-gallery-grid">
-          {axieImages.map((img, idx) => (
-            <img
+    <div className="page-template axie-gallery-page">
+      <div className="axie-gallery-inner">
+        <div className="axie-gallery-stack" role="list">
+          {AXIE_GALLERY_IMAGES.map((img, idx) => (
+            <button
               key={img}
-              src={`/images/1_axiegallery/${img}`}
-              alt={`Axie Gallery ${idx + 1}`}
-              className="axie-gallery-img"
+              type="button"
+              className="axie-gallery-stack-item"
               onClick={() => openModal(idx)}
-              style={{ cursor: 'pointer' }}
-            />
+              aria-label={`Open image ${idx + 1} of ${total} in full view`}
+              role="listitem"
+            >
+              <img
+                src={`/images/1_axiegallery/${img}`}
+                alt={`Axie gallery, image ${idx + 1}`}
+                className="axie-gallery-stack-img"
+                loading={idx < 2 ? 'eager' : 'lazy'}
+                decoding="async"
+                draggable={false}
+              />
+            </button>
           ))}
         </div>
-        {modalIdx !== null && (
-          <div className="gallery-modal-overlay" onClick={closeModal}>
-            <div className="gallery-modal-content" onClick={e => e.stopPropagation()}>
-              <button className="gallery-modal-close" onClick={closeModal}>&times;</button>
-              {modalIdx > 0 && (
-                <button className="gallery-modal-arrow gallery-modal-arrow-left" onClick={showPrev} aria-label="Previous image">&#8592;</button>
-              )}
-              <img src={`/images/1_axiegallery/${axieImages[modalIdx]}`} alt={`Large preview ${modalIdx + 1}`} className="gallery-modal-img" />
-              {modalIdx < axieImages.length - 1 && (
-                <button className="gallery-modal-arrow gallery-modal-arrow-right" onClick={showNext} aria-label="Next image">&#8594;</button>
-              )}
-            </div>
-          </div>
-        )}
       </div>
+      {modalIdx !== null && (
+        <div className="gallery-modal-overlay" onClick={closeModal}>
+          <div
+            className="gallery-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="gallery-modal-close"
+              onClick={closeModal}
+            >
+              &times;
+            </button>
+            {modalIdx > 0 && (
+              <button
+                type="button"
+                className="gallery-modal-arrow gallery-modal-arrow-left"
+                onClick={showPrev}
+                aria-label="Previous image"
+              >
+                &#8592;
+              </button>
+            )}
+            <img
+              src={`/images/1_axiegallery/${AXIE_GALLERY_IMAGES[modalIdx]}`}
+              alt={`Preview ${modalIdx + 1}`}
+              className="gallery-modal-img"
+            />
+            {modalIdx < total - 1 && (
+              <button
+                type="button"
+                className="gallery-modal-arrow gallery-modal-arrow-right"
+                onClick={showNext}
+                aria-label="Next image"
+              >
+                &#8594;
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default AxieGallery; 
+export default AxieGallery;

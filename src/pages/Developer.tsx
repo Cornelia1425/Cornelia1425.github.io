@@ -36,24 +36,6 @@ const developerProjects = [
     title: 'Architheatre',
     link: 'https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing',
     description: 'Visual storytelling at the intersection of architecture and travel.'
-  },
-  {
-    img: '3_stickerland.png',
-    title: 'Sticker Land',
-    link: 'https://drive.google.com/file/d/1svaiGH5VdaAVe_B2BjUyOHQYs8QMK9MY/view?usp=sharing',
-    description: 'Digital sticker marketplace - a Flatiron Bootcamp full-stack group project.'
-  },
-  {
-    img: '8_solanachat.png',
-    title: 'Solana Chat',
-    link: 'https://solana-chat-0cd33720.base44.app/',
-    description: 'Real-time messaging platform built on Solana blockchain.'
-  },
-  {
-    img: '9_solanawallet.png',
-    title: 'Solana Wallet Collection',
-    link: 'https://www.yiranshu.com/solanawalletapp/',
-    description: 'Connect your wallet and start building on Solana.'
   }
 ];
 

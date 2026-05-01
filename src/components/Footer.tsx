@@ -14,11 +14,6 @@ const Footer: React.FC = () => {
       label: 'Linktree'
     },
     {
-      name: 'behance',
-      url: 'https://www.behance.net/gallery/228814189/Graphic-Design-Portfolio',
-      label: 'Behance'
-    },
-    {
       name: 'x',
       url: 'https://x.com/MonsterSea7',
       label: 'X'
@@ -29,7 +24,7 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-content">
-          <p className="copyright">&copy; 2025 by Yiran Shu.</p>
+          <p className="copyright">&copy; 2026 by Yiran Shu.</p>
           <ul className="social-links">
             {socialLinks.map((link) => (
               <li key={link.name} className="social-item">
