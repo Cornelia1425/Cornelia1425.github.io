@@ -549,6 +549,309 @@ img {
   }
 }
 
+/* Full-viewport Matrix landing (no chrome: header hidden via App.tsx) */
+.home.matrix-landing {
+  width: 100%;
+  align-self: stretch;
+  background: #020805;
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+}
+
+/* Matrix-style entry (digital rain) — inspired by omma.build matrix nexus */
+.matrix-entry {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 3rem) 1.25rem;
+  padding-top: max(clamp(1.5rem, 5vw, 3rem), env(safe-area-inset-top));
+  box-sizing: border-box;
+}
+
+.matrix-entry-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  max-width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 0;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+}
+
+.matrix-entry-canvas:active {
+  cursor: grabbing;
+}
+
+.matrix-entry-ui {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  max-width: 36rem;
+  text-align: center;
+  color: #00ff41;
+  text-shadow:
+    0 0 12px rgba(0, 255, 80, 0.45),
+    0 0 28px rgba(0, 200, 60, 0.2);
+}
+
+.matrix-entry-kicker {
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+  font-size: clamp(0.68rem, 2vw, 0.82rem);
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  opacity: 0.88;
+}
+
+.matrix-entry-title {
+  font-family: 'Syne', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.25rem, 11vw, 4.25rem);
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.12em;
+  line-height: 1.05;
+  color: #b8ffc9;
+}
+
+.matrix-entry-hub {
+  font-family: ui-monospace, monospace;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  letter-spacing: 0.2em;
+  margin: 0 0 2rem;
+  opacity: 0.92;
+}
+
+.matrix-entry-dot {
+  opacity: 0.9;
+}
+
+.matrix-entry-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 2.25rem;
+}
+
+.matrix-entry-link {
+  font-family: ui-monospace, monospace;
+  font-size: clamp(0.72rem, 2.2vw, 0.85rem);
+  letter-spacing: 0.08em;
+  color: #00ff41;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  padding: 0.35rem 0.5rem;
+  transition:
+    color 0.2s ease,
+    text-shadow 0.2s ease;
+}
+
+.matrix-entry-link:hover,
+.matrix-entry-link:focus-visible {
+  color: #e8ffe8;
+  text-shadow: 0 0 16px rgba(0, 255, 120, 0.65);
+  outline: none;
+}
+
+.matrix-entry-link--btn {
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+/* Sculptural minimal surfaces — volumetric slab, saddle lighting, subtle perspective */
+.matrix-entry-nav--surfaces {
+  gap: clamp(0.85rem, 2.5vw, 1.15rem);
+  perspective: 1600px;
+  perspective-origin: 50% 32%;
+}
+
+.matrix-entry-surface {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.35rem 0;
+  padding: clamp(0.78rem, 2vw, 0.95rem) clamp(1.5rem, 4vw, 2.15rem);
+  min-width: min(100%, 16rem);
+  border-radius: clamp(11px, 2.2vw, 15px);
+  overflow: visible;
+  isolation: isolate;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: none;
+  color: rgba(240, 244, 241, 0.93);
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.45),
+    0 -1px 0 rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  transform: rotateX(8deg);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  background:
+    radial-gradient(ellipse 105% 72% at 50% -8%, rgba(255, 255, 255, 0.19) 0%, transparent 52%),
+    radial-gradient(ellipse 68% 50% at 92% 88%, rgba(0, 0, 0, 0.35) 0%, transparent 52%),
+    radial-gradient(ellipse 55% 48% at 8% 92%, rgba(0, 0, 0, 0.22) 0%, transparent 48%),
+    linear-gradient(172deg, rgba(72, 92, 84, 0.72) 0%, rgba(18, 28, 24, 0.94) 46%, rgba(8, 12, 11, 0.97) 100%);
+  backdrop-filter: blur(6px) saturate(1.02);
+  -webkit-backdrop-filter: blur(6px) saturate(1.02);
+  box-shadow:
+    0 3px 0 rgba(255, 255, 255, 0.11) inset,
+    0 -6px 14px rgba(0, 0, 0, 0.42) inset,
+    5px 0 10px rgba(0, 0, 0, 0.14) inset,
+    -4px 0 12px rgba(255, 255, 255, 0.05) inset,
+    0 22px 36px rgba(0, 0, 0, 0.38),
+    0 8px 16px rgba(0, 0, 0, 0.28);
+  transition:
+    border-color 0.28s ease,
+    background 0.28s ease,
+    box-shadow 0.28s ease,
+    color 0.2s ease,
+    transform 0.28s cubic-bezier(0.34, 1.02, 0.64, 1);
+}
+
+.matrix-entry-surface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    transparent 38%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  opacity: 0.9;
+}
+
+.matrix-entry-surface::after {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 2px;
+  height: 38%;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(ellipse 100% 100% at 50% 0%, rgba(255, 255, 255, 0.18) 0%, transparent 72%);
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+}
+
+.matrix-entry-surface--alt {
+  transform: rotateX(8deg) rotateY(-1.5deg);
+  background:
+    radial-gradient(ellipse 100% 70% at 48% -6%, rgba(255, 252, 248, 0.14) 0%, transparent 54%),
+    radial-gradient(ellipse 62% 52% at 95% 92%, rgba(0, 0, 0, 0.32) 0%, transparent 52%),
+    radial-gradient(ellipse 52% 46% at 5% 88%, rgba(0, 0, 0, 0.2) 0%, transparent 46%),
+    linear-gradient(170deg, rgba(78, 72, 82, 0.55) 0%, rgba(20, 22, 26, 0.93) 48%, rgba(10, 10, 14, 0.96) 100%);
+}
+
+.matrix-entry-surface__label {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  line-height: 1.45;
+  transform: translateZ(12px);
+}
+
+.matrix-entry-link.matrix-entry-surface:hover,
+.matrix-entry-link.matrix-entry-surface:focus-visible {
+  color: rgba(252, 253, 252, 0.98);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 -1px 0 rgba(255, 255, 255, 0.1);
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: rotateX(4deg) translateY(-4px) translateZ(18px);
+  background:
+    radial-gradient(ellipse 105% 72% at 50% -8%, rgba(255, 255, 255, 0.24) 0%, transparent 52%),
+    radial-gradient(ellipse 68% 50% at 92% 88%, rgba(0, 0, 0, 0.3) 0%, transparent 52%),
+    radial-gradient(ellipse 55% 48% at 8% 92%, rgba(0, 0, 0, 0.18) 0%, transparent 48%),
+    linear-gradient(172deg, rgba(88, 108, 100, 0.78) 0%, rgba(22, 32, 28, 0.95) 46%, rgba(10, 14, 13, 0.98) 100%);
+  box-shadow:
+    0 4px 0 rgba(255, 255, 255, 0.14) inset,
+    0 -6px 16px rgba(0, 0, 0, 0.38) inset,
+    5px 0 10px rgba(0, 0, 0, 0.12) inset,
+    -4px 0 12px rgba(255, 255, 255, 0.06) inset,
+    0 28px 48px rgba(0, 0, 0, 0.42),
+    0 12px 22px rgba(0, 0, 0, 0.3);
+}
+
+.matrix-entry-link.matrix-entry-surface--alt:hover,
+.matrix-entry-link.matrix-entry-surface--alt:focus-visible {
+  transform: rotateX(4deg) rotateY(-1.5deg) translateY(-4px) translateZ(18px);
+  background:
+    radial-gradient(ellipse 100% 70% at 48% -6%, rgba(255, 252, 248, 0.2) 0%, transparent 54%),
+    radial-gradient(ellipse 62% 52% at 95% 92%, rgba(0, 0, 0, 0.28) 0%, transparent 52%),
+    radial-gradient(ellipse 52% 46% at 5% 88%, rgba(0, 0, 0, 0.16) 0%, transparent 46%),
+    linear-gradient(170deg, rgba(92, 88, 102, 0.62) 0%, rgba(26, 28, 34, 0.94) 48%, rgba(14, 14, 20, 0.98) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matrix-entry-nav--surfaces {
+    perspective: none;
+  }
+
+  .matrix-entry-surface,
+  .matrix-entry-surface--alt {
+    transform: none;
+  }
+
+  .matrix-entry-link.matrix-entry-surface:hover,
+  .matrix-entry-link.matrix-entry-surface:focus-visible,
+  .matrix-entry-link.matrix-entry-surface--alt:hover,
+  .matrix-entry-link.matrix-entry-surface--alt:focus-visible {
+    transform: none;
+  }
+}
+
+.matrix-entry-link--inline {
+  font-size: clamp(0.68rem, 2vw, 0.78rem);
+  opacity: 0.92;
+}
+
+.matrix-entry-status {
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.35em;
+  margin: 0 0 0.35rem;
+  opacity: 0.75;
+}
+
+.matrix-entry-dim {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.45em;
+  margin: 0;
+  opacity: 0.55;
+}
+
+@media (max-width: 600px) {
+  .matrix-entry {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .matrix-entry-nav {
+    gap: 0.65rem;
+  }
+}
+
 .homepage-gallery {
   width: 100%;
   display: flex;
@@ -943,6 +1246,19 @@ h1, h2, h3 {
 /* Site States */
 .site-closed .main-content {
   margin-top: 80px;
+}
+
+/* Matrix nexus: edge-to-edge WebGL, full viewport */
+.site-closed .main-content:has(.home.matrix-landing) {
+  margin-top: 0;
+  width: 100%;
+  max-width: none;
+  align-self: stretch;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .site-open .main-content {
