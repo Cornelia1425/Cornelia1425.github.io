@@ -18,10 +18,6 @@ const Contact: React.FC = () => {
     <div className="contact-page">
       <div className="container about-content">
         <div className="about-hero">
-          <h1 className="contact-lead">
-            Send a note about collaborations, commissions, or inspirations you’d like to share.
-          </h1>
-
           {sent && (
             <p className="contact-thanks" role="status">
               Thanks — your message was sent. I’ll get back to you soon.

@@ -2,6 +2,7 @@
 
 :root {
   --paper-base: #f2f5f1;
+  --header-top-inset: 14px;
   /* Grain: tuned so desktop stays subtle; second layer uses same asset with soft-light only */
   --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.58' numOctaves='3' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.38'/%3E%3C/svg%3E");
   /* Phone / small viewports: one even lighter pass (high-DPI makes repeat grain harsh) */
@@ -23,7 +24,7 @@ body {
   flex-direction: column;   
   font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #444;
-  align-items: center; 
+  align-items: stretch;
   position: relative;
   isolation: isolate;
   min-height: 100%;
@@ -107,6 +108,7 @@ img {
   left: 0;
   right: 0;
   z-index: 1000;
+  padding-top: max(var(--header-top-inset), env(safe-area-inset-top, 0px));
   background: rgba(242, 245, 241, 0.94);
   background: color-mix(in srgb, var(--paper-base) 94%, transparent);
   transition: transform 0.3s ease;
@@ -126,12 +128,12 @@ img {
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
-  height: 80px;
+  height: 88px;
+  padding: 16px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 0 0;
 }
 .logo {
   position: absolute;
@@ -212,6 +214,8 @@ img {
 /* MAIN LAYOUT */
 .App {
   min-height: 100vh;
+  width: 100%;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
 }
@@ -1245,7 +1249,7 @@ h1, h2, h3 {
 
 /* Site States */
 .site-closed .main-content {
-  margin-top: 80px;
+  margin-top: calc(80px + var(--header-top-inset));
 }
 
 /* Matrix nexus: edge-to-edge WebGL, full viewport */
@@ -1262,7 +1266,7 @@ h1, h2, h3 {
 }
 
 .site-open .main-content {
-  margin-top: 80px;
+  margin-top: calc(80px + var(--header-top-inset));
 }
 
 /* Remove the red border from logo image */
@@ -1276,15 +1280,25 @@ h1, h2, h3 {
 
 /* CONTACT PAGE (inherits about-* layout typography) */
 .contact-page {
+  width: 100%;
+  align-self: stretch;
   min-height: calc(100vh - 140px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 4rem 0;
+  box-sizing: border-box;
+}
+
+.contact-page .container.about-content {
+  max-width: min(92vw, 38rem);
+  width: 100%;
+  align-items: stretch;
+  padding: 0 2rem;
 }
 
 .about-content {
-  max-width: 800px;
+  max-width: 1560px;
   width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
@@ -1296,6 +1310,7 @@ h1, h2, h3 {
   flex-direction: column;
   align-items: flex-start;
   gap: 2rem;
+  width: 100%;
 }
 
 .about-title {
@@ -1345,6 +1360,11 @@ h1, h2, h3 {
   max-width: 34rem;
 }
 
+.contact-page .about-hero {
+  width: 100%;
+  max-width: none;
+}
+
 .contact-thanks {
   margin: 0;
   padding: 1rem 1.25rem;
@@ -1353,13 +1373,13 @@ h1, h2, h3 {
   border: 1px solid rgba(0, 0, 0, 0.06);
   color: #2f6f4f;
   font-size: 1rem;
-  max-width: 34rem;
+  max-width: 100%;
 }
 
 .contact-form {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -1452,6 +1472,10 @@ h1, h2, h3 {
   .contact-page {
     padding: 2rem 0;
   }
+
+  .contact-page .container.about-content {
+    padding: 0 1rem;
+  }
   
   .about-content {
     padding: 0 1rem;
@@ -1496,17 +1520,17 @@ h1, h2, h3 {
 
 /* More spacing for pages with header (except home / contact tweaks below) */
 .main-content.with-header {
-  margin-top: 125px;
+  margin-top: calc(125px + var(--header-top-inset));
 }
 
 /* Specific spacing for home */
 .home .main-content.with-header {
-  margin-top: 85px !important;
+  margin-top: calc(85px + var(--header-top-inset)) !important;
 }
 
 /* Contact: align main top offset with home (previous About layout) */
 .main-content.with-header:has(.contact-page) {
-  margin-top: 85px !important;
+  margin-top: calc(85px + var(--header-top-inset)) !important;
 }
 
 /* Center the logo on mobile */
@@ -1577,12 +1601,12 @@ h1, h2, h3 {
   }
 
   .main-content.with-header {
-    margin-top: 152px;
+    margin-top: calc(152px + var(--header-top-inset));
   }
 
   .home .main-content.with-header,
   .main-content.with-header:has(.contact-page) {
-    margin-top: 108px !important;
+    margin-top: calc(108px + var(--header-top-inset)) !important;
   }
 }
 
@@ -1734,15 +1758,19 @@ h1, h2, h3 {
 /* Developer Page — vlucendo.com-style grid */
 .page-template.developer-page {
   width: 100%;
+  flex: 1;
   align-self: stretch;
   box-sizing: border-box;
-  padding: 0 clamp(12px, 4vw, 48px) 4rem;
+  padding: 0 clamp(12px, 4vw, 48px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .developer-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1rem, 2vw, 1.75rem) clamp(1.25rem, 2.5vw, 2rem);
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -1761,7 +1789,7 @@ h1, h2, h3 {
 
 .developer-thumb {
   width: 100%;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 16 / 5;
   object-fit: cover;
   display: block;
   border-radius: 0;
@@ -1769,7 +1797,7 @@ h1, h2, h3 {
 }
 
 .developer-thumb--gradient {
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 16 / 5;
 }
 
 .developer-item:hover .developer-thumb {

@@ -9,6 +9,21 @@ type DeveloperProject = {
 
 const developerProjects: DeveloperProject[] = [
   {
+    img: '11_summerbreeze.png',
+    title: 'Summer Breeze',
+    link: 'https://summer-breeze.cargo.site/',
+  },
+  {
+    img: '4_moptopuniversal.png',
+    title: 'MOPTOP Universal Dance Program',
+    link: 'https://www.moptopuniversal.com/',
+  },
+  {
+    img: '10_escapeorbit.png',
+    title: 'Escape Orbit',
+    link: 'https://escape-orbit.vercel.app/',
+  },
+  {
     img: '6_dancetogether.png',
     title: 'Dance Galaxy',
     link: 'https://dancetogather.vercel.app/',
@@ -19,16 +34,6 @@ const developerProjects: DeveloperProject[] = [
     link: 'https://sector77.vercel.app/',
   },
   {
-    bgGradient: 'linear-gradient(135deg, #0a0a2e 0%, #1e1e5a 40%, #0d2b45 70%, #0a1628 100%)',
-    title: 'Escape Orbit',
-    link: 'https://escape-orbit.vercel.app/',
-  },
-  {
-    img: '4_moptopuniversal.png',
-    title: 'MOPTOP Universal Dance Program',
-    link: 'https://www.moptopuniversal.com/',
-  },
-  {
     img: '7_mymindpalace.png',
     title: 'My Mind Palace',
     link: 'https://mymindpalace.vercel.app/',
@@ -36,7 +41,7 @@ const developerProjects: DeveloperProject[] = [
   {
     img: '1_thespells.png',
     title: 'The Spells',
-    link: 'https://thespells.xyz/',
+    link: 'https://drive.google.com/file/d/1azuTCD-HcRHkvGg9qHq-5FzVHQ3wEp3N/view?usp=sharing',
   },
   {
     img: '2_architheatre.png',
