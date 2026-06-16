@@ -19,7 +19,7 @@ const Contact: React.FC = () => {
       <div className="container about-content">
         <div className="about-hero">
           <h1 className="contact-lead">
-            Send a note about collaborations, commissions, or anything you’d like to share.
+            Send a note about collaborations, commissions, or inspirations you’d like to share.
           </h1>
 
           {sent && (
@@ -75,10 +75,6 @@ const Contact: React.FC = () => {
               Send message
             </button>
 
-            <p className="contact-footnote">
-              Delivered securely via FormSubmit. If this is your first message through the site, check your inbox
-              for a quick activation email from FormSubmit (&ldquo;Activate Form&rdquo;).
-            </p>
           </form>
         </div>
       </div>

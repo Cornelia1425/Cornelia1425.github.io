@@ -7,8 +7,6 @@ import Architecture from './pages/Architecture';
 import DigitalFabrication from './pages/DigitalFabrication';
 import Contact from './pages/Contact';
 import Developer from './pages/Developer';
-import ThreeDNarrative from './pages/ThreeDNarrative';
-import MovementStorytelling from './pages/MovementStorytelling';
 import './App.css';
 import { createContext, useContext, useState, useEffect } from 'react';
 
@@ -43,18 +41,10 @@ function App() {
     }
   }, [location]);
 
-  useEffect(() => {
-    if (location.pathname !== '/') {
-      setIsSiteOpen(true);
-    }
-  }, [location.pathname]);
-
-  const isMatrixLanding = !isSiteOpen && location.pathname === '/';
-
   return (
     <SiteContext.Provider value={{ isSiteOpen, setIsSiteOpen }}>
       <div className={`App ${isSiteOpen ? 'site-open' : 'site-closed'}`}>
-        {!isMatrixLanding && <Header />}
+        <Header />
         <main className={`main-content ${isSiteOpen ? 'with-header' : 'without-header'}`}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -64,8 +54,6 @@ function App() {
             <Route path="/digital-fabrication" element={<DigitalFabrication />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<Navigate to="/contact" replace />} />
-            <Route path="/3d-narrative" element={<ThreeDNarrative />} />
-            <Route path="/movement-storytelling" element={<MovementStorytelling />} />
             <Route path="/developer" element={<Developer />} />
           </Routes>
         </main>
