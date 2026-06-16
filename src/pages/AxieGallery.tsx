@@ -41,6 +41,15 @@ const AxieGallery: React.FC = () => {
     <div className="page-template axie-gallery-page">
       <div className="axie-gallery-inner">
         <div className="axie-gallery-stack" role="list">
+          <div className="axie-gallery-video-wrap" role="listitem">
+            <iframe
+              src="https://www.youtube.com/embed/zz_lvZjToiI"
+              title="Axie Infinity video"
+              className="axie-gallery-video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
           {AXIE_GALLERY_IMAGES.map((img, idx) => (
             <button
               key={img}
