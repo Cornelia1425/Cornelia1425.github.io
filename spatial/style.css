@@ -23,16 +23,20 @@ dialog{color:var(--text);background:#090909;border:1px solid #333;border-radius:
 html,body,#space,.layer-nav,.collection-links{cursor:var(--cursor-scene)}
 button,a{cursor:var(--cursor-action)}
 button:disabled{cursor:var(--cursor-scene)}
-:root{--collection-blue:#ff2020}
-.collection-links{filter:drop-shadow(0 0 2px #ff2020b3) drop-shadow(0 0 6px #ff202066)}
-.layer-dot{box-shadow:0 0 6px #ff2020b3,0 0 15px #ff202066}
-.collection-node.active .layer-dot{box-shadow:0 0 0 4px #ff202033,0 0 10px #ff2020,0 0 24px #ff202099}
-.collection-node:hover .layer-dot{box-shadow:0 0 0 4px #ff202026,0 0 10px #ff2020,0 0 20px #ff202080}
-.node-label{text-shadow:0 1px 2px #000,0 0 4px #ff2020cc,0 0 12px #ff202080}
-.collection-all{box-shadow:0 0 10px #ff202066,inset 0 0 10px #ff202026}
-.collection-all .hud-icon{filter:drop-shadow(0 0 4px #ff2020cc) drop-shadow(0 0 9px #ff202080)}
-.collection-all.active,.collection-all:hover{box-shadow:0 0 8px #ff2020b3,0 0 20px #ff202066,inset 0 0 10px #ff202033}
-.language-switch{text-shadow:0 0 7px #ff202099}
-.orientation svg{filter:drop-shadow(0 0 4px #ff202099) drop-shadow(0 0 9px #ff20204d)}
+:root{--collection-blue:#ff2020;--collection-strong:#ff2020b3;--collection-label:#ff2020cc;--collection-glow:#ff202099;--collection-medium:#ff202080;--collection-soft:#ff202066;--collection-axis:#ff20204d;--collection-faint:#ff202033;--collection-veil:#ff202026}
+html[data-color-mode=off]{--collection-blue:#d7dce3;--collection-strong:#d7dce3b3;--collection-label:#d7dce3cc;--collection-glow:#d7dce399;--collection-medium:#d7dce380;--collection-soft:#d7dce366;--collection-axis:#d7dce34d;--collection-faint:#d7dce333;--collection-veil:#d7dce326}
+.collection-links{filter:drop-shadow(0 0 2px var(--collection-strong)) drop-shadow(0 0 6px var(--collection-soft))}.collection-links stop{stop-color:var(--collection-blue)}
+.layer-dot{box-shadow:0 0 6px var(--collection-strong),0 0 15px var(--collection-soft)}
+.collection-node.active .layer-dot{box-shadow:0 0 0 4px var(--collection-faint),0 0 10px var(--collection-blue),0 0 24px var(--collection-glow)}
+.collection-node:hover .layer-dot{box-shadow:0 0 0 4px var(--collection-veil),0 0 10px var(--collection-blue),0 0 20px var(--collection-medium)}
+.node-label{text-shadow:0 1px 2px #000,0 0 4px var(--collection-label),0 0 12px var(--collection-medium)}
+.collection-all{box-shadow:0 0 10px var(--collection-soft),inset 0 0 10px var(--collection-veil)}
+.collection-all .hud-icon{filter:drop-shadow(0 0 4px var(--collection-label)) drop-shadow(0 0 9px var(--collection-medium))}
+.collection-all.active,.collection-all:hover{box-shadow:0 0 8px var(--collection-strong),0 0 20px var(--collection-soft),inset 0 0 10px var(--collection-faint)}
+.language-switch{text-shadow:0 0 7px var(--collection-glow)}
+.orientation{width:132px}.orientation svg{filter:drop-shadow(0 0 4px var(--collection-glow)) drop-shadow(0 0 9px var(--collection-axis))}
+.color-mode-toggle{pointer-events:auto;display:grid;grid-template-columns:1fr 26px 20px;align-items:center;gap:6px;width:132px;min-height:28px;margin:-3px auto 0;color:var(--collection-blue);font-size:9px;letter-spacing:.06em;text-align:left}.color-mode-track{position:relative;width:26px;height:11px;border:1px solid currentColor}.color-mode-thumb{position:absolute;top:2px;left:2px;width:5px;height:5px;background:currentColor;transition:transform .2s}.color-mode-toggle[aria-pressed=true] .color-mode-thumb{transform:translateX(15px)}.color-mode-state{text-align:right;font-variant-numeric:tabular-nums}
+html[data-color-mode=off] #scene canvas,html[data-color-mode=off] .index-image img,html[data-color-mode=off] .plate-thumbnails img{filter:grayscale(1)}
+.index-image img{transition:opacity .2s,filter .2s}.plate-thumbnails img{transition:filter .2s}
 .scene-tooltip{width:min(280px,calc(100vw - 20px));max-width:none;aspect-ratio:20/3;padding:0 14px;display:flex;align-items:center;justify-content:flex-start;text-align:left;border-radius:0}
 .scene-tooltip strong{width:100%;margin-bottom:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}

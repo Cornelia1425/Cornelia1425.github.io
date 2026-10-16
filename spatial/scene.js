@@ -175,6 +175,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
 
   const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0xff2020,side:THREE.DoubleSide});
   const layerEdgeThickness=.07*.65;
+  function setColorMode(value){layerEdgeMaterial.color.setHex(value?0xff2020:0xd7dce3);requestRender();}
   layers.forEach(layer=>{
     const group=new THREE.Group(); group.position.z=layer.z; scene.add(group); groups.set(layer.id,group);
     layer.cards.forEach(card=>{
@@ -392,6 +393,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     },
     reset(){setLayer('all');},
     front(){stopOrbit();move(fittedView(layerId,true));},
+    setColorMode,
     setOrbit(value){controls.autoRotate=value;onOrbitChange?.(value);requestRender();},
     setActive(value){active=value;controls.enabled=value;clearHover();requestRender();},
     zoom(direction){

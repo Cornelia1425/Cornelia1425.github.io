@@ -4,7 +4,9 @@ const $$=selector=>[...document.querySelectorAll(selector)];
 let language='en';
 try{language=localStorage.getItem('yiran-language')==='zh'?'zh':'en';}catch{}
 const t=(en,zh)=>language==='zh'?zh:en;
-let projects=[],spatial=null,activeProject=null,plate=0,orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches,selectedLayer='all',lastProjectFocus=null;
+let projects=[],spatial=null,activeProject=null,plate=0,orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches,colorMode=true,selectedLayer='all',lastProjectFocus=null;
+try{colorMode=localStorage.getItem('yiran-color-mode')!=='off';}catch{}
+document.documentElement.dataset.colorMode=colorMode?'on':'off';
 const imageProjects=()=>projects.filter(project=>!project.externalUrl);
 const projectDialog=$('#project-dialog'),imageDialog=$('#image-dialog'),indexDialog=$('#index-dialog'),aboutDialog=$('#about-dialog'),controlsDialog=$('#controls-dialog');
 const dialogs=[projectDialog,imageDialog,indexDialog,aboutDialog,controlsDialog];
@@ -23,6 +25,13 @@ function updateOrbit(value){
   $('#orbit-label').textContent=value?t('Pause orbit','暂停旋转'):t('Auto orbit','自动旋转');
   $('#auto-orbit').ariaLabel=$('#orbit-label').textContent;
 }
+function updateColorMode(value){
+  colorMode=Boolean(value);document.documentElement.dataset.colorMode=colorMode?'on':'off';
+  $('#color-mode').ariaPressed=String(colorMode);
+  $('#color-mode').ariaLabel=t(`Color Mode ${colorMode?'On':'Off'}`,`色彩模式${colorMode?'开启':'关闭'}`);
+  $('#color-mode-state').textContent=colorMode?'ON':'OFF';
+  spatial?.setColorMode(colorMode);
+}
 function updateCount(){
   const visible=$$('.project-card').filter(card=>!card.hidden);
   const count=visible.reduce((n,card)=>n+(projects.find(project=>project.id===card.dataset.id)?.images.length||0),0);
@@ -36,7 +45,7 @@ function translate(){
   $$('[data-language]').forEach(button=>button.ariaPressed=String(button.dataset.language===language));
   $('#load-label').textContent=t('Loading images','正在载入图片');
   spatial?.setLanguage(language);
-  updateLayer(selectedLayer);updateOrbit(orbit);updateCount();
+  updateLayer(selectedLayer);updateOrbit(orbit);updateColorMode(colorMode);updateCount();
   if(activeProject)fillProjectInfo();
 }
 function showIndex(){indexDialog.showModal();syncActivity();}
@@ -47,6 +56,10 @@ $('#about-open').addEventListener('click',()=>{aboutDialog.showModal();syncActiv
 $('#about-close').addEventListener('click',()=>aboutDialog.close());
 $('#controls-open').addEventListener('click',()=>{controlsDialog.showModal();syncActivity();});
 $('#controls-close').addEventListener('click',()=>controlsDialog.close());
+$('#color-mode').addEventListener('click',()=>{
+  updateColorMode(!colorMode);
+  try{localStorage.setItem('yiran-color-mode',colorMode?'on':'off');}catch{}
+});
 for(const dialog of dialogs){
   dialog.addEventListener('close',syncActivity);
   dialog.addEventListener('click',event=>{
@@ -222,6 +235,7 @@ async function boot(){
           group.style.opacity=String(.6+(axis.z+1)*.2);
         });}
       });
+      spatial.setColorMode(colorMode);
       spatial.setOrbit(orbit);
       syncActivity();
     }catch(error){unavailable();console.warn('3D collection unavailable:',error.message);}

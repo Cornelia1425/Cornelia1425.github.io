@@ -38,7 +38,9 @@ assert(!/cursor:\s*grabb?(?:ing)?/.test(appCss), '2D pages must not use grab cur
 assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.item.layer.id)"), '3D layer titles must switch to their layer when clicked');
 assert(spatialScene.includes("const label=textPlane(card.project.title") && !spatialApp.includes("$('#hover-detail')"), '3D image labels and tooltips must show only the project title');
 assert(spatialCss.includes('aspect-ratio:20/3') && spatialCss.includes('justify-content:flex-start;text-align:left'), '3D image tooltips must keep a wide fixed ratio with left-aligned titles');
-assert(spatialCss.includes(':root{--collection-blue:#ff2020}') && html.includes('#ff2020') && spatialScene.includes('color:0xff2020'), '3D navigation must use the vivid red comparison color');
+assert(html.includes('id="color-mode"') && spatialApp.includes('spatial?.setColorMode(colorMode)') && spatialScene.includes('setColorMode(value)'), 'Color Mode must synchronize the interface and 3D scene');
+assert(spatialCss.includes('html[data-color-mode=off]') && spatialCss.includes('filter:grayscale(1)') && spatialCss.includes('--collection-blue:#d7dce3'), 'Color Mode off must use silver accents and grayscale previews');
+assert(spatialCss.includes('--collection-blue:#ff2020') && html.includes('#ff2020') && spatialScene.includes('value?0xff2020:0xd7dce3'), 'Color Mode on must retain the vivid red comparison color');
 assert(spatialApp.includes("orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches") && spatialApp.includes('spatial.setOrbit(orbit)'), '3D view must start orbiting unless reduced motion is requested');
 assert(spatialScene.includes('controls.autoRotateSpeed = -.18') && !spatialScene.includes('clearHover();stopOrbit();'), '3D orbit must remain slow, clockwise, and resume after direct manipulation');
 assert(flatHtml.includes('/2d/assets/'), 'The React bundle must load from /2d/');
