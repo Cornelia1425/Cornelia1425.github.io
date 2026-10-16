@@ -23,14 +23,3 @@ dialog{color:var(--text);background:#090909;border:1px solid #333;border-radius:
 html,body,#space,.layer-nav,.collection-links{cursor:var(--cursor-scene)}
 button,a{cursor:var(--cursor-action)}
 button:disabled{cursor:var(--cursor-scene)}
-:root{--collection-blue:#247b50}
-.collection-links{filter:drop-shadow(0 0 2px #247b50b3) drop-shadow(0 0 6px #247b5066)}
-.layer-dot{box-shadow:0 0 6px #247b50b3,0 0 15px #247b5066}
-.collection-node.active .layer-dot{box-shadow:0 0 0 4px #247b5033,0 0 10px #247b50,0 0 24px #247b5099}
-.collection-node:hover .layer-dot{box-shadow:0 0 0 4px #247b5026,0 0 10px #247b50,0 0 20px #247b5080}
-.node-label{text-shadow:0 1px 2px #000,0 0 4px #247b50cc,0 0 12px #247b5080}
-.collection-all{box-shadow:0 0 10px #247b5066,inset 0 0 10px #247b5026}
-.collection-all .hud-icon{filter:drop-shadow(0 0 4px #247b50cc) drop-shadow(0 0 9px #247b5080)}
-.collection-all.active,.collection-all:hover{box-shadow:0 0 8px #247b50b3,0 0 20px #247b5066,inset 0 0 10px #247b5033}
-.language-switch{text-shadow:0 0 7px #247b5099}
-.orientation svg{filter:drop-shadow(0 0 4px #247b5099) drop-shadow(0 0 9px #247b504d)}
