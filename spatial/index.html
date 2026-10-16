@@ -40,10 +40,15 @@
     <div id="scene-fallback" class="scene-fallback" hidden><p data-en="Explore the complete collection in the index." data-zh="在作品目录中浏览完整图集。">Explore the complete collection in the index.</p><button data-index data-en="Open project index ↗" data-zh="打开作品目录 ↗">Open project index ↗</button><a class="fallback-2d" href="./2d/" data-en="Open 2D portfolio ↗" data-zh="打开平面作品集 ↗">Open 2D portfolio ↗</a></div>
     <nav class="layer-nav" aria-label="Collection layers" data-label-en="Collection layers" data-label-zh="作品分类">
       <svg class="collection-links" viewBox="0 0 212 196" aria-hidden="true">
-        <path data-link="digital" stroke="currentColor" d="M48 44 106 98"/>
-        <path data-link="architecture" stroke="currentColor" d="M164 44 106 98"/>
-        <path data-link="fabrication" stroke="currentColor" d="M48 152 106 98"/>
-        <path data-link="developer" stroke="currentColor" d="M164 152 106 98"/>
+        <defs>
+          <linearGradient id="collection-link-horizontal" gradientUnits="userSpaceOnUse" x1="48" y1="0" x2="164" y2="0"><stop offset="0" stop-color="#ff2020" stop-opacity="1"/><stop offset=".5" stop-color="#ff2020" stop-opacity=".36"/><stop offset="1" stop-color="#ff2020" stop-opacity="1"/></linearGradient>
+          <linearGradient id="collection-link-vertical" gradientUnits="userSpaceOnUse" x1="0" y1="44" x2="0" y2="152"><stop offset="0" stop-color="#ff2020" stop-opacity="1"/><stop offset=".5" stop-color="#ff2020" stop-opacity=".36"/><stop offset="1" stop-color="#ff2020" stop-opacity="1"/></linearGradient>
+          <linearGradient id="collection-link-down" gradientUnits="userSpaceOnUse" x1="48" y1="44" x2="164" y2="152"><stop offset="0" stop-color="#ff2020" stop-opacity="1"/><stop offset=".5" stop-color="#ff2020" stop-opacity=".36"/><stop offset="1" stop-color="#ff2020" stop-opacity="1"/></linearGradient>
+          <linearGradient id="collection-link-up" gradientUnits="userSpaceOnUse" x1="164" y1="44" x2="48" y2="152"><stop offset="0" stop-color="#ff2020" stop-opacity="1"/><stop offset=".5" stop-color="#ff2020" stop-opacity=".36"/><stop offset="1" stop-color="#ff2020" stop-opacity="1"/></linearGradient>
+        </defs>
+        <path data-link="digital architecture" stroke="url(#collection-link-horizontal)" d="M48 44H164"/><path data-link="digital fabrication" stroke="url(#collection-link-vertical)" d="M48 44V152"/>
+        <path data-link="architecture developer" stroke="url(#collection-link-vertical)" d="M164 44V152"/><path data-link="fabrication developer" stroke="url(#collection-link-horizontal)" d="M48 152H164"/>
+        <path data-link="digital developer" stroke="url(#collection-link-down)" d="m48 44 116 108"/><path data-link="architecture fabrication" stroke="url(#collection-link-up)" d="M164 44 48 152"/>
       </svg>
       <button class="collection-all active" data-layer="all" aria-pressed="true" aria-label="All layers" data-label-en="All layers" data-label-zh="全部层" aria-keyshortcuts="0"><span class="hud-tooltip" data-en="All layers · 0" data-zh="全部层 · 0">All layers · 0</span></button>
       <button class="collection-node node-digital" data-layer="digital" aria-pressed="false" aria-keyshortcuts="1"><span class="layer-dot" aria-hidden="true"></span><span class="node-label" data-en="Axie Gallery" data-zh="Axie 画廊">Axie Gallery</span></button>
