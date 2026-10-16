@@ -37,7 +37,7 @@ assert(!spatialScene.includes("'grab'") && !spatialScene.includes("'grabbing'"),
 assert(!/cursor:\s*grabb?(?:ing)?/.test(appCss), '2D pages must not use grab cursors');
 assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.item.layer.id)"), '3D layer titles must switch to their layer when clicked');
 assert(spatialScene.includes("const label=textPlane(card.project.title") && !spatialApp.includes("$('#hover-detail')"), '3D image labels and tooltips must show only the project title');
-assert(spatialCss.includes('aspect-ratio:20/3') && spatialCss.includes('justify-content:flex-start;text-align:left'), '3D image tooltips must keep a wide fixed ratio with left-aligned titles');
+assert(spatialCss.includes('width:min(280px,calc(100vw - 20px));max-width:none;height:34px;padding:0 14px') && spatialCss.includes('justify-content:flex-start;text-align:left'), '3D image tooltips must keep their width while using a compact fixed height and left-aligned titles');
 assert(html.includes('id="color-mode"') && spatialApp.includes('spatial?.setColorMode(colorMode)') && spatialScene.includes('setColorMode(value)'), 'Color Mode must synchronize the interface and 3D scene');
 assert(spatialCss.includes('html[data-color-mode=off]') && spatialCss.includes('filter:grayscale(1)') && spatialCss.includes('--collection-blue:#d7dce3'), 'Color Mode off must use bright silver accents and grayscale previews');
 assert(spatialCss.includes('.hud-button{') && spatialCss.includes('.color-mode-toggle,.color-mode-toggle:hover,.color-mode-toggle:focus-visible,.color-mode-toggle[aria-pressed=true]{color:#929292}'), 'Color Mode controls must always match the default control icon gray');
