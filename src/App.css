@@ -1854,4 +1854,5 @@ h1, h2, h3 {
 .portfolio-view-switch a:hover { color: #111; }
 .portfolio-view-switch a:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
 .portfolio-view-switch [aria-current=page] { color: #222; }
+.portfolio-view-switch > span[aria-hidden="true"] { display: block; align-self: center; flex: 0 0 1px; width: 1px; height: 11px; background: currentColor; font-size: 0; line-height: 0; }
 @media (max-width: 600px) { .portfolio-view-switch { top: 22px; right: 16px; } }

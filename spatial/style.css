@@ -18,7 +18,7 @@ dialog{color:var(--text);background:#090909;border:1px solid #333;border-radius:
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 /* Small view switch, aligned with the existing centered left rail. */
-.portfolio-view-switch{display:flex;align-items:center;gap:8px;padding-left:8px;white-space:nowrap;font-size:11px;letter-spacing:.04em;color:#747474}.portfolio-view-switch [aria-current=page]{color:#eee}.portfolio-view-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;min-width:28px}.portfolio-view-switch>span[aria-hidden]{color:#4d4d4d}.scene-fallback .fallback-2d{display:block;margin-top:18px;color:#bbb;font-size:12px}
+.portfolio-view-switch{display:flex;align-items:center;gap:8px;padding-left:8px;white-space:nowrap;font-size:11px;letter-spacing:.04em;color:#747474}.portfolio-view-switch [aria-current=page]{color:#eee}.portfolio-view-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;min-width:28px}.portfolio-view-switch>span[aria-hidden]{display:block;align-self:center;flex:0 0 1px;width:1px;height:11px;background:currentColor;color:#4d4d4d;font-size:0;line-height:0}.scene-fallback .fallback-2d{display:block;margin-top:18px;color:#bbb;font-size:12px}
 
 html,body,#space,.layer-nav,.collection-links{cursor:var(--cursor-scene)}
 button,a{cursor:var(--cursor-action)}

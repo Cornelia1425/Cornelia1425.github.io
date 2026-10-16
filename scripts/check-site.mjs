@@ -33,6 +33,7 @@ assert.equal(read('CNAME').trim(), 'www.yiranshu.com');
 assert(existsSync(join(dist, '.nojekyll')));
 assert(html.includes('href="./2d/"'));
 assert(html.includes('<span aria-hidden="true">|</span><a href="./2d/"') && flatHeader.includes('<span aria-hidden="true">|</span>'), '3D and 2D view switches must use the same vertical separator as the language switch');
+assert(spatialCss.includes('.portfolio-view-switch>span[aria-hidden]{display:block;align-self:center;flex:0 0 1px;width:1px;height:11px') && appCss.includes('.portfolio-view-switch > span[aria-hidden="true"] { display: block; align-self: center; flex: 0 0 1px; width: 1px; height: 11px;'), '3D and 2D view separators must be true centered vertical rules');
 assert(spatialCss.includes('.site-header button,.site-header a{pointer-events:auto}'), 'Header links must accept pointer input');
 assert(spatialCss.includes('--cursor-scene:url(') && spatialCss.includes("width='25' height='25'") && spatialCss.includes("fill='%23000' stroke='%23fff'") && spatialCss.includes("fill='%23fff' stroke='%23000'") && spatialCss.includes("stroke-linecap='round'") && !spatialCss.includes("stroke='%233aa7ff'") && !spatialCss.includes('cursor:grab'), '3D canvas must use the fuller rounded monochrome cursor');
 assert(!spatialScene.includes("'grab'") && !spatialScene.includes("'grabbing'"), '3D scene must not use grab cursors');
