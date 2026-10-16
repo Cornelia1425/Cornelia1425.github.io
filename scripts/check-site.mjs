@@ -39,9 +39,6 @@ assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.ite
 assert(spatialCss.includes(':root{--collection-blue:#247b50}') && !html.includes('#1677ff'), '3D navigation must use the layer-edge green');
 assert(spatialApp.includes("orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches") && spatialApp.includes('spatial.setOrbit(orbit)'), '3D view must start orbiting unless reduced motion is requested');
 assert(spatialScene.includes('controls.autoRotateSpeed = -.18') && !spatialScene.includes('clearHover();stopOrbit();'), '3D orbit must remain slow, clockwise, and resume after direct manipulation');
-assert(spatialScene.includes("material.customProgramCacheKey=()=> 'grayscale-preview'"), '3D card previews must render in grayscale');
-assert(spatialCss.includes('.index-image img,.plate-thumbnails img{filter:grayscale(1)}'), 'Index and project thumbnails must render in grayscale');
-assert(spatialCss.includes('.plate-open>img,.image-dialog>img{filter:none}'), 'Opened project images must retain their original color');
 assert(flatHtml.includes('/2d/assets/'), 'The React bundle must load from /2d/');
 assert(!existsSync(join(dist, '2d/images')), 'Shared images must retain their root URLs without duplication');
 

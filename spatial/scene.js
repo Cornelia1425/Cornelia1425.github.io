@@ -175,15 +175,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
 
   const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0x247b50,side:THREE.DoubleSide});
   const layerEdgeThickness=.07*.65;
-  function grayscalePreview(material){
-    material.onBeforeCompile=shader=>{
-      shader.fragmentShader=shader.fragmentShader.replace(
-        '#include <map_fragment>',
-        '#include <map_fragment>\nfloat previewLuminance=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));\ndiffuseColor.rgb=vec3(previewLuminance);'
-      );
-    };
-    material.customProgramCacheKey=()=> 'grayscale-preview';
-  }
   layers.forEach(layer=>{
     const group=new THREE.Group(); group.position.z=layer.z; scene.add(group); groups.set(layer.id,group);
     layer.cards.forEach(card=>{
@@ -192,7 +183,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
       holder.rotation.x=card.rotationX;
       // Fixed in world space: Orbit changes the camera, never the image orientation.
       const material=new THREE.MeshBasicMaterial({color:0x222222,side:THREE.DoubleSide});
-      grayscalePreview(material);
       const plane=new THREE.Mesh(imageGeometry,material);
       plane.userData=card; holder.add(plane); pickTargets.push(plane);
       const borderMaterial=new THREE.LineBasicMaterial({color:0x777777,transparent:true,opacity:.35});
