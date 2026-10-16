@@ -1,0 +1,651 @@
+[
+  {
+    "id": "axie-gallery",
+    "title": "Axie Gallery",
+    "category": "digital",
+    "categoryLabel": "Digital space",
+    "categoryLabelZh": "数字空间",
+    "subtitle": "A gallery beyond the physical",
+    "subtitleZh": "物理空间之外的画廊",
+    "description": "A virtual gallery created for an Axie Infinity community member and deployed in Decentraland. Hand sketches and in-world images document the passage from a spatial idea to a shared digital environment.",
+    "descriptionZh": "为 Axie Infinity 社区成员设计、并部署于 Decentraland 的虚拟画廊。手绘草图与虚拟世界中的图像记录了一个空间想法如何成为共享的数字环境。",
+    "coverIndex": 4,
+    "images": [
+      {
+        "project": "axie-gallery",
+        "name": "1_handdrawing.jpg",
+        "image": "assets/axie-gallery/1_handdrawing.webp",
+        "thumb": "assets/axie-gallery/1_handdrawing-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "axie-gallery",
+        "name": "2_handdrawing.jpg",
+        "image": "assets/axie-gallery/2_handdrawing.webp",
+        "thumb": "assets/axie-gallery/2_handdrawing-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "axie-gallery",
+        "name": "3_handdrawing.jpg",
+        "image": "assets/axie-gallery/3_handdrawing.webp",
+        "thumb": "assets/axie-gallery/3_handdrawing-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "axie-gallery",
+        "name": "4_axie.jpg",
+        "image": "assets/axie-gallery/4_axie.webp",
+        "thumb": "assets/axie-gallery/4_axie-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "axie-gallery",
+        "name": "5_axie.jpg",
+        "image": "assets/axie-gallery/5_axie.webp",
+        "thumb": "assets/axie-gallery/5_axie-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "axie-gallery",
+        "name": "6_axie.jpg",
+        "image": "assets/axie-gallery/6_axie.webp",
+        "thumb": "assets/axie-gallery/6_axie-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "axie-gallery",
+        "name": "7_axie.jpg",
+        "image": "assets/axie-gallery/7_axie.webp",
+        "thumb": "assets/axie-gallery/7_axie-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "axie-gallery",
+        "name": "8_axie.jpg",
+        "image": "assets/axie-gallery/8_axie.webp",
+        "thumb": "assets/axie-gallery/8_axie-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      }
+    ]
+  },
+  {
+    "id": "the-tool",
+    "title": "The Tool",
+    "category": "architecture",
+    "categoryLabel": "Architectural design",
+    "categoryLabelZh": "建筑设计",
+    "subtitle": "Connections into form",
+    "subtitleZh": "从关系到形态",
+    "description": "A spatial study developed through linework, structural explorations and physical models. The sequence moves from abstract connections to material form.",
+    "descriptionZh": "通过线稿、结构探索与实体模型展开的空间研究。从抽象的关系出发，让空间逐步形成可见的形态。",
+    "coverIndex": 1,
+    "images": [
+      {
+        "project": "the-tool",
+        "name": "0_1_tool.png",
+        "image": "assets/the-tool/0_1_tool.webp",
+        "thumb": "assets/the-tool/0_1_tool-thumb.webp",
+        "width": 2100,
+        "height": 690
+      },
+      {
+        "project": "the-tool",
+        "name": "0_2_tool.jpg",
+        "image": "assets/the-tool/0_2_tool.webp",
+        "thumb": "assets/the-tool/0_2_tool-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "the-tool",
+        "name": "0_3_tool.jpg",
+        "image": "assets/the-tool/0_3_tool.webp",
+        "thumb": "assets/the-tool/0_3_tool-thumb.webp",
+        "width": 2100,
+        "height": 1347
+      }
+    ]
+  },
+  {
+    "id": "dance-place",
+    "title": "The Dance Place",
+    "category": "architecture",
+    "categoryLabel": "Architectural design",
+    "categoryLabelZh": "建筑设计",
+    "subtitle": "Movement & gathering",
+    "subtitleZh": "运动与相聚",
+    "description": "An architectural exploration of dance and gathering. Drawings and renderings bring together landscape, movement and the spaces people inhabit.",
+    "descriptionZh": "围绕舞蹈与相聚展开的建筑探索。图纸与效果图呈现景观、运动和人所处空间之间的关系。",
+    "coverIndex": 0,
+    "images": [
+      {
+        "project": "dance-place",
+        "name": "1_1_dance.jpg",
+        "image": "assets/dance-place/1_1_dance.webp",
+        "thumb": "assets/dance-place/1_1_dance-thumb.webp",
+        "width": 2100,
+        "height": 743
+      },
+      {
+        "project": "dance-place",
+        "name": "1_2_dance.jpg",
+        "image": "assets/dance-place/1_2_dance.webp",
+        "thumb": "assets/dance-place/1_2_dance-thumb.webp",
+        "width": 2100,
+        "height": 1350
+      },
+      {
+        "project": "dance-place",
+        "name": "1_3_dance.jpg",
+        "image": "assets/dance-place/1_3_dance.webp",
+        "thumb": "assets/dance-place/1_3_dance-thumb.webp",
+        "width": 2100,
+        "height": 1350
+      },
+      {
+        "project": "dance-place",
+        "name": "1_4_dance.jpg",
+        "image": "assets/dance-place/1_4_dance.webp",
+        "thumb": "assets/dance-place/1_4_dance-thumb.webp",
+        "width": 2100,
+        "height": 1335
+      }
+    ]
+  },
+  {
+    "id": "urban-sensorium",
+    "title": "Urban Sensorium",
+    "category": "architecture",
+    "categoryLabel": "Architectural design",
+    "categoryLabelZh": "建筑设计",
+    "subtitle": "The city, from within",
+    "subtitleZh": "从内部感受城市",
+    "description": "An urban architectural study explored through sectional drawings, circulation studies and physical models. A collection of perspectives on the experience of the city.",
+    "descriptionZh": "通过剖面图、流线研究与实体模型展开的城市建筑探索。从不同视角观察和感受城市中的空间。",
+    "coverIndex": 2,
+    "images": [
+      {
+        "project": "urban-sensorium",
+        "name": "2_1_urbansensorium.jpg",
+        "image": "assets/urban-sensorium/2_1_urbansensorium.webp",
+        "thumb": "assets/urban-sensorium/2_1_urbansensorium-thumb.webp",
+        "width": 2100,
+        "height": 1245
+      },
+      {
+        "project": "urban-sensorium",
+        "name": "2_2_urbansensorium.jpg",
+        "image": "assets/urban-sensorium/2_2_urbansensorium.webp",
+        "thumb": "assets/urban-sensorium/2_2_urbansensorium-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "urban-sensorium",
+        "name": "2_3_urbansensorium.jpg",
+        "image": "assets/urban-sensorium/2_3_urbansensorium.webp",
+        "thumb": "assets/urban-sensorium/2_3_urbansensorium-thumb.webp",
+        "width": 2100,
+        "height": 1378
+      },
+      {
+        "project": "urban-sensorium",
+        "name": "2_4_urbansensorium.jpg",
+        "image": "assets/urban-sensorium/2_4_urbansensorium.webp",
+        "thumb": "assets/urban-sensorium/2_4_urbansensorium-thumb.webp",
+        "width": 2100,
+        "height": 1359
+      },
+      {
+        "project": "urban-sensorium",
+        "name": "2_5_urbansensorium.jpg",
+        "image": "assets/urban-sensorium/2_5_urbansensorium.webp",
+        "thumb": "assets/urban-sensorium/2_5_urbansensorium-thumb.webp",
+        "width": 2100,
+        "height": 1358
+      }
+    ]
+  },
+  {
+    "id": "learning-about-death",
+    "title": "Learning about Death",
+    "category": "architecture",
+    "categoryLabel": "Architectural design",
+    "categoryLabelZh": "建筑设计",
+    "subtitle": "Landscape & experience",
+    "subtitleZh": "景观与体验",
+    "description": "A landscape and architectural study of learning about death. Site models, diagrams and sections trace the relationship between place and experience.",
+    "descriptionZh": "关于死亡学习的景观与建筑研究。场地模型、分析图和剖面共同呈现空间与体验之间的关系。",
+    "coverIndex": 5,
+    "images": [
+      {
+        "project": "learning-about-death",
+        "name": "3_0_learningcenter.png",
+        "image": "assets/learning-about-death/3_0_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_0_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1415
+      },
+      {
+        "project": "learning-about-death",
+        "name": "3_1_learningcenter.jpg",
+        "image": "assets/learning-about-death/3_1_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_1_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "learning-about-death",
+        "name": "3_2_learningcenter.jpg",
+        "image": "assets/learning-about-death/3_2_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_2_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "learning-about-death",
+        "name": "3_3_learningcenter.jpg",
+        "image": "assets/learning-about-death/3_3_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_3_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1359
+      },
+      {
+        "project": "learning-about-death",
+        "name": "3_4_learningcenter.jpg",
+        "image": "assets/learning-about-death/3_4_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_4_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1359
+      },
+      {
+        "project": "learning-about-death",
+        "name": "3_5_learningcenter.jpg",
+        "image": "assets/learning-about-death/3_5_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_5_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1359
+      },
+      {
+        "project": "learning-about-death",
+        "name": "3_6_learningcenter.jpg",
+        "image": "assets/learning-about-death/3_6_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_6_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1359
+      },
+      {
+        "project": "learning-about-death",
+        "name": "3_7_learningcenter.jpg",
+        "image": "assets/learning-about-death/3_7_learningcenter.webp",
+        "thumb": "assets/learning-about-death/3_7_learningcenter-thumb.webp",
+        "width": 2100,
+        "height": 1359
+      }
+    ]
+  },
+  {
+    "id": "aa-summer-school",
+    "title": "AA Summer School",
+    "category": "architecture",
+    "categoryLabel": "Architectural design",
+    "categoryLabelZh": "建筑设计",
+    "subtitle": "Form & architectural imagination",
+    "subtitleZh": "形态与建筑想象",
+    "description": "A collection of form experiments and architectural visualizations from AA Summer School. The work moves between sculptural studies and the scale of the city.",
+    "descriptionZh": "AA 暑期学校的形态实验与建筑可视化作品。作品在雕塑般的形态研究与城市尺度之间展开。",
+    "coverIndex": 0,
+    "images": [
+      {
+        "project": "aa-summer-school",
+        "name": "4_1_AA.jpg",
+        "image": "assets/aa-summer-school/4_1_AA.webp",
+        "thumb": "assets/aa-summer-school/4_1_AA-thumb.webp",
+        "width": 2100,
+        "height": 1310
+      },
+      {
+        "project": "aa-summer-school",
+        "name": "4_2_AA.jpg",
+        "image": "assets/aa-summer-school/4_2_AA.webp",
+        "thumb": "assets/aa-summer-school/4_2_AA-thumb.webp",
+        "width": 2100,
+        "height": 1272
+      },
+      {
+        "project": "aa-summer-school",
+        "name": "4_3_AA.jpg",
+        "image": "assets/aa-summer-school/4_3_AA.webp",
+        "thumb": "assets/aa-summer-school/4_3_AA-thumb.webp",
+        "width": 2100,
+        "height": 1400
+      },
+      {
+        "project": "aa-summer-school",
+        "name": "4_4_AA.jpg",
+        "image": "assets/aa-summer-school/4_4_AA.webp",
+        "thumb": "assets/aa-summer-school/4_4_AA-thumb.webp",
+        "width": 2100,
+        "height": 1485
+      },
+      {
+        "project": "aa-summer-school",
+        "name": "4_5_AA.jpg",
+        "image": "assets/aa-summer-school/4_5_AA.webp",
+        "thumb": "assets/aa-summer-school/4_5_AA-thumb.webp",
+        "width": 1280,
+        "height": 904
+      }
+    ]
+  },
+  {
+    "id": "practice",
+    "title": "Practice",
+    "category": "architecture",
+    "categoryLabel": "Architectural design",
+    "categoryLabelZh": "建筑设计",
+    "subtitle": "Professional architectural work",
+    "subtitleZh": "专业建筑实践",
+    "description": "A selection of architectural work from professional practice, shown through site imagery, design documentation and visual studies.",
+    "descriptionZh": "来自专业实践的建筑作品选集，通过场地影像、设计资料与视觉研究呈现。",
+    "coverIndex": 0,
+    "images": [
+      {
+        "project": "practice",
+        "name": "5_1_practice.jpg",
+        "image": "assets/practice/5_1_practice.webp",
+        "thumb": "assets/practice/5_1_practice-thumb.webp",
+        "width": 2100,
+        "height": 1072
+      }
+    ]
+  },
+  {
+    "id": "digital-fabrication",
+    "title": "Digital Fabrication",
+    "category": "objects",
+    "categoryLabel": "Objects & fabrication",
+    "categoryLabelZh": "物件与制造",
+    "subtitle": "From digital to tangible",
+    "subtitleZh": "从数字到实体",
+    "description": "Furniture, lighting and object studies developed through digital modeling and physical fabrication. A collection of experiments in geometry, material and making.",
+    "descriptionZh": "通过数字建模与实体制造展开的家具、灯具和物件设计。探索几何、材料与制作之间的关系。",
+    "coverIndex": 0,
+    "images": [
+      {
+        "project": "digital-fabrication",
+        "name": "0.jpg",
+        "image": "assets/digital-fabrication/0.webp",
+        "thumb": "assets/digital-fabrication/0-thumb.webp",
+        "width": 2100,
+        "height": 1349
+      },
+      {
+        "project": "digital-fabrication",
+        "name": "1.jpg",
+        "image": "assets/digital-fabrication/1.webp",
+        "thumb": "assets/digital-fabrication/1-thumb.webp",
+        "width": 2100,
+        "height": 1358
+      },
+      {
+        "project": "digital-fabrication",
+        "name": "2.jpg",
+        "image": "assets/digital-fabrication/2.webp",
+        "thumb": "assets/digital-fabrication/2-thumb.webp",
+        "width": 2100,
+        "height": 1241
+      },
+      {
+        "project": "digital-fabrication",
+        "name": "3.jpg",
+        "image": "assets/digital-fabrication/3.webp",
+        "thumb": "assets/digital-fabrication/3-thumb.webp",
+        "width": 2100,
+        "height": 810
+      },
+      {
+        "project": "digital-fabrication",
+        "name": "4.jpg",
+        "image": "assets/digital-fabrication/4.webp",
+        "thumb": "assets/digital-fabrication/4-thumb.webp",
+        "width": 2100,
+        "height": 1313
+      }
+    ]
+  },
+  {
+    "id": "nuwa-creation",
+    "title": "Nüwa Creation",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://www.yiranshu.com/nuwa-creation/",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "nuwa-creation",
+        "name": "12_nuwacreation.png",
+        "image": "assets/developer/12_nuwacreation.png",
+        "thumb": "assets/developer/12_nuwacreation.png",
+        "width": 2704,
+        "height": 1520,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/12_nuwacreation.png"
+      }
+    ]
+  },
+  {
+    "id": "summer-breeze",
+    "title": "Summer Breeze",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://summer-breeze.cargo.site/",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "summer-breeze",
+        "name": "11_summerbreeze.png",
+        "image": "assets/developer/11_summerbreeze.png",
+        "thumb": "assets/developer/11_summerbreeze.png",
+        "width": 1100,
+        "height": 662,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/11_summerbreeze.png"
+      }
+    ]
+  },
+  {
+    "id": "moptop-universal",
+    "title": "MOPTOP Universal Dance Program",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://www.moptopuniversal.com/",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "moptop-universal",
+        "name": "4_moptopuniversal.png",
+        "image": "assets/developer/4_moptopuniversal.png",
+        "thumb": "assets/developer/4_moptopuniversal.png",
+        "width": 2704,
+        "height": 1514,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/4_moptopuniversal.png"
+      }
+    ]
+  },
+  {
+    "id": "escape-orbit",
+    "title": "Escape Orbit",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://escape-orbit.vercel.app/",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "escape-orbit",
+        "name": "10_escapeorbit.png",
+        "image": "assets/developer/10_escapeorbit.png",
+        "thumb": "assets/developer/10_escapeorbit.png",
+        "width": 2704,
+        "height": 1756,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/10_escapeorbit.png"
+      }
+    ]
+  },
+  {
+    "id": "dance-galaxy",
+    "title": "Dance Galaxy",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://dancetogather.vercel.app/",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "dance-galaxy",
+        "name": "6_dancetogether.png",
+        "image": "assets/developer/6_dancetogether.png",
+        "thumb": "assets/developer/6_dancetogether.png",
+        "width": 2462,
+        "height": 1476,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/6_dancetogether.png"
+      }
+    ]
+  },
+  {
+    "id": "sector77-spaceship-museum",
+    "title": "Sector77 Spaceship Museum",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://sector77.vercel.app/",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "sector77-spaceship-museum",
+        "name": "5_sector77.png",
+        "image": "assets/developer/5_sector77.png",
+        "thumb": "assets/developer/5_sector77.png",
+        "width": 2704,
+        "height": 1520,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/5_sector77.png"
+      }
+    ]
+  },
+  {
+    "id": "my-mind-palace",
+    "title": "My Mind Palace",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://mymindpalace.vercel.app/",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "my-mind-palace",
+        "name": "7_mymindpalace.png",
+        "image": "assets/developer/7_mymindpalace.png",
+        "thumb": "assets/developer/7_mymindpalace.png",
+        "width": 2704,
+        "height": 1490,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/7_mymindpalace.png"
+      }
+    ]
+  },
+  {
+    "id": "the-spells",
+    "title": "The Spells",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://drive.google.com/file/d/1azuTCD-HcRHkvGg9qHq-5FzVHQ3wEp3N/view?usp=sharing",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "the-spells",
+        "name": "1_thespells.png",
+        "image": "assets/developer/1_thespells.png",
+        "thumb": "assets/developer/1_thespells.png",
+        "width": 2704,
+        "height": 1500,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/1_thespells.png"
+      }
+    ]
+  },
+  {
+    "id": "architheatre",
+    "title": "Architheatre",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Web project",
+    "subtitleZh": "网站与交互项目",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing",
+    "sourceUrl": "https://www.yiranshu.com/#/developer",
+    "images": [
+      {
+        "project": "architheatre",
+        "name": "2_architheatre.png",
+        "image": "assets/developer/2_architheatre.png",
+        "thumb": "assets/developer/2_architheatre.png",
+        "width": 1960,
+        "height": 1204,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/2_architheatre.png"
+      }
+    ]
+  }
+]

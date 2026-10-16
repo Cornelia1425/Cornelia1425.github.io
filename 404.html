@@ -1,10 +1,32 @@
-<script>
-  // Redirect all subpages to their hash version for React Router SPA support on GitHub Pages
-  var path = window.location.pathname;
-  if (path !== '/' && path !== '/index.html') {
-    var hashPath = '#' + path;
-    window.location.replace('/' + hashPath);
-  } else {
-    window.location.replace('/index.html');
-  }
-</script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Page not found — Yiran Shu</title>
+  <script>
+    // Only known portfolio routes redirect. Separate projects such as
+    // /nuwa-creation/ keep their own GitHub Pages destinations.
+    const routes = new Set(['/', '/axie-gallery', '/architecture',
+      '/digital-fabrication', '/developer', '/contact', '/about', '/graphic-design']);
+    const path = location.pathname.replace(/^\/2d(?=\/|$)/, '').replace(/\/$/, '') || '/';
+    if (routes.has(path)) {
+      location.replace('/2d/#' + path + location.search);
+    }
+  </script>
+  <style>
+    :root { color-scheme: dark; font-family: Arial, sans-serif; }
+    body { margin: 0; min-height: 100svh; display: grid; place-items: center; background: #000; color: #ddd; }
+    main { padding: 32px; }
+    h1 { font-size: 24px; font-weight: 400; }
+    p { color: #999; }
+    nav { display: flex; gap: 18px; margin-top: 28px; }
+    a { color: inherit; text-underline-offset: 5px; }
+  </style>
+</head>
+<body><main>
+  <h1>Page not found / 页面未找到</h1>
+  <p>Yiran Shu</p>
+  <nav aria-label="Portfolio view / 作品集视图"><a href="/">3D</a><a href="/2d/">2D</a></nav>
+</main></body>
+</html>
