@@ -29,7 +29,8 @@ html[data-color-mode=off]{--collection-blue:#d7dce3;--collection-strong:#d7dce3b
 .layer-dot{box-shadow:0 0 5px var(--collection-soft)}
 .collection-node.active .layer-dot{box-shadow:0 0 7px var(--collection-strong),0 0 13px var(--collection-soft)}
 .collection-node:hover .layer-dot{box-shadow:0 0 7px var(--collection-strong),0 0 11px var(--collection-soft)}
-.node-label{text-shadow:0 1px 2px #000,0 0 5px var(--collection-veil)}
+.node-label{text-shadow:0 1px 2px #000,0 0 5px var(--collection-veil);transition:text-shadow .2s,color .2s}
+.collection-node:hover .node-label,.collection-node.active .node-label,.collection-node:focus-visible .node-label{text-shadow:0 1px 2px #000,0 0 5px var(--collection-strong),0 0 12px var(--collection-medium)}
 .collection-all:before{box-shadow:0 0 5px var(--collection-veil)}
 .collection-all.active:before,.collection-all:hover:before{box-shadow:0 0 7px var(--collection-soft)}
 .language-switch{text-shadow:0 0 7px var(--collection-glow)}
