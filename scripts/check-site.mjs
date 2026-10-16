@@ -36,7 +36,7 @@ assert(spatialCss.includes('--cursor-scene:url(') && !spatialCss.includes('curso
 assert(!spatialScene.includes("'grab'") && !spatialScene.includes("'grabbing'"), '3D scene must not use grab cursors');
 assert(!/cursor:\s*grabb?(?:ing)?/.test(appCss), '2D pages must not use grab cursors');
 assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.item.layer.id)"), '3D layer titles must switch to their layer when clicked');
-assert(spatialCss.includes('--collection-blue:#1677ff') && html.includes('#1677ff') && !/247b50/.test(spatialCss + html + spatialScene), '3D navigation must use the original deep blue');
+assert(spatialCss.includes(':root{--collection-blue:#ff2020}') && html.includes('#ff2020') && spatialScene.includes('color:0xff2020'), '3D navigation must use the vivid red comparison color');
 assert(spatialApp.includes("orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches") && spatialApp.includes('spatial.setOrbit(orbit)'), '3D view must start orbiting unless reduced motion is requested');
 assert(spatialScene.includes('controls.autoRotateSpeed = -.18') && !spatialScene.includes('clearHover();stopOrbit();'), '3D orbit must remain slow, clockwise, and resume after direct manipulation');
 assert(flatHtml.includes('/2d/assets/'), 'The React bundle must load from /2d/');

@@ -23,3 +23,14 @@ dialog{color:var(--text);background:#090909;border:1px solid #333;border-radius:
 html,body,#space,.layer-nav,.collection-links{cursor:var(--cursor-scene)}
 button,a{cursor:var(--cursor-action)}
 button:disabled{cursor:var(--cursor-scene)}
+:root{--collection-blue:#ff2020}
+.collection-links{filter:drop-shadow(0 0 2px #ff2020b3) drop-shadow(0 0 6px #ff202066)}
+.layer-dot{box-shadow:0 0 6px #ff2020b3,0 0 15px #ff202066}
+.collection-node.active .layer-dot{box-shadow:0 0 0 4px #ff202033,0 0 10px #ff2020,0 0 24px #ff202099}
+.collection-node:hover .layer-dot{box-shadow:0 0 0 4px #ff202026,0 0 10px #ff2020,0 0 20px #ff202080}
+.node-label{text-shadow:0 1px 2px #000,0 0 4px #ff2020cc,0 0 12px #ff202080}
+.collection-all{box-shadow:0 0 10px #ff202066,inset 0 0 10px #ff202026}
+.collection-all .hud-icon{filter:drop-shadow(0 0 4px #ff2020cc) drop-shadow(0 0 9px #ff202080)}
+.collection-all.active,.collection-all:hover{box-shadow:0 0 8px #ff2020b3,0 0 20px #ff202066,inset 0 0 10px #ff202033}
+.language-switch{text-shadow:0 0 7px #ff202099}
+.orientation svg{filter:drop-shadow(0 0 4px #ff202099) drop-shadow(0 0 9px #ff20204d)}

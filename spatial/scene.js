@@ -173,7 +173,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     return {mesh,glow,inkWidth:update(text),update,hitTest};
   }
 
-  const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0x1677ff,side:THREE.DoubleSide});
+  const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0xff2020,side:THREE.DoubleSide});
   const layerEdgeThickness=.07*.65;
   layers.forEach(layer=>{
     const group=new THREE.Group(); group.position.z=layer.z; scene.add(group); groups.set(layer.id,group);
