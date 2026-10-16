@@ -193,7 +193,6 @@ function onHover(item){
   const tooltip=$('#scene-tooltip');tooltip.hidden=!item;
   if(!item)return;
   $('#hover-title').textContent=item.project.title;
-  $('#hover-detail').textContent=item.project.externalUrl?t('Open project in a new tab ↗','在新标签页打开项目 ↗'):t(`Image ${item.imageIndex+1} / ${item.project.images.length} · Click to open`,`作品图 ${item.imageIndex+1} / ${item.project.images.length} · 点击查看`);
   tooltip.style.left=`${Math.max(10,Math.min(item.x+18,innerWidth-tooltip.offsetWidth-14))}px`;
   tooltip.style.top=`${Math.max(10,Math.min(item.y+18,innerHeight-tooltip.offsetHeight-14))}px`;
 }

@@ -188,7 +188,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       const borderMaterial=new THREE.LineBasicMaterial({color:0x777777,transparent:true,opacity:.35});
       const border=new THREE.LineSegments(borderGeometry,borderMaterial);
       border.position.z=.008; holder.add(border);
-      const label=textPlane(`${card.project.title}${card.project.externalUrl?'   ↗':`   / ${String(card.imageIndex+1).padStart(2,'0')}`}`,CARD.width,.23,'#8b8b8b',29);
+      const label=textPlane(card.project.title,CARD.width,.23,'#8b8b8b',29);
       label.position.set(0,-CARD.height/2-.19,.01); holder.add(label);
       group.add(holder); cards.push({holder,plane,border,card});
       const texture=loader.load(card.image.thumb,()=>{

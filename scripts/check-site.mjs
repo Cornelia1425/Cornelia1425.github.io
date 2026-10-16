@@ -36,6 +36,7 @@ assert(spatialCss.includes('--cursor-scene:url(') && !spatialCss.includes('curso
 assert(!spatialScene.includes("'grab'") && !spatialScene.includes("'grabbing'"), '3D scene must not use grab cursors');
 assert(!/cursor:\s*grabb?(?:ing)?/.test(appCss), '2D pages must not use grab cursors');
 assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.item.layer.id)"), '3D layer titles must switch to their layer when clicked');
+assert(spatialScene.includes("const label=textPlane(card.project.title") && !spatialApp.includes("$('#hover-detail')"), '3D image labels and tooltips must show only the project title');
 assert(spatialCss.includes(':root{--collection-blue:#ff2020}') && html.includes('#ff2020') && spatialScene.includes('color:0xff2020'), '3D navigation must use the vivid red comparison color');
 assert(spatialApp.includes("orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches") && spatialApp.includes('spatial.setOrbit(orbit)'), '3D view must start orbiting unless reduced motion is requested');
 assert(spatialScene.includes('controls.autoRotateSpeed = -.18') && !spatialScene.includes('clearHover();stopOrbit();'), '3D orbit must remain slow, clockwise, and resume after direct manipulation');

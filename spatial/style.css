@@ -34,3 +34,4 @@ button:disabled{cursor:var(--cursor-scene)}
 .collection-all.active,.collection-all:hover{box-shadow:0 0 8px #ff2020b3,0 0 20px #ff202066,inset 0 0 10px #ff202033}
 .language-switch{text-shadow:0 0 7px #ff202099}
 .orientation svg{filter:drop-shadow(0 0 4px #ff202099) drop-shadow(0 0 9px #ff20204d)}
+.scene-tooltip strong{margin-bottom:0}
