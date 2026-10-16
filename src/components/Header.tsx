@@ -85,7 +85,7 @@ const Header: React.FC = () => {
     <header className={`header${headerHidden ? ' header--hidden' : ''}`}>
       <nav className="portfolio-view-switch" aria-label="Portfolio view / 作品集视图">
         <a href="/" aria-label="Open 3D portfolio / 打开三维作品集">3D</a>
-        <span aria-hidden="true">/</span>
+        <span aria-hidden="true">|</span>
         <span aria-current="page">2D</span>
       </nav>
       <div className="header-container">
