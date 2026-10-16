@@ -175,7 +175,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
 
   const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0xff2020,side:THREE.DoubleSide});
   const layerEdgeThickness=.07*.65;
-  function setColorMode(value){layerEdgeMaterial.color.setHex(value?0xff2020:0xd7dce3);requestRender();}
+  function setColorMode(value){layerEdgeMaterial.color.setHex(value?0xff2020:0x929292);requestRender();}
   layers.forEach(layer=>{
     const group=new THREE.Group(); group.position.z=layer.z; scene.add(group); groups.set(layer.id,group);
     layer.cards.forEach(card=>{
