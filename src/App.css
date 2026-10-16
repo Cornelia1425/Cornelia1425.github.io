@@ -1850,7 +1850,9 @@ h1, h2, h3 {
   font-size: 12px;
   letter-spacing: .04em;
 }
-.portfolio-view-switch a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 4px; color: #666; }
+.portfolio-view-switch a,
+.portfolio-view-switch [aria-current=page] { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 28px; width: 28px; min-height: 40px; padding: 0; }
+.portfolio-view-switch a { color: #666; }
 .portfolio-view-switch a:hover { color: #111; }
 .portfolio-view-switch a:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
 .portfolio-view-switch [aria-current=page] { color: #222; }
