@@ -26,11 +26,11 @@ export function createSpatialCollection({container,projects,language='en',getNav
   controls.autoRotateSpeed = .35;
 
   const layers = buildLayout(projects,container.clientWidth<700);
-  const groups = new Map(), cards = [], pickTargets = [], headings = [];
+  const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [];
   const loader = new THREE.TextureLoader();
   const imageGeometry = new THREE.PlaneGeometry(CARD.width,CARD.height);
   const borderGeometry = new THREE.EdgesGeometry(new THREE.PlaneGeometry(CARD.width+.025,CARD.height+.025));
-  let active=true, renderPending=true, tween=null, layerId='all', hovered=null;
+  let active=true, renderPending=true, tween=null, layerId='all', hovered=null, hoveredHeading=null;
   let loaded=0, failed=0, lastTime=0, pointerDown=null, dragged=false, pointerCount=0;
   const total = layers.reduce((count,layer)=>count+layer.cards.length,0);
   const requestRender = ()=>{renderPending=true;};
@@ -122,8 +122,14 @@ export function createSpatialCollection({container,projects,language='en',getNav
     const canvas=document.createElement('canvas');
     canvas.width=2048;canvas.height=Math.round(canvas.width*height/width);
     const context=canvas.getContext('2d');
+    const glowCanvas=document.createElement('canvas');
+    glowCanvas.width=canvas.width;glowCanvas.height=canvas.height;
+    const glowContext=glowCanvas.getContext('2d');
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+    const glowTexture=new THREE.CanvasTexture(glowCanvas);glowTexture.colorSpace=THREE.SRGBColorSpace;
     texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+    glowTexture.anisotropy=texture.anisotropy;
+    let alpha;
     function update(value){
       context.clearRect(0,0,canvas.width,canvas.height);
       let pixels=Math.round(fontSize*canvas.width/width);
@@ -136,13 +142,35 @@ export function createSpatialCollection({container,projects,language='en',getNav
       context.fillText(value,0,canvas.height/2);
       const metrics=context.measureText(value);
       const inkRight=Number.isFinite(metrics.actualBoundingBoxRight)?metrics.actualBoundingBoxRight:metrics.width;
-      texture.needsUpdate=true;
+      alpha=context.getImageData(0,0,canvas.width,canvas.height).data;
+      glowContext.clearRect(0,0,glowCanvas.width,glowCanvas.height);
+      glowContext.font=context.font;glowContext.textAlign='left';glowContext.textBaseline='middle';
+      glowContext.fillStyle='rgba(255,255,255,.72)';glowContext.shadowColor='#fff';
+      glowContext.shadowBlur=Math.round(canvas.height*.12);
+      glowContext.fillText(value,0,glowCanvas.height/2);
+      texture.needsUpdate=true;glowTexture.needsUpdate=true;
       return Math.min(inkRight,canvas.width)*width/canvas.width;
     }
-    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),new THREE.MeshBasicMaterial({
+    function hitTest(uv){
+      const x=Math.round(uv.x*(canvas.width-1));
+      const y=Math.round((1-uv.y)*(canvas.height-1));
+      const radius=Math.max(3,Math.round(canvas.height*.03));
+      const left=Math.max(0,x-radius),top=Math.max(0,y-radius);
+      const right=Math.min(canvas.width-1,x+radius),bottom=Math.min(canvas.height-1,y+radius);
+      for(let sampleY=top;sampleY<=bottom;sampleY++)for(let sampleX=left;sampleX<=right;sampleX++){
+        if(alpha[(sampleY*canvas.width+sampleX)*4+3]>24)return true;
+      }
+      return false;
+    }
+    const geometry=new THREE.PlaneGeometry(width,height);
+    const mesh=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({
       map:texture,transparent:true,depthWrite:false,side:THREE.DoubleSide
     }));
-    return {mesh,inkWidth:update(text),update};
+    const glow=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({
+      map:glowTexture,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending
+    }));
+    glow.position.z=-.002;glow.renderOrder=1;mesh.renderOrder=2;mesh.add(glow);
+    return {mesh,glow,inkWidth:update(text),update,hitTest};
   }
 
   const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0x247b50,side:THREE.DoubleSide});
@@ -190,7 +218,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     ]),new THREE.LineBasicMaterial({color:0x626262,transparent:true,opacity:.22}));
     group.add(frame);
     const titleBounds=headingBounds(layer);
-    const {mesh:heading,inkWidth,update}=layerHeading(language==='zh'?layer.titleZh:layer.title);
+    const {mesh:heading,glow,inkWidth,update,hitTest}=layerHeading(language==='zh'?layer.titleZh:layer.title);
     // Stop just after the final visible letter, using the actual rendered font.
     const topRight=titleBounds.left+inkWidth+.035;
     const topStart=left-layerEdgeThickness/2;
@@ -201,8 +229,10 @@ export function createSpatialCollection({container,projects,language='en',getNav
     leftEdge.position.set(left,(bottom+top)/2,.02);
     group.add(topEdge,leftEdge);
     heading.position.set((titleBounds.left+titleBounds.right)/2,(titleBounds.bottom+titleBounds.top)/2,.01);
+    heading.userData.layerId=layer.id;
     group.add(heading);
-    headings.push({layer,update,topEdge,topStart,titleLeft:titleBounds.left});
+    headings.push({layer,mesh:heading,glow,inkWidth,update,hitTest,topEdge,topStart,titleLeft:titleBounds.left});
+    headingTargets.push(heading);
     const points=[];
     for(let x=left;x<=right;x+=4.05) for(let y=bottom;y<=top;y+=2.9) {
       points.push(new THREE.Vector3(x-.05,y,-.04),new THREE.Vector3(x+.05,y,-.04),new THREE.Vector3(x,y-.05,-.04),new THREE.Vector3(x,y+.05,-.04));
@@ -246,35 +276,57 @@ export function createSpatialCollection({container,projects,language='en',getNav
   }
   function clearHover(){
     if(hovered){hovered.border.material.color.setHex(0x777777);hovered.border.material.opacity=.35;hovered=null;}
-    renderer.domElement.style.cursor='grab';onHover?.(null);requestRender();
+    if(hoveredHeading){hoveredHeading.glow.material.opacity=0;hoveredHeading=null;}
+    renderer.domElement.style.cursor='var(--cursor-scene)';onHover?.(null);requestRender();
   }
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
   function hit(event){
     const rect=renderer.domElement.getBoundingClientRect();
     pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);
     raycaster.setFromCamera(pointer,camera);
-    const visible=pickTargets.filter(plane=>groups.get(plane.userData.layerId).visible);
-    const object=raycaster.intersectObjects(visible,false)[0]?.object;
-    return cards.find(card=>card.plane===object)||null;
+    const visibleCards=pickTargets.filter(plane=>groups.get(plane.userData.layerId).visible);
+    const visibleHeadings=headingTargets.filter(heading=>groups.get(heading.userData.layerId).visible);
+    const intersections=raycaster.intersectObjects([...visibleCards,...visibleHeadings],false);
+    for(const intersection of intersections){
+      const heading=headings.find(item=>item.mesh===intersection.object);
+      if(heading){
+        if(!intersection.uv||intersection.uv.x>heading.inkWidth/LAYER_HEADING.width||!heading.hitTest(intersection.uv))continue;
+        return {type:'layer',item:heading};
+      }
+      const card=cards.find(item=>item.plane===intersection.object);
+      if(card)return {type:'card',item:card};
+    }
+    return null;
   }
   renderer.domElement.addEventListener('pointerdown',event=>{
     pointerCount++;pointerDown={x:event.clientX,y:event.clientY,button:event.button};
     dragged=pointerCount>1;tween=null;clearHover();stopOrbit();
-    renderer.domElement.style.cursor='grabbing';
+    renderer.domElement.style.cursor='var(--cursor-scene)';
   });
   renderer.domElement.addEventListener('pointermove',event=>{
     if(pointerDown){if(Math.hypot(event.clientX-pointerDown.x,event.clientY-pointerDown.y)>5)dragged=true;return;}
     if(event.pointerType==='touch')return;
-    const card=hit(event);
-    if(card!==hovered){clearHover();hovered=card;if(card){card.border.material.color.setHex(0xff8a32);card.border.material.opacity=1;renderer.domElement.style.cursor='pointer';}}
+    const target=hit(event);
+    const card=target?.type==='card'?target.item:null;
+    const heading=target?.type==='layer'?target.item:null;
+    if(card!==hovered||heading!==hoveredHeading){
+      clearHover();hovered=card;hoveredHeading=heading;
+      if(card){card.border.material.color.setHex(0xff8a32);card.border.material.opacity=1;}
+      if(heading)heading.glow.material.opacity=.82;
+    }
+    renderer.domElement.style.cursor=target?'var(--cursor-action)':'var(--cursor-scene)';
     if(card)onHover?.({project:card.card.project,imageIndex:card.card.imageIndex,x:event.clientX,y:event.clientY});
     requestRender();
   });
   renderer.domElement.addEventListener('pointerup',event=>{
     const shouldOpen=pointerDown&&!dragged&&pointerDown.button===0&&pointerCount===1;
     pointerCount=Math.max(0,pointerCount-1);pointerDown=null;
-    renderer.domElement.style.cursor='grab';
-    if(shouldOpen){const card=hit(event);if(card)onOpen(card.card.project.id,card.card.imageIndex);}
+    renderer.domElement.style.cursor='var(--cursor-scene)';
+    if(shouldOpen){
+      const target=hit(event);
+      if(target?.type==='card')onOpen(target.item.card.project.id,target.item.card.imageIndex);
+      else if(target?.type==='layer')setLayer(target.item.layer.id);
+    }
   });
   renderer.domElement.addEventListener('pointercancel',()=>{pointerDown=null;pointerCount=0;dragged=false;clearHover();});
   renderer.domElement.addEventListener('pointerleave',()=>{if(!pointerDown)clearHover();});
@@ -328,6 +380,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       language=next;
       for(const item of headings){
         const inkWidth=item.update(language==='zh'?item.layer.titleZh:item.layer.title);
+        item.inkWidth=inkWidth;
         const end=item.titleLeft+inkWidth+.035;
         item.topEdge.scale.x=end-item.topStart;
         item.topEdge.position.x=(item.topStart+end)/2;

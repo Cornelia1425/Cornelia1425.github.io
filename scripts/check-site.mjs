@@ -11,6 +11,9 @@ const projects = JSON.parse(read('projects.json'));
 const original = JSON.parse(readFileSync(join(root, 'scripts/portfolio-source.json'), 'utf8'));
 const html = read('index.html');
 const flatHtml = read('2d/index.html');
+const spatialCss = read('style.css');
+const spatialScene = read('scene.js');
+const appCss = readFileSync(join(root, 'src/App.css'), 'utf8');
 
 function exists(url, from = '/') {
   if (!url || /^(?:#|https?:|mailto:|data:|\/\/)/.test(url)) return;
@@ -27,6 +30,11 @@ exists('/studio/');
 assert.equal(read('CNAME').trim(), 'www.yiranshu.com');
 assert(existsSync(join(dist, '.nojekyll')));
 assert(html.includes('href="./2d/"'));
+assert(spatialCss.includes('.site-header button,.site-header a{pointer-events:auto}'), 'Header links must accept pointer input');
+assert(spatialCss.includes('--cursor-scene:url(') && !spatialCss.includes('cursor:grab'), '3D canvas must use the custom scene cursor');
+assert(!spatialScene.includes("'grab'") && !spatialScene.includes("'grabbing'"), '3D scene must not use grab cursors');
+assert(!/cursor:\s*grabb?(?:ing)?/.test(appCss), '2D pages must not use grab cursors');
+assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.item.layer.id)"), '3D layer titles must switch to their layer when clicked');
 assert(flatHtml.includes('/2d/assets/'), 'The React bundle must load from /2d/');
 assert(!existsSync(join(dist, '2d/images')), 'Shared images must retain their root URLs without duplication');
 

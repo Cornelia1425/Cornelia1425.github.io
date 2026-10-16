@@ -587,12 +587,8 @@ img {
   height: 100dvh;
   z-index: 0;
   display: block;
-  cursor: grab;
+  cursor: default;
   touch-action: none;
-}
-
-.matrix-entry-canvas:active {
-  cursor: grabbing;
 }
 
 .matrix-entry-ui {
