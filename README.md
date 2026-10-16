@@ -1,154 +1,96 @@
-# Yiran Shu - Portfolio
+# Yiran Shu · 3D + 2D Portfolio
 
-A modern React portfolio website showcasing architecture, design, and digital fabrication work.
+同一个仓库：3D 首页、原来的 2D 作品集，以及现有 Studio 页面。此迁移分支供审阅；保存源码不等于发布网站。
 
-## 🚀 Features
+One repository: the 3D homepage, original 2D portfolio, and existing Studio page. This migration branch is for review; saving source does not publish the website.
 
-- **Modern React Architecture**: Built with React 18, TypeScript, and Vite
-- **Responsive Design**: Mobile-first approach with beautiful animations
-- **Clean Navigation**: Smooth routing with React Router
-- **Professional Layout**: Clean, minimalist design focused on content
-- **Performance Optimized**: Fast loading with modern build tools
+仓库 / Repository: [Cornelia1425/Cornelia1425.github.io](https://github.com/Cornelia1425/Cornelia1425.github.io)
 
-## 📁 Project Structure
+## 用哪个分支？ / Which branch?
 
-```
-src/
-├── components/          # Reusable UI components
-│   ├── Header.tsx      # Navigation header
-│   ├── Header.css
-│   ├── Footer.tsx      # Footer with social links
-│   └── Footer.css
-├── pages/              # Page components
-│   ├── Home.tsx        # Landing page
-│   ├── Home.css
-│   ├── About.tsx       # About page
-│   ├── About.css
-│   ├── AxieGallery.tsx # Digital art gallery
-│   ├── Architecture.tsx # Architectural projects
-│   ├── GraphicDesign.tsx # Graphic design work
-│   ├── DigitalFabrication.tsx # Digital fabrication projects
-│   └── PageTemplate.css # Shared page styles
-├── App.tsx             # Main app component
-├── App.css             # Global styles
-└── main.tsx            # App entry point
-```
+3D 和 2D 是同一个源码分支里的不同文件夹，不需要两个仓库。/ 3D and 2D are folders in the same source branch, not separate repositories.
 
-## 🛠️ Technologies Used
+| 分支 / Branch | 用途 / Purpose |
+| --- | --- |
+| `codex/portfolio-3d-home` | **当前迁移与审阅分支；合并前 push 到这里。** Current migration/review branch; push here before merging. |
+| `react-version` | 原 2D 源码分支；**迁移合并后，日常 3D、2D、Studio 修改都 push 到这里。** Original 2D source; after merging the migration, maintain all views here. |
+| `gh-pages` | 正式网站的生成文件，由 `npm run deploy` 更新。 Generated live-site files, updated by `npm run deploy`. |
+| `master` | 更早的旧版 HTML，不用于这次迁移。 Older HTML version, not used for this migration. |
 
-- **React 18.2.0** - UI library
-- **TypeScript** - Type safety
-- **Vite** - Build tool and dev server
-- **React Router 6.20.1** - Client-side routing
-- **CSS3** - Styling with modern features
+## 文件在哪里？ / Where are the files?
 
-## 🚀 Getting Started
+以下地址对应**发布后的**网站。/ These URLs describe the site **after deployment**.
 
-### Prerequisites
+| 内容 / View | 编辑位置 / Source | 访问地址 / URL |
+| --- | --- | --- |
+| 3D 空间作品集 / Spatial portfolio | [`spatial/`](spatial/README.md) | `https://www.yiranshu.com/` |
+| 原 2D 作品集 / Original flat portfolio | [`src/`](src/README.md) | `https://www.yiranshu.com/2d/` |
+| Studio 跨学科作品集 / Interdisciplinary portfolio | [`public/studio/`](public/studio/README.md) | `https://www.yiranshu.com/studio/` |
+| 原站共享图片 / Shared original images | `public/images/` | `/images/` |
+| 域名文件 / Domain file | `public/CNAME` | `www.yiranshu.com` |
 
-- Node.js 16.20.2 or higher
-- npm 8.19.4 or higher
+`dist/` 是自动生成的网站，不要在里面改源码。`/nuwa-creation/` 是另行发布的项目，保留原地址；源码不在这些文件夹里。
 
-### Installation
+`dist/` is generated output, not source. `/nuwa-creation/` remains a separately published project; its source is not in these folders.
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd portfolio-react
-```
+## 本地放在哪里？ / Local folder
 
-2. Install dependencies:
-```bash
-npm install
-```
+建议沿用电脑 `Documents/Dev/` 下现有的 Portfolio React 文件夹，前提是在该文件夹运行 `git remote get-url origin`，确认连接的是上面的仓库。不要在里面再嵌套 clone 一个完整仓库。切换分支前先运行 `git status`，保存已有修改。
 
-3. Start the development server:
-```bash
-npm run dev
-```
+Reuse the existing Portfolio React folder under `Documents/Dev/` if `git remote get-url origin` confirms the repository above. Do not clone a second repository inside it. Run `git status` and save existing work before switching branches.
 
-4. Open your browser and navigate to `http://localhost:5173`
+## 查看与保存修改 / Preview and push
 
-### Available Scripts
+在仓库根目录运行；此次使用 Node.js 24 验证。/ Run from the repository root; validated with Node.js 24.
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-## 📱 Pages
-
-### Home
-- Hero section with introduction
-- Featured work grid
-- About preview section
-
-### About
-- Professional bio
-- Areas of expertise
-- Profile image
-
-### Portfolio Sections
-- **Axie Gallery**: Digital art and creative expressions
-- **Architecture**: Learning Center, Urban Sensorium, The Instrument
-- **Graphic Design**: Visual communication and branding
-- **Digital Fabrication**: Innovative manufacturing and prototyping
-
-## 🎨 Design Features
-
-- **Responsive Grid Layout**: Adapts to all screen sizes
-- **Smooth Animations**: Hover effects and transitions
-- **Modern Typography**: Clean, readable fonts
-- **Consistent Spacing**: Professional layout system
-- **Accessibility**: Focus states and semantic HTML
-
-## 🔧 Customization
-
-### Adding Content
-1. Replace placeholder images in the `public/images/` directory
-2. Update project data in `src/pages/Home.tsx`
-3. Modify bio text in `src/pages/About.tsx`
-4. Update social links in `src/components/Footer.tsx`
-
-### Styling
-- Global styles: `src/App.css`
-- Component styles: Individual `.css` files
-- Color scheme: Update CSS custom properties
-- Typography: Modify font families and sizes
-
-## 📦 Deployment
-
-### Build for Production
-```bash
+```sh
+npm ci
 npm run build
+npm run preview
 ```
 
-### Deploy Options
-- **Vercel**: Connect GitHub repository for automatic deployment
-- **Netlify**: Drag and drop the `dist` folder
-- **GitHub Pages**: Use GitHub Actions for deployment
-- **Traditional Hosting**: Upload `dist` folder to web server
+打开命令输出的本地地址查看 3D；加 `/2d/` 或 `/studio/` 查看其他版本。`npm run dev` 只启动 2D 开发页面；`npm run check` 检查已有构建。
 
-## 🤝 Contributing
+Open the printed local URL for 3D, then `/2d/` or `/studio/` for the other views. `npm run dev` starts only the 2D development app; `npm run check` checks an existing build.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+**迁移合并前 / Before the migration is merged:**
 
-## 📄 License
+```sh
+git fetch origin
+git switch codex/portfolio-3d-home
+# 修改文件后 / After editing files:
+git status
+git add .
+git commit -m "Update portfolio"
+git push -u origin codex/portfolio-3d-home
+```
 
-This project is open source and available under the [MIT License](LICENSE).
+**迁移合并到 `react-version` 后**，日常修改用这个分支：
 
-## 👤 Contact
+**After the migration is merged into `react-version`**, use that branch for ongoing edits:
 
-- **Portfolio**: [www.yiranshu.com](https://www.yiranshu.com)
-- **Instagram**: [@yiranshu](https://www.instagram.com/yiranshu/)
-- **LinkedIn**: [Yiran Shu](https://www.linkedin.com/in/yiranshu/)
-- **Behance**: [Portfolio](https://www.behance.net/gallery/47954635/Portfolio)
-- **Issuu**: [Publications](https://issuu.com/shuyiran/)
+```sh
+git switch react-version
+git pull --ff-only origin react-version
+# 修改文件后 / After editing files:
+git add .
+git commit -m "Update portfolio"
+git push origin react-version
+```
 
----
+## 发布正式网站 / Publish the live site
 
-Built with ❤️ using React and modern web technologies.
+目前 push 源码不会自动发布。准备公开已检查的版本时，在包含已合并迁移代码的 `react-version` 分支运行：
+
+Pushing source does not currently publish automatically. To publish a reviewed version, run this on `react-version` after it includes the merged migration:
+
+```sh
+npm ci
+npm run deploy
+```
+
+此命令会重新构建，再把 `dist/` 发布到 **`gh-pages`**，改变正式网站。电脑上的 Git 需要已登录有写权限的 GitHub 账号。继续使用同一个 GitHub Pages 站点和 `www.yiranshu.com` 时，保留现有域名与 DNS 配置。
+
+This rebuilds and publishes `dist/` to **`gh-pages`**, changing the live website. Local Git needs authentication with repository write access. Keep the existing domain and DNS configuration when continuing to use the same GitHub Pages site and `www.yiranshu.com`.
+
+迁移来源、检查结果和回退依据见 [MIGRATION.md](MIGRATION.md)。/ See [MIGRATION.md](MIGRATION.md) for provenance, verification, and rollback notes.

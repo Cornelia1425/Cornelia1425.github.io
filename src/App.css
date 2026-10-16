@@ -1839,3 +1839,23 @@ h1, h2, h3 {
   border: none;
   display: block;
 }
+
+/* Persistent view choice within the original 2D header, without a button box. */
+.portfolio-view-switch {
+  position: absolute;
+  top: 6px;
+  right: max(20px, env(safe-area-inset-right, 0px));
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #888;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+.portfolio-view-switch a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 4px; color: #666; }
+.portfolio-view-switch a:hover { color: #111; }
+.portfolio-view-switch a:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
+.portfolio-view-switch [aria-current=page] { color: #222; }
+@media (max-width: 600px) { .portfolio-view-switch { top: 22px; right: 16px; } }

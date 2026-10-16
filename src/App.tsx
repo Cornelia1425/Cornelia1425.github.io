@@ -32,11 +32,11 @@ function App() {
   const location = useLocation();
   const [isSiteOpen, setIsSiteOpen] = useState(() => {
     // Open site if not on home page
-    return Boolean(location.hash && location.hash !== '#/');
+    return location.pathname !== '/';
   });
 
   useEffect(() => {
-    if (location.hash && location.hash !== '#/') {
+    if (location.pathname !== '/') {
       setIsSiteOpen(true);
     }
   }, [location]);

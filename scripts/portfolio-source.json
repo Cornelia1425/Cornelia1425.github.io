@@ -1,0 +1,74 @@
+{
+  "source": "https://www.yiranshu.com/",
+  "script": "https://www.yiranshu.com/assets/index-bff1e8da.js",
+  "navigation": [
+    [
+      "/axie-gallery",
+      "Axie Gallery"
+    ],
+    [
+      "/architecture",
+      "Architectural Design"
+    ],
+    [
+      "/digital-fabrication",
+      "Digital Fabrication"
+    ],
+    [
+      "/developer",
+      "Developer"
+    ],
+    [
+      "/contact",
+      "Contact"
+    ]
+  ],
+  "developer": [
+    {
+      "img": "12_nuwacreation.png",
+      "title": "Nüwa Creation",
+      "link": "https://www.yiranshu.com/nuwa-creation/"
+    },
+    {
+      "img": "11_summerbreeze.png",
+      "title": "Summer Breeze",
+      "link": "https://summer-breeze.cargo.site/"
+    },
+    {
+      "img": "4_moptopuniversal.png",
+      "title": "MOPTOP Universal Dance Program",
+      "link": "https://www.moptopuniversal.com/"
+    },
+    {
+      "img": "10_escapeorbit.png",
+      "title": "Escape Orbit",
+      "link": "https://escape-orbit.vercel.app/"
+    },
+    {
+      "img": "6_dancetogether.png",
+      "title": "Dance Galaxy",
+      "link": "https://dancetogather.vercel.app/"
+    },
+    {
+      "img": "5_sector77.png",
+      "title": "Sector77 Spaceship Museum",
+      "link": "https://sector77.vercel.app/"
+    },
+    {
+      "img": "7_mymindpalace.png",
+      "title": "My Mind Palace",
+      "link": "https://mymindpalace.vercel.app/"
+    },
+    {
+      "img": "1_thespells.png",
+      "title": "The Spells",
+      "link": "https://drive.google.com/file/d/1azuTCD-HcRHkvGg9qHq-5FzVHQ3wEp3N/view?usp=sharing"
+    },
+    {
+      "img": "2_architheatre.png",
+      "title": "Architheatre",
+      "link": "https://drive.google.com/file/d/1n_Kt1cC9zjjdmqon3wTjqd6hAGrffSZO/view?usp=sharing"
+    }
+  ],
+  "retrievedDate": "2026-10-15"
+}

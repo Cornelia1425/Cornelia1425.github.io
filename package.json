@@ -6,9 +6,10 @@
   "homepage": "https://www.yiranshu.com",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/build-site.mjs",
+    "check": "node scripts/check-site.mjs",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --outDir dist --base /",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
