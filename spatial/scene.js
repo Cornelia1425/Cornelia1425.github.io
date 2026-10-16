@@ -145,8 +145,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       alpha=context.getImageData(0,0,canvas.width,canvas.height).data;
       glowContext.clearRect(0,0,glowCanvas.width,glowCanvas.height);
       glowContext.font=context.font;glowContext.textAlign='left';glowContext.textBaseline='middle';
-      glowContext.fillStyle='rgba(255,255,255,.72)';glowContext.shadowColor='#fff';
-      glowContext.shadowBlur=Math.round(canvas.height*.12);
+      glowContext.fillStyle='#fff';
       glowContext.fillText(value,0,glowCanvas.height/2);
       texture.needsUpdate=true;glowTexture.needsUpdate=true;
       return Math.min(inkRight,canvas.width)*width/canvas.width;
@@ -313,7 +312,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     if(card!==hovered||heading!==hoveredHeading){
       clearHover();hovered=card;hoveredHeading=heading;
       if(card){card.border.material.color.setHex(0xff8a32);card.border.material.opacity=1;}
-      if(heading)heading.glow.material.opacity=.82;
+      if(heading)heading.glow.material.opacity=.22;
     }
     renderer.domElement.style.cursor=target?'var(--cursor-action)':'var(--cursor-scene)';
     if(card)onHover?.({project:card.card.project,imageIndex:card.card.imageIndex,x:event.clientX,y:event.clientY});

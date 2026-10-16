@@ -36,6 +36,7 @@ assert(spatialCss.includes('--cursor-scene:url(') && !spatialCss.includes('curso
 assert(!spatialScene.includes("'grab'") && !spatialScene.includes("'grabbing'"), '3D scene must not use grab cursors');
 assert(!/cursor:\s*grabb?(?:ing)?/.test(appCss), '2D pages must not use grab cursors');
 assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.item.layer.id)"), '3D layer titles must switch to their layer when clicked');
+assert(spatialScene.includes("glowContext.fillStyle='#fff'") && !spatialScene.includes('glowContext.shadowBlur') && spatialScene.includes('heading.glow.material.opacity=.22'), '3D layer title hover must brighten subtly without a broad glow');
 assert(spatialScene.includes("const label=textPlane(card.project.title") && !spatialApp.includes("$('#hover-detail')"), '3D image labels and tooltips must show only the project title');
 assert(spatialCss.includes('width:min(320px,calc(100vw - 20px));max-width:none;aspect-ratio:140/17;padding:0 16px') && spatialCss.includes('margin-bottom:0;font-size:13px') && spatialCss.includes('justify-content:flex-start;text-align:left'), '3D image tooltips must scale up proportionally with larger left-aligned titles');
 assert(html.includes('id="color-mode"') && spatialApp.includes('spatial?.setColorMode(colorMode)') && spatialScene.includes('setColorMode(value)'), 'Color Mode must synchronize the interface and 3D scene');
