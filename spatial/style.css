@@ -34,4 +34,5 @@ button:disabled{cursor:var(--cursor-scene)}
 .collection-all.active,.collection-all:hover{box-shadow:0 0 8px #ff2020b3,0 0 20px #ff202066,inset 0 0 10px #ff202033}
 .language-switch{text-shadow:0 0 7px #ff202099}
 .orientation svg{filter:drop-shadow(0 0 4px #ff202099) drop-shadow(0 0 9px #ff20204d)}
-.scene-tooltip strong{margin-bottom:0}
+.scene-tooltip{width:min(280px,calc(100vw - 20px));max-width:none;aspect-ratio:20/3;padding:0 14px;display:flex;align-items:center;justify-content:flex-start;text-align:left;border-radius:0}
+.scene-tooltip strong{width:100%;margin-bottom:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
