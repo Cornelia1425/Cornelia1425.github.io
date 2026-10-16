@@ -23,7 +23,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
   controls.maxDistance = 180;
   controls.minPolarAngle = .04;
   controls.maxPolarAngle = Math.PI-.04;
-  controls.autoRotateSpeed = .35;
+  controls.autoRotateSpeed = .18;
 
   const layers = buildLayout(projects,container.clientWidth<700);
   const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [];
@@ -272,7 +272,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     layerId=id;
     groups.forEach((group,key)=>group.visible=id==='all'||key===id);
     spine.visible=id==='all';
-    clearHover();stopOrbit();move(fittedView(id),immediate);onLayerChange?.(id);
+    clearHover();move(fittedView(id),immediate);onLayerChange?.(id);
   }
   function clearHover(){
     if(hovered){hovered.border.material.color.setHex(0x777777);hovered.border.material.opacity=.35;hovered=null;}
@@ -300,7 +300,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
   }
   renderer.domElement.addEventListener('pointerdown',event=>{
     pointerCount++;pointerDown={x:event.clientX,y:event.clientY,button:event.button};
-    dragged=pointerCount>1;tween=null;clearHover();stopOrbit();
+    dragged=pointerCount>1;tween=null;clearHover();
     renderer.domElement.style.cursor='var(--cursor-scene)';
   });
   renderer.domElement.addEventListener('pointermove',event=>{
@@ -357,7 +357,10 @@ export function createSpatialCollection({container,projects,language='en',getNav
       camera.updateProjectionMatrix();
       if(t===1)tween=null;requestRender();
     }
+    const autoRotate=controls.autoRotate;
+    if(tween)controls.autoRotate=false;
     controls.update(delta);
+    controls.autoRotate=autoRotate;
     if(!renderPending&&!tween&&!controls.autoRotate)return;
     updateRoom();renderer.render(scene,camera);renderPending=false;
     if(now-lastAxis>50){

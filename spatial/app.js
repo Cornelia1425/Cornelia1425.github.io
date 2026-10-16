@@ -4,7 +4,7 @@ const $$=selector=>[...document.querySelectorAll(selector)];
 let language='en';
 try{language=localStorage.getItem('yiran-language')==='zh'?'zh':'en';}catch{}
 const t=(en,zh)=>language==='zh'?zh:en;
-let projects=[],spatial=null,activeProject=null,plate=0,orbit=false,selectedLayer='all',lastProjectFocus=null;
+let projects=[],spatial=null,activeProject=null,plate=0,orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches,selectedLayer='all',lastProjectFocus=null;
 const imageProjects=()=>projects.filter(project=>!project.externalUrl);
 const projectDialog=$('#project-dialog'),imageDialog=$('#image-dialog'),indexDialog=$('#index-dialog'),aboutDialog=$('#about-dialog'),controlsDialog=$('#controls-dialog');
 const dialogs=[projectDialog,imageDialog,indexDialog,aboutDialog,controlsDialog];
@@ -223,6 +223,7 @@ async function boot(){
           group.style.opacity=String(.6+(axis.z+1)*.2);
         });}
       });
+      spatial.setOrbit(orbit);
       syncActivity();
     }catch(error){unavailable();console.warn('3D collection unavailable:',error.message);}
   }catch(error){unavailable();console.warn(error.message);}
