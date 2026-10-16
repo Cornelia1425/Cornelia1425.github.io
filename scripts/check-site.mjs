@@ -32,7 +32,7 @@ assert.equal(read('CNAME').trim(), 'www.yiranshu.com');
 assert(existsSync(join(dist, '.nojekyll')));
 assert(html.includes('href="./2d/"'));
 assert(spatialCss.includes('.site-header button,.site-header a{pointer-events:auto}'), 'Header links must accept pointer input');
-assert(spatialCss.includes('--cursor-scene:url(') && spatialCss.includes("width='22' height='22'") && spatialCss.includes("stroke='%233aa7ff'") && spatialCss.includes("fill='%23d9ecff' stroke='%2305080c'") && spatialCss.includes("stroke-linecap='round'") && !spatialCss.includes('cursor:grab'), '3D canvas must use the compact rounded blue-glow cursor with a black action outline');
+assert(spatialCss.includes('--cursor-scene:url(') && spatialCss.includes("width='25' height='25'") && spatialCss.includes("fill='%23000' stroke='%23fff'") && spatialCss.includes("fill='%23fff' stroke='%23000'") && spatialCss.includes("stroke-linecap='round'") && !spatialCss.includes("stroke='%233aa7ff'") && !spatialCss.includes('cursor:grab'), '3D canvas must use the fuller rounded monochrome cursor');
 assert(!spatialScene.includes("'grab'") && !spatialScene.includes("'grabbing'"), '3D scene must not use grab cursors');
 assert(!/cursor:\s*grabb?(?:ing)?/.test(appCss), '2D pages must not use grab cursors');
 assert(spatialScene.includes("else if(target?.type==='layer')setLayer(target.item.layer.id)"), '3D layer titles must switch to their layer when clicked');
