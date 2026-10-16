@@ -23,6 +23,7 @@
     <symbol id="icon-zoom-out" viewBox="0 0 32 32"><circle cx="13" cy="13" r="9"/><path d="m20 20 8 8M9 13h8"/></symbol>
     <symbol id="icon-zoom-in" viewBox="0 0 32 32"><use href="#icon-zoom-out"/><path d="M13 9v8"/></symbol>
     <symbol id="icon-controls" viewBox="0 0 32 32"><rect x="2" y="6" width="28" height="20" rx="2"/><path d="M7 11h1m4 0h1m4 0h1m4 0h3M7 16h1m4 0h1m4 0h1m4 0h3M7 21h3m4 0h11"/></symbol>
+    <symbol id="icon-layers" viewBox="0 0 32 32"><path d="m3 11 13-7 13 7-13 7-13-7Zm0 5 13 7 13-7M3 21l13 7 13-7"/></symbol>
     <symbol id="icon-mouse" viewBox="0 0 32 40"><rect x="6" y="3" width="20" height="32" rx="10"/><path d="M6 16h20M16 3v13"/></symbol>
   </defs></svg>
   <button class="skip-link" data-index data-en="Skip to project index" data-zh="跳到作品目录">Skip to project index</button>
@@ -50,7 +51,7 @@
         <path data-link="architecture developer" stroke="url(#collection-link-vertical)" d="M164 44V152"/><path data-link="fabrication developer" stroke="url(#collection-link-horizontal)" d="M48 152H164"/>
         <path data-link="digital developer" stroke="url(#collection-link-down)" d="m48 44 116 108"/><path data-link="architecture fabrication" stroke="url(#collection-link-up)" d="M164 44 48 152"/>
       </svg>
-      <button class="collection-all active" data-layer="all" aria-pressed="true" aria-label="All layers" data-label-en="All layers" data-label-zh="全部层" aria-keyshortcuts="0"><span class="hud-tooltip" data-en="All layers · 0" data-zh="全部层 · 0">All layers · 0</span></button>
+      <button class="collection-all active" data-layer="all" aria-pressed="true" aria-label="All layers" data-label-en="All layers" data-label-zh="全部层" aria-keyshortcuts="0"><svg class="hud-icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-layers"/></svg><span class="hud-tooltip" data-en="All layers · 0" data-zh="全部层 · 0">All layers · 0</span></button>
       <button class="collection-node node-digital" data-layer="digital" aria-pressed="false" aria-keyshortcuts="1"><span class="layer-dot" aria-hidden="true"></span><span class="node-label" data-en="Axie Gallery" data-zh="Axie 画廊">Axie Gallery</span></button>
       <button class="collection-node node-architecture" data-layer="architecture" aria-pressed="false" aria-keyshortcuts="2"><span class="layer-dot" aria-hidden="true"></span><span class="node-label" data-en="Architecture" data-zh="建筑设计">Architecture</span></button>
       <button class="collection-node node-fabrication" data-layer="fabrication" aria-pressed="false" aria-keyshortcuts="3"><span class="layer-dot" aria-hidden="true"></span><span class="node-label" data-en="Digital Fabrication" data-zh="数字制造">Digital Fabrication</span></button>
