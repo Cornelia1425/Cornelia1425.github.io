@@ -23,7 +23,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
   controls.maxDistance = 180;
   controls.minPolarAngle = .04;
   controls.maxPolarAngle = Math.PI-.04;
-  controls.autoRotateSpeed = .18;
+  controls.autoRotateSpeed = -.18;
 
   const layers = buildLayout(projects,container.clientWidth<700);
   const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [];
