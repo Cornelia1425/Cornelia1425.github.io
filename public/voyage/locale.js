@@ -1,0 +1,7 @@
+export const LANGUAGE_KEY='beyond-the-mountains-language';
+export const COLOR_KEY='beyond-the-mountains-color';
+export const COPY={
+ en:{title:'Beyond the Mountains',description:'A quiet journey through a living ink painting. Walk left, cross the streams, and follow the mountains.',stage:'An ink painting you can explore. Walk left with the arrow keys; press Space to jump.',language:'Language',touch:'Touch controls',left:'Walk left',right:'Walk right',jump:'Jump',hint:'← → move · Space jump · Esc pause',touchHint:'Follow the path to the left',resume:'Continue',retry:'From checkpoint',next:'Next scroll ←',again:'Wander again',colorOn:'Color on',colorOff:'Color off',soundOn:'Sound on',soundOff:'Sound off',soundUnavailable:'Sound is unavailable.',noSave:'Progress cannot be saved in this browser.',fall:'Try again.',paused:'Paused.',saved:'Checkpoint saved.',complete:'Scroll complete.',finished:'Journey complete.',chapters:['Stream','Wind','Peaks']},
+ zh:{title:'游记',description:'一卷可以行走的水墨山水。向左，跨过小溪，走向山里。',stage:'可以行走的水墨画。左右键行走，空格跳跃。',language:'语言',touch:'触屏操作',left:'向左走',right:'向右走',jump:'跳跃',hint:'← → 行走 · 空格 跳跃 · Esc 暂停',touchHint:'沿着山路，向左走',resume:'继续',retry:'回到路标',next:'下一卷 ←',again:'再走一程',colorOn:'色彩 开',colorOff:'色彩 关',soundOn:'声音开',soundOff:'声音关',soundUnavailable:'声音暂时不可用。',noSave:'此浏览器无法保存进度。',fall:'再试一次。',paused:'已暂停。',saved:'路标已记住进度。',complete:'已走完这一卷。',finished:'已走完三卷山水。',chapters:['渡溪','听风','见山']}
+};
+export function readLanguage(storage){try{return storage.getItem(LANGUAGE_KEY)==='zh'?'zh':'en';}catch{return 'en';}}

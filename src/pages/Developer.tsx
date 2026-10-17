@@ -9,6 +9,11 @@ type DeveloperProject = {
 
 const developerProjects: DeveloperProject[] = [
   {
+    img: '13_beyondthemountains.png',
+    title: 'Beyond the Mountains',
+    link: 'https://www.yiranshu.com/voyage/',
+  },
+  {
     img: '12_nuwacreation.png',
     title: 'Nüwa Creation',
     link: 'https://www.yiranshu.com/nuwa-creation/',
