@@ -30,10 +30,11 @@ export class Journey {
   if(this.complete)return;dt=Math.min(dt,.025);this.time+=dt;
   const p=this.player;const oldY=p.y,wasGrounded=p.grounded;
   this.buffer=Math.max(0,this.buffer-dt);this.coyote=p.grounded?.12:Math.max(0,this.coyote-dt);
-  if(input.jump)this.buffer=.14;
+  if(input.jump)this.buffer=Math.max(.05,Math.min(.25,Number.isFinite(input.jumpBuffer)?input.jumpBuffer:.14));
   const dir=(input.right?1:0)-(input.left?1:0);
+  const speed=Number.isFinite(input.speed)?Math.max(0,input.speed):310;
   const wind=this.level===1&&dir?Math.sin(this.time*.8)*13:0;
-  p.vx=dir*310+wind;if(dir)p.facing=dir;
+  p.vx=dir*speed+wind;if(dir)p.facing=dir;
   if(this.buffer>0&&this.coyote>0){p.vy=-665;p.grounded=false;this.coyote=0;this.buffer=0;this.events.push({type:'jump'});}
   let nx=Math.max(35,Math.min(WORLD-35,p.x+p.vx*dt));
   for(const r of this.rocks){if(nx+12>r.x&&nx-12<r.x+r.w&&p.y>r.y+3&&p.y-58<r.y+r.h){

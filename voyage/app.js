@@ -8,6 +8,7 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const svg=$('#scene'),stage=$('#stage'),hint=$('#hint'),actions=$('#actions');
 const SAVE_KEY='beyond-the-mountains-v1';
 const coarse=window.matchMedia('(pointer:coarse)').matches;
+const MOVE_SPEED=coarse?372:310,CAMERA_RESPONSE=coarse?12:8,JUMP_BUFFER=coarse?.18:.14;
 let language='en',colorOn=true,soundVolume=.33,save={version:1,unlocked:0,records:[null,null,null],current:null},storageAvailable=true;
 try{
  language=readLanguage(localStorage);
@@ -96,10 +97,10 @@ function frame(time){
   accumulator+=dt;
   while(accumulator>=1/120&&mode==='playing'){
    const jump=jumpQueued;jumpQueued=false;
-   game.step(1/120,{left:keys.has('left')||touches.has('left'),right:keys.has('right')||touches.has('right'),jump});
+   game.step(1/120,{left:keys.has('left')||touches.has('left'),right:keys.has('right')||touches.has('right'),jump,speed:MOVE_SPEED,jumpBuffer:JUMP_BUFFER});
    accumulator-=1/120;processEvents();
   }
-  camera+=(targetCamera()-camera)*Math.min(1,dt*8);paint(time);soundscape.update(game.player,game.walk,game.chapter.gaps);
+  camera+=(targetCamera()-camera)*Math.min(1,dt*CAMERA_RESPONSE);paint(time);soundscape.update(game.player,game.walk,game.chapter.gaps);
  }
  requestAnimationFrame(frame);
 }
