@@ -7,11 +7,14 @@ import {NatureSound} from './sound.js';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const svg=$('#scene'),stage=$('#stage'),hint=$('#hint'),actions=$('#actions');
 const SAVE_KEY='beyond-the-mountains-v1';
+const SOUND_VOLUME_KEY='voyage-sound-volume';
 const coarse=window.matchMedia('(pointer:coarse)').matches;
-let language='en',colorOn=true,save={version:1,unlocked:0,records:[null,null,null],current:null},storageAvailable=true;
+let language='en',colorOn=true,soundVolume=.85,save={version:1,unlocked:0,records:[null,null,null],current:null},storageAvailable=true;
 try{
  language=readLanguage(localStorage);
  colorOn=localStorage.getItem(COLOR_KEY)!=='off';
+ const savedVolume=localStorage.getItem(SOUND_VOLUME_KEY),storedVolume=Number(savedVolume);
+ if(savedVolume!==null&&Number.isFinite(storedVolume))soundVolume=Math.max(0,Math.min(1,storedVolume));
  const data=JSON.parse(localStorage.getItem(SAVE_KEY));
  if(data?.version===1){
   save.unlocked=Math.max(0,Math.min(2,Number(data.unlocked)||0));
@@ -22,9 +25,15 @@ try{
 let mode='playing',game=new Journey(),camera=0,viewWidth=1440,lastFrame=0,accumulator=0,lastArt=0;
 let jumpQueued=false,hintTimer,hintKey=coarse?'touchHint':'hint';
 const keys=new Set(),touches=new Set();
-const soundscape=new NatureSound();let soundOn=false;
+const soundscape=new NatureSound({volume:soundVolume}),soundVolumeInput=$('#soundVolume');
 const t=key=>COPY[language][key];
 function announce(message){$('#srStatus').textContent=message;}
+function syncSoundControl(){
+ const percent=Math.round(soundVolume*100);
+ $('#soundLabel').textContent=t('sound');soundVolumeInput.value=String(percent);
+ soundVolumeInput.setAttribute('aria-label',t('soundVolume'));
+ soundVolumeInput.setAttribute('aria-valuetext',`${percent}%`);
+}
 function showHint(key,duration=7000){
  hintKey=key;hint.textContent=t(key);hint.classList.remove('faded');
  clearTimeout(hintTimer);hintTimer=setTimeout(()=>hint.classList.add('faded'),duration);
@@ -34,8 +43,7 @@ function refreshActions(){
  $('#touchControls').hidden=mode!=='playing';
  $('#advance').textContent=mode==='paused'?t('resume'):game.level===2?t('again'):t('next');
  $('#retry').hidden=mode!=='paused';$('#retry').textContent=t('retry');
- $('#sound').textContent=t(soundOn?'soundOn':'soundOff');
- $('#sound').setAttribute('aria-pressed',String(soundOn));
+ syncSoundControl();
  document.body.classList.toggle('resting',mode!=='playing');
  soundscape.setActive(mode==='playing'&&!document.hidden);
 }
@@ -100,8 +108,7 @@ function frame(time){
 function keyName(e){if(['ArrowLeft','KeyA'].includes(e.code))return 'left';if(['ArrowRight','KeyD'].includes(e.code))return 'right';if(['Space','ArrowUp','KeyW'].includes(e.code))return 'jump';}
 window.addEventListener('keydown',e=>{
  if(['Escape','KeyP'].includes(e.code)){if(e.repeat)return;e.preventDefault();if(mode==='playing')pauseGame();else if(mode==='paused')resumeGame();return;}
- if(e.target.closest?.('button'))return;
- if(e.code==='KeyM'&&!e.repeat){toggleSound();return;}
+ if(e.target.closest?.('button,input'))return;
  const k=keyName(e);if(!k||mode!=='playing')return;e.preventDefault();
  if(k==='jump'&&!e.repeat&&!keys.has(k))jumpQueued=true;keys.add(k);
 });
@@ -125,10 +132,13 @@ $$('[data-language]').forEach(b=>b.addEventListener('click',()=>{
 $('#colorToggle').onclick=()=>{colorOn=!colorOn;try{localStorage.setItem(COLOR_KEY,colorOn?'on':'off');}catch{}applyLanguage();stage.focus({preventScroll:true});};
 $('#advance').onclick=()=>{if(mode==='paused')resumeGame();else if(mode==='result')begin(game.level===2?0:game.level+1);};
 $('#retry').onclick=()=>{if(mode==='paused'){game.respawn();resumeGame();processEvents();paint(0,true);}};
-$('#sound').onclick=()=>toggleSound();
+soundVolumeInput.addEventListener('pointerdown',()=>{void setSoundVolume(soundVolumeInput.value);});
+soundVolumeInput.addEventListener('input',()=>{void setSoundVolume(soundVolumeInput.value);});
 
-async function toggleSound(){try{
- soundOn=await soundscape.setEnabled(!soundOn);refreshActions();stage.focus({preventScroll:true});
- }catch{announce(t('soundUnavailable'));}}
+async function setSoundVolume(value){
+ soundVolume=Math.max(0,Math.min(1,Number(value)/100));syncSoundControl();
+ try{localStorage.setItem(SOUND_VOLUME_KEY,String(soundVolume));}catch{}
+ try{await soundscape.setVolume(soundVolume);}catch{announce(t('soundUnavailable'));}
+}
 applyLanguage();begin(save.current?.level||0,save.current,true);
 new ResizeObserver(resize).observe(stage);requestAnimationFrame(frame);

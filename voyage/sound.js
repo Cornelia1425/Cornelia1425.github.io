@@ -1,5 +1,6 @@
 // Quiet, original procedural field sounds. No external audio files or music.
 const RATE=24000;
+const OUTPUT_BOOST=1.25;
 function seeded(seed){return ()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};}
 function normalize(samples,peak){
  let max=0;for(const sample of samples)max=Math.max(max,Math.abs(sample));
@@ -57,8 +58,9 @@ export function birdcall(seed=1,rate=RATE){
 }
 
 export class NatureSound{
- constructor({createContext=null,random=Math.random}={}){
+ constructor({createContext=null,random=Math.random,volume=.85}={}){
   this.createContext=createContext;this.random=random;
+  this.volume=Math.max(0,Math.min(1,volume));
   this.enabled=false;this.active=true;this.sources=new Set();this.lastWalk=0;this.lastStep=-1;
  }
  between(a,b){return a+(b-a)*this.random();}
@@ -82,15 +84,19 @@ export class NatureSound{
   if(on){this.initialize();await this.context.resume();}
   this.enabled=on;this.setActive(this.active);return this.enabled;
  }
+ async setVolume(volume){
+  this.volume=Math.max(0,Math.min(1,Number(volume)||0));
+  await this.setEnabled(this.volume>0);return this.volume;
+ }
  setActive(active){
   this.active=active;if(!this.context)return;
-  const audible=this.enabled&&active;if(this.audible===audible)return;this.audible=audible;
-  const now=this.context.currentTime,volume=audible ? .55 : 0;
+  const audible=this.enabled&&active&&this.volume>0,wasAudible=this.audible;this.audible=audible;
+  const now=this.context.currentTime,volume=audible ? this.volume*OUTPUT_BOOST : 0;
   this.master.gain.cancelScheduledValues(now);
   this.master.gain.setValueAtTime(this.master.gain.value,now);
   this.master.gain.linearRampToValueAtTime(volume,now+.06);
-  if(volume){this.scheduleAmbience();this.lastStep=-1;}
-  else for(const source of this.sources)try{source.stop(now+.065);}catch{}
+  if(audible&&!wasAudible){this.scheduleAmbience();this.lastStep=-1;}
+  else if(!audible&&wasAudible)for(const source of this.sources)try{source.stop(now+.065);}catch{}
  }
  play(buffer,volume,pan=0){
   if(!this.enabled||!this.active)return;
@@ -107,15 +113,15 @@ export class NatureSound{
   if(!this.enabled||!this.active||this.context.state!=='running')return;
   const now=this.context.currentTime,step=Math.floor((walk+Math.PI/2)/Math.PI);
   if(player.grounded&&moved&&step!==this.lastStep){
-   this.play(this.steps[Math.floor(this.random()*this.steps.length)],this.between(.25,.33),this.between(-.08,.08));
+   this.play(this.steps[Math.floor(this.random()*this.steps.length)],this.between(.36,.5),this.between(-.08,.08));
   }
   this.lastStep=step;
   if(now>=this.nextWind){
-   this.play(this.winds[Math.floor(this.random()*this.winds.length)],this.between(.2,.3),this.between(-.35,.35));
+   this.play(this.winds[Math.floor(this.random()*this.winds.length)],this.between(.34,.48),this.between(-.35,.35));
    this.nextWind=now+this.between(20,34);
   }
   if(now>=this.nextBird){
-   this.play(this.calls[Math.floor(this.random()*this.calls.length)],this.between(.15,.23),this.between(-.8,.8));
+   this.play(this.calls[Math.floor(this.random()*this.calls.length)],this.between(.26,.4),this.between(-.8,.8));
    this.nextBird=now+this.between(24,43);
   }
  }

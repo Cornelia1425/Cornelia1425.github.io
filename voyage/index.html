@@ -4,7 +4,7 @@
  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
  <meta name="theme-color" content="#e9dcc1">
  <meta name="description" content="A quiet journey through a living ink painting. Walk left, cross the streams, and follow the mountains.">
- <title>Beyond the Mountains</title>
+ <title>Voyage</title>
  <link rel="icon" type="image/png" href="/images/favicon/icon.png">
  <link rel="preload" as="image" href="./assets/huangshan-ink-v2.png">
  <link rel="prefetch" as="image" href="./assets/huizhou-village-v4.png">
@@ -34,7 +34,10 @@
   </div>
  </main>
  <div class="preferences">
- <button id="sound" class="sound-switch" type="button" aria-pressed="false">Sound off</button>
+ <label class="sound-control" for="soundVolume">
+  <span id="soundLabel">Sound</span>
+  <input id="soundVolume" class="sound-slider" type="range" min="0" max="100" step="1" value="85" aria-label="Sound volume" aria-valuetext="85%">
+ </label>
  <button id="colorToggle" class="color-switch" type="button" aria-pressed="true">Color on</button>
  <nav class="language-switch" aria-label="Language">
   <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
