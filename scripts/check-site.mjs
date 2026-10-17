@@ -52,7 +52,7 @@ for (const project of projects) {
     exists(image.image); exists(image.thumb); imageCount++;
   }
 }
-assert.equal(imageCount, 48);
+assert.equal(imageCount, 49);
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
 assert.equal(new Set(ids).size, ids.length);
 for (const name of ['app.js', 'scene.js']) {

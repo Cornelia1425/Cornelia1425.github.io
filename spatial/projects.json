@@ -424,6 +424,31 @@
     ]
   },
   {
+    "id": "beyond-the-mountains",
+    "title": "Beyond the Mountains",
+    "category": "developer",
+    "categoryLabel": "Developer",
+    "categoryLabelZh": "开发项目",
+    "subtitle": "Interactive web journey",
+    "subtitleZh": "互动网页旅程",
+    "description": "",
+    "descriptionZh": "",
+    "coverIndex": 0,
+    "externalUrl": "https://www.yiranshu.com/voyage/",
+    "sourceUrl": "https://www.yiranshu.com/2d/#/developer",
+    "images": [
+      {
+        "project": "beyond-the-mountains",
+        "name": "13_beyondthemountains.png",
+        "image": "assets/developer/13_beyondthemountains.png",
+        "thumb": "assets/developer/13_beyondthemountains.png",
+        "width": 1440,
+        "height": 900,
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/13_beyondthemountains.png"
+      }
+    ]
+  },
+  {
     "id": "nuwa-creation",
     "title": "Nüwa Creation",
     "category": "developer",
