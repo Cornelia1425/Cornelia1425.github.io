@@ -23,7 +23,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
   controls.maxDistance = 180;
   controls.minPolarAngle = .04;
   controls.maxPolarAngle = Math.PI-.04;
-  controls.autoRotateSpeed = -.18;
+  controls.autoRotateSpeed = .35;
 
   const layers = buildLayout(projects,container.clientWidth<700);
   const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [];
@@ -145,7 +145,8 @@ export function createSpatialCollection({container,projects,language='en',getNav
       alpha=context.getImageData(0,0,canvas.width,canvas.height).data;
       glowContext.clearRect(0,0,glowCanvas.width,glowCanvas.height);
       glowContext.font=context.font;glowContext.textAlign='left';glowContext.textBaseline='middle';
-      glowContext.fillStyle='#fff';
+      glowContext.fillStyle='rgba(255,255,255,.72)';glowContext.shadowColor='#fff';
+      glowContext.shadowBlur=Math.round(canvas.height*.12);
       glowContext.fillText(value,0,glowCanvas.height/2);
       texture.needsUpdate=true;glowTexture.needsUpdate=true;
       return Math.min(inkRight,canvas.width)*width/canvas.width;
@@ -172,9 +173,8 @@ export function createSpatialCollection({container,projects,language='en',getNav
     return {mesh,glow,inkWidth:update(text),update,hitTest};
   }
 
-  const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0xff2020,side:THREE.DoubleSide});
-  const layerEdgeThickness=.07*.75;
-  function setColorMode(value){layerEdgeMaterial.color.setHex(value?0xff2020:0xd7dce3);requestRender();}
+  const layerEdgeMaterial=new THREE.MeshBasicMaterial({color:0x247b50,side:THREE.DoubleSide});
+  const layerEdgeThickness=.07*.65;
   layers.forEach(layer=>{
     const group=new THREE.Group(); group.position.z=layer.z; scene.add(group); groups.set(layer.id,group);
     layer.cards.forEach(card=>{
@@ -188,7 +188,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       const borderMaterial=new THREE.LineBasicMaterial({color:0x777777,transparent:true,opacity:.35});
       const border=new THREE.LineSegments(borderGeometry,borderMaterial);
       border.position.z=.008; holder.add(border);
-      const label=textPlane(card.project.title,CARD.width,.23,'#8b8b8b',29);
+      const label=textPlane(`${card.project.title}${card.project.externalUrl?'   ↗':`   / ${String(card.imageIndex+1).padStart(2,'0')}`}`,CARD.width,.23,'#8b8b8b',29);
       label.position.set(0,-CARD.height/2-.19,.01); holder.add(label);
       group.add(holder); cards.push({holder,plane,border,card});
       const texture=loader.load(card.image.thumb,()=>{
@@ -272,7 +272,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     layerId=id;
     groups.forEach((group,key)=>group.visible=id==='all'||key===id);
     spine.visible=id==='all';
-    clearHover();move(fittedView(id),immediate);onLayerChange?.(id);
+    clearHover();stopOrbit();move(fittedView(id),immediate);onLayerChange?.(id);
   }
   function clearHover(){
     if(hovered){hovered.border.material.color.setHex(0x777777);hovered.border.material.opacity=.35;hovered=null;}
@@ -300,7 +300,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
   }
   renderer.domElement.addEventListener('pointerdown',event=>{
     pointerCount++;pointerDown={x:event.clientX,y:event.clientY,button:event.button};
-    dragged=pointerCount>1;tween=null;clearHover();
+    dragged=pointerCount>1;tween=null;clearHover();stopOrbit();
     renderer.domElement.style.cursor='var(--cursor-scene)';
   });
   renderer.domElement.addEventListener('pointermove',event=>{
@@ -312,7 +312,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     if(card!==hovered||heading!==hoveredHeading){
       clearHover();hovered=card;hoveredHeading=heading;
       if(card){card.border.material.color.setHex(0xff8a32);card.border.material.opacity=1;}
-      if(heading)heading.glow.material.opacity=.22;
+      if(heading)heading.glow.material.opacity=.82;
     }
     renderer.domElement.style.cursor=target?'var(--cursor-action)':'var(--cursor-scene)';
     if(card)onHover?.({project:card.card.project,imageIndex:card.card.imageIndex,x:event.clientX,y:event.clientY});
@@ -357,10 +357,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       camera.updateProjectionMatrix();
       if(t===1)tween=null;requestRender();
     }
-    const autoRotate=controls.autoRotate;
-    if(tween)controls.autoRotate=false;
     controls.update(delta);
-    controls.autoRotate=autoRotate;
     if(!renderPending&&!tween&&!controls.autoRotate)return;
     updateRoom();renderer.render(scene,camera);renderPending=false;
     if(now-lastAxis>50){
@@ -392,7 +389,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
     },
     reset(){setLayer('all');},
     front(){stopOrbit();move(fittedView(layerId,true));},
-    setColorMode,
     setOrbit(value){controls.autoRotate=value;onOrbitChange?.(value);requestRender();},
     setActive(value){active=value;controls.enabled=value;clearHover();requestRender();},
     zoom(direction){

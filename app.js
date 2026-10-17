@@ -4,9 +4,7 @@ const $$=selector=>[...document.querySelectorAll(selector)];
 let language='en';
 try{language=localStorage.getItem('yiran-language')==='zh'?'zh':'en';}catch{}
 const t=(en,zh)=>language==='zh'?zh:en;
-let projects=[],spatial=null,activeProject=null,plate=0,orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches,colorMode=true,selectedLayer='all',lastProjectFocus=null;
-try{colorMode=localStorage.getItem('yiran-color-mode')!=='off';}catch{}
-document.documentElement.dataset.colorMode=colorMode?'on':'off';
+let projects=[],spatial=null,activeProject=null,plate=0,orbit=false,selectedLayer='all',lastProjectFocus=null;
 const imageProjects=()=>projects.filter(project=>!project.externalUrl);
 const projectDialog=$('#project-dialog'),imageDialog=$('#image-dialog'),indexDialog=$('#index-dialog'),aboutDialog=$('#about-dialog'),controlsDialog=$('#controls-dialog');
 const dialogs=[projectDialog,imageDialog,indexDialog,aboutDialog,controlsDialog];
@@ -25,13 +23,6 @@ function updateOrbit(value){
   $('#orbit-label').textContent=value?t('Pause orbit','暂停旋转'):t('Auto orbit','自动旋转');
   $('#auto-orbit').ariaLabel=$('#orbit-label').textContent;
 }
-function updateColorMode(value){
-  colorMode=Boolean(value);document.documentElement.dataset.colorMode=colorMode?'on':'off';
-  $('#color-mode').ariaPressed=String(colorMode);
-  $('#color-mode').ariaLabel=t(`Color Mode ${colorMode?'On':'Off'}`,`色彩模式${colorMode?'开启':'关闭'}`);
-  $('#color-mode-state').textContent=colorMode?'ON':'OFF';
-  spatial?.setColorMode(colorMode);
-}
 function updateCount(){
   const visible=$$('.project-card').filter(card=>!card.hidden);
   const count=visible.reduce((n,card)=>n+(projects.find(project=>project.id===card.dataset.id)?.images.length||0),0);
@@ -45,7 +36,7 @@ function translate(){
   $$('[data-language]').forEach(button=>button.ariaPressed=String(button.dataset.language===language));
   $('#load-label').textContent=t('Loading images','正在载入图片');
   spatial?.setLanguage(language);
-  updateLayer(selectedLayer);updateOrbit(orbit);updateColorMode(colorMode);updateCount();
+  updateLayer(selectedLayer);updateOrbit(orbit);updateCount();
   if(activeProject)fillProjectInfo();
 }
 function showIndex(){indexDialog.showModal();syncActivity();}
@@ -56,10 +47,6 @@ $('#about-open').addEventListener('click',()=>{aboutDialog.showModal();syncActiv
 $('#about-close').addEventListener('click',()=>aboutDialog.close());
 $('#controls-open').addEventListener('click',()=>{controlsDialog.showModal();syncActivity();});
 $('#controls-close').addEventListener('click',()=>controlsDialog.close());
-$('#color-mode').addEventListener('click',()=>{
-  updateColorMode(!colorMode);
-  try{localStorage.setItem('yiran-color-mode',colorMode?'on':'off');}catch{}
-});
 for(const dialog of dialogs){
   dialog.addEventListener('close',syncActivity);
   dialog.addEventListener('click',event=>{
@@ -206,6 +193,7 @@ function onHover(item){
   const tooltip=$('#scene-tooltip');tooltip.hidden=!item;
   if(!item)return;
   $('#hover-title').textContent=item.project.title;
+  $('#hover-detail').textContent=item.project.externalUrl?t('Open project in a new tab ↗','在新标签页打开项目 ↗'):t(`Image ${item.imageIndex+1} / ${item.project.images.length} · Click to open`,`作品图 ${item.imageIndex+1} / ${item.project.images.length} · 点击查看`);
   tooltip.style.left=`${Math.max(10,Math.min(item.x+18,innerWidth-tooltip.offsetWidth-14))}px`;
   tooltip.style.top=`${Math.max(10,Math.min(item.y+18,innerHeight-tooltip.offsetHeight-14))}px`;
 }
@@ -235,8 +223,6 @@ async function boot(){
           group.style.opacity=String(.6+(axis.z+1)*.2);
         });}
       });
-      spatial.setColorMode(colorMode);
-      spatial.setOrbit(orbit);
       syncActivity();
     }catch(error){unavailable();console.warn('3D collection unavailable:',error.message);}
   }catch(error){unavailable();console.warn(error.message);}

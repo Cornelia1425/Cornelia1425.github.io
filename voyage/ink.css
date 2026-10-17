@@ -1,0 +1,7 @@
+/* Decorative ink motion stays separate from the game's collision geometry. */
+.cloud-drift{animation:clouds-breathe 22s ease-in-out infinite alternate}
+.stream-flow{animation:creek-flow 4.8s linear infinite}
+@keyframes creek-flow{from{stroke-dashoffset:0}to{stroke-dashoffset:-72}}
+@keyframes clouds-breathe{from{transform:translate(-12px,0);opacity:.7}to{transform:translate(22px,-6px);opacity:1}}
+body.resting .cloud-drift,body.resting .stream-flow{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.cloud-drift,.stream-flow{animation:none}}
