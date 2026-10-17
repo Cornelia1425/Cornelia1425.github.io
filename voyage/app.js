@@ -7,14 +7,11 @@ import {NatureSound} from './sound.js';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const svg=$('#scene'),stage=$('#stage'),hint=$('#hint'),actions=$('#actions');
 const SAVE_KEY='beyond-the-mountains-v1';
-const SOUND_VOLUME_KEY='voyage-sound-volume';
 const coarse=window.matchMedia('(pointer:coarse)').matches;
-let language='en',colorOn=true,soundVolume=.85,save={version:1,unlocked:0,records:[null,null,null],current:null},storageAvailable=true;
+let language='en',colorOn=true,soundVolume=.33,save={version:1,unlocked:0,records:[null,null,null],current:null},storageAvailable=true;
 try{
  language=readLanguage(localStorage);
  colorOn=localStorage.getItem(COLOR_KEY)!=='off';
- const savedVolume=localStorage.getItem(SOUND_VOLUME_KEY),storedVolume=Number(savedVolume);
- if(savedVolume!==null&&Number.isFinite(storedVolume))soundVolume=Math.max(0,Math.min(1,storedVolume));
  const data=JSON.parse(localStorage.getItem(SAVE_KEY));
  if(data?.version===1){
   save.unlocked=Math.max(0,Math.min(2,Number(data.unlocked)||0));
@@ -137,7 +134,6 @@ soundVolumeInput.addEventListener('input',()=>{void setSoundVolume(soundVolumeIn
 
 async function setSoundVolume(value){
  soundVolume=Math.max(0,Math.min(1,Number(value)/100));syncSoundControl();
- try{localStorage.setItem(SOUND_VOLUME_KEY,String(soundVolume));}catch{}
  try{await soundscape.setVolume(soundVolume);}catch{announce(t('soundUnavailable'));}
 }
 applyLanguage();begin(save.current?.level||0,save.current,true);
