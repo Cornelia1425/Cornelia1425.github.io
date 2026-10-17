@@ -133,9 +133,10 @@ export function trailSign(x,y){return `<g transform="translate(${x} ${f(y)})">
 export function landscape(level){
  const c=CHAPTERS[level],r=rng(95+level),edge=[0,...c.gaps.flat().sort((a,b)=>a-b),WORLD];let s='';
  for(let k=0;k<edge.length-1;k+=2){
-  const a=edge[k],b=edge[k+1],pts=[];
+  const a=edge[k],b=edge[k+1],leftEdge=a===0?-180:a,pts=[];
+  if(a===0)pts.push([leftEdge,groundY(level,a)]);
   for(let x=a;x<b;x+=8)pts.push([x,groundY(level,x)]);pts.push([b,groundY(level,b)]);
-  let d=contour(pts)+`Q${b-6},${groundY(level,b)+36} ${b-12},${groundY(level,b)+100}L${b-30},890L${a+35},890L${a+12},${groundY(level,a)+100}Z`;
+  let d=contour(pts)+`Q${b-6},${groundY(level,b)+36} ${b-12},${groundY(level,b)+100}L${b-30},890L${a===0?leftEdge:a+35},890L${a===0?leftEdge:a+12},${groundY(level,a)+100}Z`;
   s+=`<g filter="url(#brushEdge)">${level===2?`<path d="${d}" fill="${PAPER}"/>`:''}<path d="${d}" fill="url(#ridgeWash)"/>`;
   s+=line(contour(pts),5.6,'#42483d',.87);
   // Broken dry-brush bands follow the actual walkable contour.
