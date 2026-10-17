@@ -1,6 +1,6 @@
 // Quiet, original procedural field sounds. No external audio files or music.
 const RATE=24000;
-const OUTPUT_BOOST=1.25;
+const OUTPUT_BOOST=.42;
 function seeded(seed){return ()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};}
 function normalize(samples,peak){
  let max=0;for(const sample of samples)max=Math.max(max,Math.abs(sample));
@@ -33,6 +33,35 @@ export function wind(seed=1,duration=10,rate=RATE){
   out[i]=(deep*.8+air*.18)*swell*uneven;
  }
  return normalize(out,.23);
+}
+
+export function water(seed=1,duration=8,rate=RATE){
+ const r=seeded(seed),length=Math.ceil(rate*duration),fade=Math.ceil(rate*.7),raw=new Float32Array(length+fade);
+ let body=0,flow=0,sheen=0;
+ for(let i=0;i<raw.length;i++){
+  const t=i/rate,n=r()*2-1;
+  body+=(n-body)*.018;flow+=(body-flow)*.075;sheen+=(n-sheen)*.19;
+  const current=.8+.12*Math.sin(t*.73+seed)+.08*Math.sin(t*1.91+.6);
+  raw[i]=(flow*.86+(sheen-body)*.12)*current;
+ }
+ const out=raw.slice(0,length);
+ // Fold a short continuation over the opening so the repeating stream has no seam.
+ for(let i=0;i<fade;i++){const mix=i/fade;out[i]=raw[length+i]*(1-mix)+raw[i]*mix;}
+ return normalize(out,.42);
+}
+
+export function streamPresence(x,gaps,radius=460){
+ let nearest=null,distance=Infinity;
+ for(const [a,b] of gaps||[]){
+  const d=x<a?a-x:x>b?x-b:0;
+  if(d<distance){distance=d;nearest=[a,b];}
+ }
+ if(!nearest||distance>=radius)return {amount:0,pan:0};
+ const center=(nearest[0]+nearest[1])/2;
+ return {
+  amount:Math.pow(1-distance/radius,1.6),
+  pan:Math.max(-.65,Math.min(.65,(center-x)/radius))
+ };
 }
 
 export function birdcall(seed=1,rate=RATE){
@@ -74,6 +103,12 @@ export class NatureSound{
   this.steps=Array.from({length:6},(_,i)=>buffer(footstep(31+i*17)));
   this.winds=[buffer(wind(74,9)),buffer(wind(119,12))];
   this.calls=[buffer(birdcall(29)),buffer(birdcall(81)),buffer(birdcall(143))];
+  this.water=buffer(water(207));this.waterGain=this.context.createGain();this.waterGain.gain.value=0;
+  this.waterPan=this.context.createStereoPanner?.();
+  if(this.waterPan){this.waterGain.connect(this.waterPan);this.waterPan.connect(this.master);}
+  else this.waterGain.connect(this.master);
+  this.waterSource=this.context.createBufferSource();this.waterSource.buffer=this.water;this.waterSource.loop=true;
+  this.waterSource.connect(this.waterGain);this.waterSource.start();this.nextWaterUpdate=0;
  }
  scheduleAmbience(){
   const now=this.context.currentTime;
@@ -108,10 +143,18 @@ export class NatureSound{
   source.onended=()=>{this.sources.delete(source);source.disconnect();gain.disconnect();position?.disconnect();};
   source.start(c.currentTime);
  }
- update(player,walk){
+ update(player,walk,gaps=[]){
   const moved=walk>this.lastWalk+.001;this.lastWalk=walk;
   if(!this.enabled||!this.active||this.context.state!=='running')return;
   const now=this.context.currentTime,step=Math.floor((walk+Math.PI/2)/Math.PI);
+  if(now>=this.nextWaterUpdate){
+   const stream=streamPresence(player.x,gaps),target=stream.amount*.36;
+   this.waterGain.gain.cancelScheduledValues(now);
+   this.waterGain.gain.setValueAtTime(this.waterGain.gain.value,now);
+   this.waterGain.gain.linearRampToValueAtTime(target,now+.28);
+   if(this.waterPan){this.waterPan.pan.cancelScheduledValues(now);this.waterPan.pan.setValueAtTime(this.waterPan.pan.value,now);this.waterPan.pan.linearRampToValueAtTime(stream.pan,now+.28);}
+   this.nextWaterUpdate=now+.12;
+  }
   if(player.grounded&&moved&&step!==this.lastStep){
    this.play(this.steps[Math.floor(this.random()*this.steps.length)],this.between(.36,.5),this.between(-.08,.08));
   }

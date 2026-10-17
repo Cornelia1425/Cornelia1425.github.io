@@ -101,7 +101,7 @@ function frame(time){
    game.step(1/120,{left:keys.has('left')||touches.has('left'),right:keys.has('right')||touches.has('right'),jump});
    accumulator-=1/120;processEvents();
   }
-  camera+=(targetCamera()-camera)*Math.min(1,dt*8);paint(time);soundscape.update(game.player,game.walk);
+  camera+=(targetCamera()-camera)*Math.min(1,dt*8);paint(time);soundscape.update(game.player,game.walk,game.chapter.gaps);
  }
  requestAnimationFrame(frame);
 }
