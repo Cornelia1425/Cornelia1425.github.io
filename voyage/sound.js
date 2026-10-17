@@ -112,7 +112,7 @@ export class NatureSound{
  }
  scheduleAmbience(){
   const now=this.context.currentTime;
-  this.nextWind=now+this.between(1.2,3.5);
+  this.nextWind=now+this.between(.2,.65);
   this.nextBird=now+this.between(7,13);
  }
  async setEnabled(on){
