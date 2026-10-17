@@ -23,6 +23,7 @@ let mode='playing',game=new Journey(),camera=0,viewWidth=1440,lastFrame=0,accumu
 let jumpQueued=false,hintTimer,hintKey=coarse?'touchHint':'hint';
 const keys=new Set(),touches=new Set();
 const soundscape=new NatureSound({volume:soundVolume}),soundVolumeInput=$('#soundVolume');
+let soundStarted=false;
 const t=key=>COPY[language][key];
 function announce(message){$('#srStatus').textContent=message;}
 function syncSoundControl(){
@@ -134,7 +135,20 @@ soundVolumeInput.addEventListener('input',()=>{void setSoundVolume(soundVolumeIn
 
 async function setSoundVolume(value){
  soundVolume=Math.max(0,Math.min(1,Number(value)/100));syncSoundControl();
- try{await soundscape.setVolume(soundVolume);}catch{announce(t('soundUnavailable'));}
+ try{await soundscape.setVolume(soundVolume);soundStarted=soundVolume>0;if(soundStarted)removeSoundUnlock();}catch{announce(t('soundUnavailable'));}
 }
+function removeSoundUnlock(){
+ window.removeEventListener('pointerdown',unlockSound,true);
+ window.removeEventListener('keydown',unlockSound,true);
+}
+async function startDefaultSound(silent=false){
+ if(soundStarted||soundVolume<=0)return;
+ try{await soundscape.setVolume(soundVolume);soundStarted=true;removeSoundUnlock();}
+ catch{if(!silent){announce(t('soundUnavailable'));removeSoundUnlock();}}
+}
+function unlockSound(){void startDefaultSound();}
+window.addEventListener('pointerdown',unlockSound,true);
+window.addEventListener('keydown',unlockSound,true);
 applyLanguage();begin(save.current?.level||0,save.current,true);
+void startDefaultSound(true);
 new ResizeObserver(resize).observe(stage);requestAnimationFrame(frame);
