@@ -69,8 +69,8 @@ export function landscape(level){
  return s;
 }
 export function leaf(x,y,i){return `<g id="leaf-${i}" transform="translate(${x} ${y})"><circle r="22" fill="#b77b5b" opacity=".06"/><path d="M-10 7Q-13 -8 9 -13Q15 5 -10 7Z" fill="#b77b5b" fill-opacity=".12" stroke="#a56d53" stroke-width="1.1"/><path d="M-13 12L8 -10M-3 1L-5 -5M1 -3L7 -2" fill="none" stroke="#a56d53" stroke-width=".7"/></g>`;}
-export function character(player,time=0,walk=0){
- const moving=Math.abs(player.vx)>2,frame=Math.floor((moving?walk:time*1.5)*2)/2,jump=!player.grounded;
+export function character(player,time=0,walk=0,smooth=false){
+ const moving=Math.abs(player.vx)>2,phase=moving?walk:time*1.5,frame=smooth?phase:Math.floor(phase*2)/2,jump=!player.grounded;
  const stride=moving?Math.sin(frame)*11:0,bob=player.grounded?(moving?Math.abs(Math.cos(frame))*1.1:Math.sin(frame)*.35):0;
  const flutter=Math.sin(time*1.15+frame*.18)*(moving?2.5:1.4);
  let s=`<g transform="translate(${f(player.x)} ${f(player.y-bob)}) scale(${-player.facing} 1)">`;

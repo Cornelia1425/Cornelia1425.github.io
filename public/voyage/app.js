@@ -9,6 +9,7 @@ const svg=$('#scene'),stage=$('#stage'),hint=$('#hint'),actions=$('#actions');
 const SAVE_KEY='beyond-the-mountains-v1';
 const coarse=window.matchMedia('(pointer:coarse)').matches;
 const MOVE_SPEED=coarse?372:310,CAMERA_RESPONSE=coarse?12:8,JUMP_BUFFER=coarse?.18:.14;
+const SIMULATION_STEP=coarse?1/60:1/120,MAX_SIMULATION_STEPS=coarse?4:8,ART_INTERVAL=1000/(coarse?20:12);
 let language='en',colorOn=true,soundVolume=.33,save={version:1,unlocked:0,records:[null,null,null],current:null},storageAvailable=true;
 try{
  language=readLanguage(localStorage);
@@ -68,7 +69,7 @@ function rebuild(){svg.innerHTML=sceneMarkup(game.level);camera=targetCamera();l
 function paint(time,force=false){
  const vertical=groundCameraY(game.level,game.player);
  applyCamera(svg,camera,vertical,game.player);
- if(force||time-lastArt>=1000/12){setSceneTransforms(svg,camera,game.player,game.time,game.walk,game.collected,vertical);lastArt=time;}
+ if(force||time-lastArt>=ART_INTERVAL){setSceneTransforms(svg,camera,game.player,game.time,game.walk,game.collected,vertical,coarse);lastArt=time;}
 }
 function begin(level=0,resume=null,initial=false){
  clearInput();mode='playing';game=new Journey(level,resume);accumulator=0;
@@ -95,13 +96,14 @@ function processEvents(){for(const event of game.drain()){
 function frame(time){
  const dt=lastFrame?Math.min((time-lastFrame)/1000,.08):0;lastFrame=time;
  if(mode==='playing'){
-  accumulator+=dt;
-  while(accumulator>=1/120&&mode==='playing'){
+  accumulator=Math.min(accumulator+dt,SIMULATION_STEP*MAX_SIMULATION_STEPS);
+  let steps=0;
+  while(accumulator>=SIMULATION_STEP&&steps<MAX_SIMULATION_STEPS&&mode==='playing'){
    const jump=jumpQueued;jumpQueued=false;
-   game.step(1/120,{left:keys.has('left')||touches.has('left'),right:keys.has('right')||touches.has('right'),jump,speed:MOVE_SPEED,jumpBuffer:JUMP_BUFFER});
-   accumulator-=1/120;processEvents();
+   game.step(SIMULATION_STEP,{left:keys.has('left')||touches.has('left'),right:keys.has('right')||touches.has('right'),jump,speed:MOVE_SPEED,jumpBuffer:JUMP_BUFFER});
+   accumulator-=SIMULATION_STEP;steps++;processEvents();
   }
-  camera+=(targetCamera()-camera)*Math.min(1,dt*CAMERA_RESPONSE);paint(time);soundscape.update(game.player,game.walk,game.chapter.gaps);
+  camera+=(targetCamera()-camera)*(1-Math.exp(-dt*CAMERA_RESPONSE));paint(time);soundscape.update(game.player,game.walk,game.chapter.gaps);
  }
  requestAnimationFrame(frame);
 }
