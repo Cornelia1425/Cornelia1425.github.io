@@ -115,13 +115,39 @@ export class NatureSound{
   this.nextWind=now+this.between(.2,.65);
   this.nextBird=now+this.between(7,13);
  }
+ prime(){
+  // iOS needs an audio source to start inside the trusted touch event. A
+  // one-sample silent buffer unlocks Web Audio without adding a click.
+  const source=this.context.createBufferSource(),gain=this.context.createGain();
+  source.buffer=this.context.createBuffer(1,1,this.context.sampleRate||RATE);
+  gain.gain.value=0;source.connect(gain);gain.connect(this.context.destination);
+  source.onended=()=>{source.disconnect();gain.disconnect();};source.start(0);
+ }
+ get running(){return Boolean(this.context&&this.enabled&&this.context.state==='running');}
  async setEnabled(on){
-  if(on){this.initialize();await this.context.resume();}
-  this.enabled=on;this.setActive(this.active);return this.enabled;
+  if(on){
+   this.initialize();
+   try{await this.context.resume();}catch{}
+   on=this.context.state==='running';
+  }
+  this.enabled=Boolean(on);this.setActive(this.active);return this.enabled;
  }
  async setVolume(volume){
   this.volume=Math.max(0,Math.min(1,Number(volume)||0));
   await this.setEnabled(this.volume>0);return this.volume;
+ }
+ async unlock(volume=this.volume){
+  this.volume=Math.max(0,Math.min(1,Number(volume)||0));
+  if(!this.volume)return this.setEnabled(false);
+  this.initialize();
+  // Both calls must happen synchronously while the browser still considers
+  // this a user gesture; only await the resume promise afterwards.
+  let resume;
+  try{resume=this.context.resume();}catch{}
+  try{this.prime();}catch{}
+  try{await resume;}catch{}
+  this.enabled=this.context.state==='running';this.setActive(this.active);
+  return this.enabled;
  }
  setActive(active){
   this.active=active;if(!this.context)return;
