@@ -21,11 +21,11 @@ export class Journey {
   const cp=this.chapter.checkpoints.includes(save?.checkpoint)?save.checkpoint:this.chapter.checkpoints[0];
   this.checkpoint=cp;this.collected=new Set((Array.isArray(save?.collected)?save.collected:[]).filter(x=>[0,1,2].includes(x)));
   this.player={x:cp,y:groundY(this.level,cp),vx:0,vy:0,grounded:true,facing:-1};
-  this.time=0;this.walk=0;this.coyote=.12;this.buffer=0;this.complete=false;this.deaths=0;this.events=[];
+  this.time=0;this.walk=0;this.coyote=.12;this.buffer=0;this.complete=false;this.deaths=0;this.fallCried=false;this.events=[];
  }
  snapshot(){return {level:this.level,checkpoint:this.checkpoint,collected:[...this.collected]};}
  drain(){const e=this.events;this.events=[];return e;}
- respawn(){this.player.x=this.checkpoint;this.player.y=groundY(this.level,this.checkpoint);this.player.vx=0;this.player.vy=0;this.player.grounded=true;this.coyote=.12;this.buffer=0;this.deaths++;this.events.push({type:'fall'});}
+ respawn(){this.player.x=this.checkpoint;this.player.y=groundY(this.level,this.checkpoint);this.player.vx=0;this.player.vy=0;this.player.grounded=true;this.coyote=.12;this.buffer=0;this.fallCried=false;this.deaths++;this.events.push({type:'fall'});}
  step(dt,input={}){
   if(this.complete)return;dt=Math.min(dt,.025);this.time+=dt;
   const p=this.player;const oldY=p.y,wasGrounded=p.grounded;
@@ -46,6 +46,7 @@ export class Journey {
   for(const r of this.rocks)if(p.x+10>r.x&&p.x-10<r.x+r.w)surfaces.push(r.y);
   surfaces.sort((a,b)=>a-b);
   for(const floor of surfaces){if(p.vy>=0&&(p.y>=floor||(wasGrounded&&Math.abs(floor-oldY)<8))&&(oldY<=floor+4||(wasGrounded&&oldY<=floor+10))){p.y=floor;p.vy=0;p.grounded=true;break;}}
+  if(!p.grounded&&!this.fallCried&&p.y>groundY(this.level,p.x)+68){this.fallCried=true;this.events.push({type:'plunge'});}
   for(const cp of this.chapter.checkpoints)if(p.x<=cp&&cp<this.checkpoint&&p.grounded){this.checkpoint=cp;this.events.push({type:'checkpoint'});}
   if(p.y>870)this.respawn();
   if(p.x<160&&p.grounded){this.complete=true;this.events.push({type:'complete'});}

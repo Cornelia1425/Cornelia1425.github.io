@@ -90,6 +90,7 @@ function finish(){
 }
 function processEvents(){for(const event of game.drain()){
  if(event.type==='checkpoint'){saveCurrent();announce(t('saved'));}
+ if(event.type==='plunge')soundscape.plunge();
  if(event.type==='fall'){clearInput();camera=targetCamera();showHint('fall',2400);announce(t('fall'));}
  if(event.type==='complete')finish();
 }}
