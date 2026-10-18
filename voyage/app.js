@@ -25,6 +25,7 @@ let jumpQueued=false,hintTimer,hintKey=coarse?'touchHint':'hint';
 const keys=new Set(),touches=new Set();
 const soundscape=new NatureSound({volume:soundVolume}),soundVolumeInput=$('#soundVolume');
 let soundStarted=false;
+const SOUND_UNLOCK_EVENTS=['touchstart','touchend','pointerdown','pointerup','click','keydown'];
 const t=key=>COPY[language][key];
 function announce(message){$('#srStatus').textContent=message;}
 function syncSoundControl(){
@@ -115,6 +116,10 @@ window.addEventListener('keyup',e=>{const k=keyName(e);if(k){keys.delete(k);if(m
 window.addEventListener('blur',()=>{clearInput();if(mode==='playing')pauseGame();});
 document.addEventListener('visibilitychange',()=>{
  if(document.hidden){clearInput();if(mode==='playing')pauseGame();}
+ else if(soundVolume>0&&!soundscape.running){soundStarted=false;armSoundUnlock();void startDefaultSound(true);}
+});
+window.addEventListener('pageshow',()=>{
+ if(soundVolume>0&&!soundscape.running){soundStarted=false;armSoundUnlock();void startDefaultSound(true);}
 });
 window.addEventListener('pagehide',saveCurrent);
 stage.addEventListener('pointerdown',()=>{if(mode==='paused')resumeGame();else stage.focus({preventScroll:true});});
@@ -136,20 +141,29 @@ soundVolumeInput.addEventListener('input',()=>{void setSoundVolume(soundVolumeIn
 
 async function setSoundVolume(value){
  soundVolume=Math.max(0,Math.min(1,Number(value)/100));syncSoundControl();
- try{await soundscape.setVolume(soundVolume);soundStarted=soundVolume>0;if(soundStarted)removeSoundUnlock();}catch{announce(t('soundUnavailable'));}
+ try{
+  if(soundVolume>0)await soundscape.unlock(soundVolume);else await soundscape.setVolume(0);
+  soundStarted=soundscape.running;
+  if(soundStarted||soundVolume===0)removeSoundUnlock();else armSoundUnlock();
+ }catch{soundStarted=false;if(soundVolume>0)armSoundUnlock();announce(t('soundUnavailable'));}
 }
 function removeSoundUnlock(){
- window.removeEventListener('pointerdown',unlockSound,true);
- window.removeEventListener('keydown',unlockSound,true);
+ for(const event of SOUND_UNLOCK_EVENTS)window.removeEventListener(event,unlockSound,true);
 }
-async function startDefaultSound(silent=false){
+function armSoundUnlock(){
+ for(const event of SOUND_UNLOCK_EVENTS)window.addEventListener(event,unlockSound,true);
+}
+async function startDefaultSound(silent=false,gesture=false){
  if(soundStarted||soundVolume<=0)return;
- try{await soundscape.setVolume(soundVolume);soundStarted=true;removeSoundUnlock();}
- catch{if(!silent){announce(t('soundUnavailable'));removeSoundUnlock();}}
+ try{
+  if(gesture)await soundscape.unlock(soundVolume);else await soundscape.setVolume(soundVolume);
+  soundStarted=soundscape.running;
+  if(soundStarted)removeSoundUnlock();else armSoundUnlock();
+ }
+ catch{soundStarted=false;armSoundUnlock();if(!silent)announce(t('soundUnavailable'));}
 }
-function unlockSound(){void startDefaultSound();}
-window.addEventListener('pointerdown',unlockSound,true);
-window.addEventListener('keydown',unlockSound,true);
+function unlockSound(){void startDefaultSound(true,true);}
+armSoundUnlock();
 applyLanguage();begin(save.current?.level||0,save.current,true);
 void startDefaultSound(true);
 new ResizeObserver(resize).observe(stage);requestAnimationFrame(frame);
