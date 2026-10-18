@@ -1,6 +1,5 @@
 import {CHAPTERS,groundY,rocksFor,WORLD} from './game-core.js';
 import {character as traveler} from './art.js';
-import {applyCamera} from './camera.js';
 
 // Artwork uses one source paper tone; the final wash warms every layer alike.
 export const PAPER='#f2f1e9',XUAN_PAPER='#f0e4cc',INK='#242722';
@@ -157,12 +156,18 @@ export function landscape(level){
  return s;
 }
 
-export function character(player,time=0,walk=0){return traveler(player,time,walk);}
+export function character(player,time=0,walk=0,smooth=false){return traveler(player,time,walk,smooth);}
 export function sceneMarkup(level=0){return defs()+`<g id="paperTone" filter="url(#xuanPaperTone)">`+sky()+`<g id="farLayer">${distant()}</g><g id="midLayer">${middle(level)}</g><g id="villageLayer">${village(level)}</g><g id="cloudLayer"><g class="cloud-drift"><path d="M-120 404Q130 380 350 411T850 404T1350 421T1950 399T2750 419T3650 398T4550 414L4800 442Q3900 466 3000 437T2000 455 1570 438T750 442T-120 431Z" fill="${PAPER}" opacity=".4"/></g></g><g id="worldLayer"><g id="streamLayer">${streams(level)}</g>${landscape(level)}<g id="traveler"></g></g><g id="airLayer"></g><rect x="0" y="710" width="4800" height="80" fill="url(#bottomMist)" pointer-events="none"/></g>`;}
-export function setSceneTransforms(svg,camera,player,time=0,walk=0,collected=new Set(),cameraY=0){
- applyCamera(svg,camera,cameraY,player);
- svg.querySelector('#traveler').innerHTML=character({...player,x:0,y:0},time,walk);
- svg.querySelector('#airLayer').innerHTML=birds(time);
+const sceneCache=new WeakMap();
+function movingNodes(svg){
+ let nodes=sceneCache.get(svg);
+ if(!nodes?.traveler?.isConnected){nodes={traveler:svg.querySelector('#traveler'),airLayer:svg.querySelector('#airLayer')};sceneCache.set(svg,nodes);}
+ return nodes;
+}
+export function setSceneTransforms(svg,camera,player,time=0,walk=0,collected=new Set(),cameraY=0,smooth=false){
+ const nodes=movingNodes(svg);
+ nodes.traveler.innerHTML=character({...player,x:0,y:0},time,walk,smooth);
+ nodes.airLayer.innerHTML=birds(time);
 }
 
 // Fixed world routes, with slow rightward flight driven only by elapsed time.
