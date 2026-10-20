@@ -86,8 +86,22 @@ export function birdcall(seed=1,rate=RATE){
  return normalize(out,.17);
 }
 
+export function swoosh(seed=1,rate=RATE){
+ const r=seeded(seed),duration=.22,out=new Float32Array(Math.ceil(rate*duration));
+ let phase=0,air=0;
+ for(let i=0;i<out.length;i++){
+  const t=i/rate,p=t/duration,n=r()*2-1;
+  const pitch=560+1120*Math.pow(p,.62);
+  phase+=2*Math.PI*pitch/rate;
+  air+=(n-air)*(.07+p*.09);
+  const envelope=Math.pow(Math.sin(Math.PI*p),1.45);
+  out[i]=(Math.sin(phase)*.36+(n-air)*.14+air*.06)*envelope;
+ }
+ return normalize(out,.24);
+}
+
 export function yelp(seed=1,rate=RATE){
- const r=seeded(seed),duration=.5,out=new Float32Array(Math.ceil(rate*duration));
+ const r=seeded(seed),duration=.3,out=new Float32Array(Math.ceil(rate*duration));
  let phase=0,breath=0;
  for(let i=0;i<out.length;i++){
   const t=i/rate;
@@ -104,7 +118,7 @@ export function yelp(seed=1,rate=RATE){
    voice+=Math.sin(phase*harmonic+(harmonic%2)*.08)*amount;weight+=amount;
   }
   breath+=((r()*2-1)-breath)*.19;
-  const attack=Math.min(1,t/.02),release=Math.min(1,(duration-t)/.09);
+  const attack=Math.min(1,t/.015),release=Math.min(1,(duration-t)/.055);
   const envelope=attack*Math.max(0,release)*(.92+.08*Math.sin(t*Math.PI*13));
   out[i]=(voice/weight+breath*.035)*envelope;
  }
@@ -128,6 +142,7 @@ export class NatureSound{
   this.steps=Array.from({length:6},(_,i)=>buffer(footstep(31+i*17)));
   this.winds=[buffer(wind(74,9)),buffer(wind(119,12))];
   this.calls=[buffer(birdcall(29)),buffer(birdcall(81)),buffer(birdcall(143))];
+  this.swoosh=buffer(swoosh(457));
   this.yelp=buffer(yelp(311));
   this.water=buffer(water(207));this.waterGain=this.context.createGain();this.waterGain.gain.value=0;
   this.waterPan=this.context.createStereoPanner?.();
@@ -195,6 +210,7 @@ export class NatureSound{
   source.onended=()=>{this.sources.delete(source);source.disconnect();gain.disconnect();position?.disconnect();};
   source.start(c.currentTime);
  }
+ jump(){this.play(this.swoosh,.52,this.between(-.1,.1));}
  plunge(){this.play(this.yelp,.78,this.between(-.18,.18));}
  update(player,walk,gaps=[]){
   const moved=walk>this.lastWalk+.001;this.lastWalk=walk;
