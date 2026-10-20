@@ -87,14 +87,12 @@ export function birdcall(seed=1,rate=RATE){
 }
 
 export function yelp(seed=1,rate=RATE){
- const r=seeded(seed),duration=.82,out=new Float32Array(Math.ceil(rate*duration));
+ const r=seeded(seed),duration=.5,out=new Float32Array(Math.ceil(rate*duration));
  let phase=0,breath=0;
  for(let i=0;i<out.length;i++){
-  const t=i/rate,p=t/duration;
-  // A quick rise, a tiny second wobble, then a long comic fall: "aaAAaah".
-  const rise=p<.18?260+(470-260)*(p/.18):470+(205-470)*((p-.18)/.82);
-  const hiccup=72*Math.exp(-Math.pow((p-.56)/.085,2));
-  const pitch=(rise+hiccup)*(1+.035*Math.sin(t*Math.PI*18));
+  const t=i/rate;
+  // A short, steady "ah" with pitch vibrato—no descending glide.
+  const pitch=390*(1+.055*Math.sin(t*Math.PI*17));
   phase+=2*Math.PI*pitch/rate;
   let voice=0,weight=0;
   // Harmonics clustered around the "ah" vowel formants keep the procedural
@@ -106,7 +104,7 @@ export function yelp(seed=1,rate=RATE){
    voice+=Math.sin(phase*harmonic+(harmonic%2)*.08)*amount;weight+=amount;
   }
   breath+=((r()*2-1)-breath)*.19;
-  const attack=Math.min(1,t/.025),release=Math.min(1,(duration-t)/.18);
+  const attack=Math.min(1,t/.02),release=Math.min(1,(duration-t)/.09);
   const envelope=attack*Math.max(0,release)*(.92+.08*Math.sin(t*Math.PI*13));
   out[i]=(voice/weight+breath*.035)*envelope;
  }
