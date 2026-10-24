@@ -48,3 +48,25 @@ html[data-color-mode=off] #scene canvas,html[data-color-mode=off] .index-image i
 .scene-tooltip span::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
 .scene-tooltip span::-webkit-scrollbar-thumb{background:rgba(255,138,50,0.3);border-radius:2px}
 .scene-tooltip span::-webkit-scrollbar-thumb:hover{background:rgba(255,138,50,0.5)}
+
+/* Axie character overlay - fixed, independent of camera */
+.axie-overlay{position:fixed;right:20px;bottom:180px;width:200px;height:200px;z-index:3;pointer-events:auto}
+.axie-overlay canvas{width:100%;height:100%;display:block;border-radius:8px}
+
+/* Axie status indicator - positioned near overlay */
+.axie-status{position:fixed;right:20px;bottom:150px;z-index:4;background:#000e;border:1px solid #555;color:#d0d0d0;padding:7px 11px;font-size:8px;letter-spacing:.03em;white-space:nowrap;pointer-events:none}
+.axie-status[data-status="connecting"]{border-color:#888;color:#aaa}
+.axie-status[data-status="listening"]{border-color:var(--accent);color:var(--accent)}
+.axie-status[data-status="speaking"]{border-color:#ff2020;color:#ff6060;animation:axie-pulse 1.2s ease-in-out infinite}
+.axie-status[data-status="error"]{border-color:#ff4444;color:#ff6666}
+@keyframes axie-pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+@media(max-width:700px){
+  .axie-overlay{right:15px;bottom:max(140px,calc(env(safe-area-inset-bottom) + 140px));width:140px;height:140px}
+  .axie-status{right:15px;bottom:max(115px,calc(env(safe-area-inset-bottom) + 115px));font-size:7px;padding:6px 9px}
+}
+
+@media(max-height:600px){
+  .axie-overlay{bottom:100px;width:160px;height:160px}
+  .axie-status{bottom:75px}
+}

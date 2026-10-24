@@ -21,6 +21,13 @@ function exists(url, from = '/') {
   if (!url || /^(?:#|https?:|mailto:|data:|\/\/)/.test(url)) return;
   const resolved = new URL(url.replaceAll('&amp;', '&'), 'https://www.yiranshu.com' + from);
   let file = join(dist, decodeURIComponent(resolved.pathname));
+  // Skip optional assets (e.g., user-provided models)
+  if (file.endsWith('/assets/axie.glb')) {
+    if (!existsSync(file)) {
+      console.log('Optional asset not present:', resolved.pathname);
+      return;
+    }
+  }
   assert(existsSync(file), `Missing local URL ${url} from ${from}`);
   if (statSync(file).isDirectory()) file = join(file, 'index.html');
   assert(existsSync(file), `Missing index for ${url}`);

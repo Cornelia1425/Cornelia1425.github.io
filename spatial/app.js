@@ -222,6 +222,41 @@ async function boot(){
   try{
     const response=await fetch('./projects.json');if(!response.ok)throw new Error('Project data unavailable');
     projects=await response.json();translate();readHash();
+    
+    // Initialize Axie overlay (independent of main scene)
+    try{
+      const {createAxieOverlay}=await import('./axie-overlay.js');
+      const axieOverlay=createAxieOverlay({
+        container:$('#axie-overlay'),
+        language,
+        onStatusChange(status,lang){
+          const statusLabel=$('#axie-status');
+          if(!statusLabel)return;
+          const labels={
+            connecting:{en:'Connecting...',zh:'正在连接...'},
+            listening:{en:'Listening',zh:'正在听'},
+            speaking:{en:'Speaking',zh:'正在说话'},
+            error:{en:'Error',zh:'错误'}
+          };
+          const label=labels[status];
+          if(!label){
+            statusLabel.hidden=true;
+            return;
+          }
+          const text=lang==='zh'?label.zh:label.en;
+          statusLabel.textContent=text;
+          statusLabel.dataset.status=status;
+          statusLabel.hidden=false;
+        }
+      });
+      // Update language when toggle changes
+      const originalTranslate=translate;
+      translate=function(){
+        originalTranslate();
+        axieOverlay.setLanguage(language);
+      };
+    }catch(error){console.warn('Axie overlay unavailable:',error.message);}
+    
     try{
       const {createSpatialCollection}=await import('./scene.js');
       spatial=createSpatialCollection({
