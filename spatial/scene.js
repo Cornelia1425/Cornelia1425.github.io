@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { CARD, LAYER_HEADING, ROOM_GRID, archiveViewport, buildLayout, coverWindow, fitView, headingBounds, roomBounds } from './layout.js';
+import { createAxie } from './axie.js';
 
-export function createSpatialCollection({container,projects,language='en',getNavigationRight,onOpen,onHover,onLayerChange,onOrbitChange,onProgress,onUnavailable,onCamera}) {
+export function createSpatialCollection({container,projects,language='en',getNavigationRight,onOpen,onHover,onLayerChange,onOrbitChange,onProgress,onUnavailable,onCamera,onAxieStatusChange}) {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer = new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});
   renderer.setClearColor(0x000000,1);
@@ -34,6 +35,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
   let loaded=0, failed=0, lastTime=0, pointerDown=null, dragged=false, pointerCount=0;
   const total = layers.reduce((count,layer)=>count+layer.cards.length,0);
   const requestRender = ()=>{renderPending=true;};
+  let axie = null;
 
   // The far walls extend past the view and disappear into a soft distance fade.
   const room=roomBounds(layers), roomCenter=new THREE.Vector3(...room.center);
@@ -284,6 +286,12 @@ export function createSpatialCollection({container,projects,language='en',getNav
     const rect=renderer.domElement.getBoundingClientRect();
     pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);
     raycaster.setFromCamera(pointer,camera);
+    
+    // Check Axie first
+    if(axie?.isVisible()&&axie.isModelClicked(pointer,camera)){
+      return {type:'axie',item:axie};
+    }
+    
     const visibleCards=pickTargets.filter(plane=>groups.get(plane.userData.layerId).visible);
     const visibleHeadings=headingTargets.filter(heading=>groups.get(heading.userData.layerId).visible);
     const intersections=raycaster.intersectObjects([...visibleCards,...visibleHeadings],false);
@@ -326,6 +334,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       const target=hit(event);
       if(target?.type==='card')onOpen(target.item.card.project.id,target.item.card.imageIndex);
       else if(target?.type==='layer')setLayer(target.item.layer.id);
+      else if(target?.type==='axie')target.item.toggleConversation();
     }
   });
   renderer.domElement.addEventListener('pointercancel',()=>{pointerDown=null;pointerCount=0;dragged=false;clearHover();});
@@ -375,6 +384,18 @@ export function createSpatialCollection({container,projects,language='en',getNav
   requestAnimationFrame(frame);
   document.addEventListener('visibilitychange',requestRender);
   renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();active=false;onUnavailable?.();});
+  
+  // Initialize Axie asynchronously
+  createAxie({
+    scene,
+    camera,
+    language,
+    onStatusChange: onAxieStatusChange
+  }).then(instance => {
+    axie = instance;
+    requestRender();
+  });
+  
   return {
     setLayer,
     setLanguage(value){
@@ -388,6 +409,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
         item.topEdge.scale.x=end-item.topStart;
         item.topEdge.position.x=(item.topStart+end)/2;
       }
+      if(axie)axie.setLanguage(next);
       clearHover();requestRender();
     },
     reset(){setLayer('all');},
@@ -399,6 +421,9 @@ export function createSpatialCollection({container,projects,language='en',getNav
       tween=null;const offset=camera.position.clone().sub(controls.target);
       offset.multiplyScalar(direction>0?.82:1.22).clampLength(controls.minDistance,controls.maxDistance);
       camera.position.copy(controls.target).add(offset);controls.update();requestRender();
+    },
+    toggleAxie(){
+      axie?.toggleConversation();
     }
   };
 }
