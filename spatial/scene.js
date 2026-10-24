@@ -288,7 +288,9 @@ export function createSpatialCollection({container,projects,language='en',getNav
     raycaster.setFromCamera(pointer,camera);
     
     // Check Axie first
+    console.log('hit(): Checking Axie, visible:', axie?.isVisible());
     if(axie?.isVisible()&&axie.isModelClicked(pointer,camera)){
+      console.log('hit(): Axie was hit!');
       return {type:'axie',item:axie};
     }
     
@@ -333,9 +335,13 @@ export function createSpatialCollection({container,projects,language='en',getNav
     renderer.domElement.style.cursor='var(--cursor-scene)';
     if(shouldOpen){
       const target=hit(event);
+      console.log('Click detected, target type:', target?.type);
       if(target?.type==='card')onOpen(target.item.card.project.id,target.item.card.imageIndex);
       else if(target?.type==='layer')setLayer(target.item.layer.id);
-      else if(target?.type==='axie')target.item.toggleConversation();
+      else if(target?.type==='axie'){
+        console.log('Axie clicked! Starting conversation...');
+        target.item.toggleConversation();
+      }
     }
   });
   renderer.domElement.addEventListener('pointercancel',()=>{pointerDown=null;pointerCount=0;dragged=false;clearHover();});
@@ -394,6 +400,8 @@ export function createSpatialCollection({container,projects,language='en',getNav
     frontZ: Math.max(bounds.frontZ || layer.z, layer.z)
   }), { right: -Infinity, bottom: Infinity, frontZ: -Infinity });
   
+  console.log('Layout bounds for Axie:', allLayerBounds);
+  
   createAxie({
     scene,
     camera,
@@ -403,6 +411,8 @@ export function createSpatialCollection({container,projects,language='en',getNav
     requestRender
   }).then(instance => {
     axie = instance;
+    // Expose for testing
+    window._axieTest = () => instance._testStart();
     requestRender();
   });
   

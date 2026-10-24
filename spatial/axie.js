@@ -3,7 +3,7 @@ import { GLTFLoader } from './vendor/GLTFLoader.js';
 
 const MODEL_PATH = './assets/axie.glb';
 const AGENT_ID = 'agent_9201m5qk96heefevwfbmg8mp3y94';
-const ELEVENLABS_SDK = 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.0.0/+esm';
+const ELEVENLABS_SDK = 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.30.0/+esm';
 
 export async function createAxie({ scene, camera, language = 'en', onStatusChange, layoutBounds, requestRender }) {
   let model = null, container = null;
@@ -24,10 +24,12 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
   // Load the model with graceful fallback
   async function loadModel() {
     const loader = new GLTFLoader();
+    console.log('Axie: Starting model load from', MODEL_PATH);
     return new Promise((resolve) => {
       loader.load(
         MODEL_PATH,
         (gltf) => {
+          console.log('Axie: Model loaded successfully');
           model = gltf.scene;
           
           // Auto-fit: scale to be similar to a project card (CARD.width ~3.2)
@@ -95,6 +97,20 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
     container.position.y = startY + Math.sin(idleTime * frequency) * amplitude;
     container.rotation.y = Math.sin(idleTime * frequency * 0.5) * 0.08;
     
+    // Get real-time output volume from conversation if speaking
+    if (speaking && conversation && conversation.getOutputVolume) {
+      try {
+        const outputVolume = conversation.getOutputVolume();
+        // outputVolume is typically 0-1, use it directly
+        targetVolume = Math.max(0, Math.min(1, outputVolume));
+      } catch (e) {
+        // If getOutputVolume fails, fall back to simulated volume
+        targetVolume = 0.8;
+      }
+    } else if (!speaking) {
+      targetVolume = 0;
+    }
+    
     // Smooth volume transition
     volume += (targetVolume - volume) * 5 * deltaSeconds;
     
@@ -139,60 +155,67 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
     
     onStatusChange?.('connecting', language);
     
+    // First request microphone permission
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (error) {
+      console.error('Microphone permission denied or unavailable:', error);
+      onStatusChange?.('error', language);
+      return;
+    }
+    
     const sdk = await lazyLoadElevenLabs();
-    if (!sdk) {
+    if (!sdk || !sdk.Conversation) {
+      console.error('ElevenLabs SDK not available or missing Conversation API');
       onStatusChange?.('error', language);
       return;
     }
     
     try {
-      const config = { agentId: AGENT_ID };
-      // Only pass language override if explicitly safe (ElevenLabs auto-detects by default)
+      const config = {
+        agentId: AGENT_ID,
+        connectionType: 'webrtc', // WebRTC recommended for public agents
+        onConnect: () => {
+          console.log('Axie conversation connected');
+          onStatusChange?.('listening', language);
+        },
+        onDisconnect: () => {
+          console.log('Axie conversation disconnected');
+          speaking = false;
+          targetVolume = 0;
+          conversation = null;
+          onStatusChange?.('idle', language);
+        },
+        onError: (error) => {
+          console.error('Axie conversation error:', error);
+          speaking = false;
+          targetVolume = 0;
+          conversation = null;
+          onStatusChange?.('error', language);
+        },
+        onModeChange: ({ mode }) => {
+          console.log('Axie mode change:', mode);
+          if (mode === 'speaking') {
+            speaking = true;
+            onStatusChange?.('speaking', language);
+          } else if (mode === 'listening') {
+            speaking = false;
+            targetVolume = 0;
+            onStatusChange?.('listening', language);
+          }
+        }
+      };
+      
+      // Only pass language override if explicitly safe
       if (overrideLanguage === 'zh' || overrideLanguage === 'zh-Hans') {
         config.overrides = { agent: { language: 'zh' } };
       }
       
       conversation = await sdk.Conversation.startSession(config);
-      
-      // Set up event listeners
-      conversation.on('connected', () => {
-        onStatusChange?.('listening', language);
-        speaking = false;
-      });
-      
-      conversation.on('audio', (audio) => {
-        speaking = true;
-        onStatusChange?.('speaking', language);
-        // Simulate volume from audio (ElevenLabs SDK may provide actual volume data)
-        targetVolume = 0.8;
-      });
-      
-      conversation.on('message', (message) => {
-        if (message.type === 'agent_response_end' || message.type === 'user_transcript') {
-          speaking = false;
-          targetVolume = 0;
-          onStatusChange?.('listening', language);
-        }
-      });
-      
-      conversation.on('disconnected', () => {
-        speaking = false;
-        targetVolume = 0;
-        conversation = null;
-        onStatusChange?.('idle', language);
-      });
-      
-      conversation.on('error', (error) => {
-        console.error('Conversation error:', error);
-        endConversation();
-        onStatusChange?.('error', language);
-      });
-      
-      // Start microphone
-      await conversation.startRecording();
+      console.log('Axie conversation started');
       
     } catch (error) {
-      console.error('Failed to start conversation:', error);
+      console.error('Failed to start Axie conversation:', error);
       conversation = null;
       onStatusChange?.('error', language);
     }
@@ -201,9 +224,10 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
   async function endConversation() {
     if (!conversation) return;
     try {
+      console.log('Ending Axie conversation');
       await conversation.endSession();
     } catch (error) {
-      console.error('Error ending conversation:', error);
+      console.error('Error ending Axie conversation:', error);
     }
     conversation = null;
     speaking = false;
@@ -212,10 +236,16 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
   }
   
   function isModelClicked(mouse, camera) {
-    if (!model) return false;
+    if (!model || !container) {
+      console.log('Axie: isModelClicked called but no model or container');
+      return false;
+    }
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(model, true);
-    return intersects.length > 0;
+    // Raycast the container which includes the model
+    const intersects = raycaster.intersectObject(container, true);
+    const hit = intersects.length > 0;
+    if (hit) console.log('Axie: Raycast hit!', intersects.length, 'objects');
+    return hit;
   }
   
   // Initialize
@@ -223,7 +253,19 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
   if (result && result.container) {
     // Store the starting Y position for idle animation
     result.container.userData.startY = result.container.position.y;
+    const pos = result.container.position;
+    console.log('Axie: Initialized at position', pos.x.toFixed(2), pos.y.toFixed(2), pos.z.toFixed(2));
+    
+    // Log bounding box
+    const box = new THREE.Box3().setFromObject(result.container);
+    const size = box.getSize(new THREE.Vector3());
+    console.log('Axie: Bounding box size', size.x.toFixed(2), size.y.toFixed(2), size.z.toFixed(2));
+    console.log('Axie: Bounding box min', box.min.x.toFixed(2), box.min.y.toFixed(2), box.min.z.toFixed(2));
+    console.log('Axie: Bounding box max', box.max.x.toFixed(2), box.max.y.toFixed(2), box.max.z.toFixed(2));
+    
     requestRender();
+  } else {
+    console.log('Axie: Model not loaded, skipping initialization');
   }
   
   return {
@@ -237,6 +279,8 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
         await startConversation();
       }
     },
+    // Expose for testing
+    _testStart: () => startConversation(),
     startConversation: (overrideLanguage) => startConversation(overrideLanguage),
     endConversation,
     isActive: () => !!conversation,
