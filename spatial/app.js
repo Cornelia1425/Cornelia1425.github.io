@@ -222,22 +222,14 @@ async function boot(){
   try{
     const response=await fetch('./projects.json');if(!response.ok)throw new Error('Project data unavailable');
     projects=await response.json();translate();readHash();
+    
+    // Initialize Axie overlay (independent of main scene)
     try{
-      const {createSpatialCollection}=await import('./scene.js');
-      spatial=createSpatialCollection({
-        container:$('#scene'),projects,language,onOpen:activateProject,onHover,onLayerChange:updateLayer,onOrbitChange:updateOrbit,onUnavailable:unavailable,
-        getNavigationRight:()=>$('.layer-nav').getBoundingClientRect().right,
-        onProgress({loaded,failed,total}){
-          $('#load-count').textContent=`${String(loaded+failed).padStart(2,'0')} / ${total}`;
-          if(loaded+failed===total){$('#scene-loading').classList.add('done');setTimeout(()=>$('#scene-loading').hidden=true,350);}
-        },
-        onCamera(axes){axes.forEach(axis=>{
-          const group=document.querySelector(`[data-axis="${axis.axis}"]`),line=group.querySelector('line'),label=group.querySelector('text');
-          line.setAttribute('x2',45+axis.x*27);line.setAttribute('y2',45+axis.y*27);
-          label.setAttribute('x',42+axis.x*36);label.setAttribute('y',48+axis.y*36);
-          group.style.opacity=String(.6+(axis.z+1)*.2);
-        });},
-        onAxieStatusChange(status,lang){
+      const {createAxieOverlay}=await import('./axie-overlay.js');
+      const axieOverlay=createAxieOverlay({
+        container:$('#axie-overlay'),
+        language,
+        onStatusChange(status,lang){
           const statusLabel=$('#axie-status');
           if(!statusLabel)return;
           const labels={
@@ -256,6 +248,30 @@ async function boot(){
           statusLabel.dataset.status=status;
           statusLabel.hidden=false;
         }
+      });
+      // Update language when toggle changes
+      const originalTranslate=translate;
+      translate=function(){
+        originalTranslate();
+        axieOverlay.setLanguage(language);
+      };
+    }catch(error){console.warn('Axie overlay unavailable:',error.message);}
+    
+    try{
+      const {createSpatialCollection}=await import('./scene.js');
+      spatial=createSpatialCollection({
+        container:$('#scene'),projects,language,onOpen:activateProject,onHover,onLayerChange:updateLayer,onOrbitChange:updateOrbit,onUnavailable:unavailable,
+        getNavigationRight:()=>$('.layer-nav').getBoundingClientRect().right,
+        onProgress({loaded,failed,total}){
+          $('#load-count').textContent=`${String(loaded+failed).padStart(2,'0')} / ${total}`;
+          if(loaded+failed===total){$('#scene-loading').classList.add('done');setTimeout(()=>$('#scene-loading').hidden=true,350);}
+        },
+        onCamera(axes){axes.forEach(axis=>{
+          const group=document.querySelector(`[data-axis="${axis.axis}"]`),line=group.querySelector('line'),label=group.querySelector('text');
+          line.setAttribute('x2',45+axis.x*27);line.setAttribute('y2',45+axis.y*27);
+          label.setAttribute('x',42+axis.x*36);label.setAttribute('y',48+axis.y*36);
+          group.style.opacity=String(.6+(axis.z+1)*.2);
+        });}
       });
       spatial.setColorMode(colorMode);
       spatial.setOrbit(orbit);
