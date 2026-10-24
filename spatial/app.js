@@ -182,7 +182,6 @@ $('#front-view').addEventListener('click',()=>spatial?.front());
 $('#auto-orbit').addEventListener('click',()=>spatial?.setOrbit(!orbit));
 $('#zoom-in').addEventListener('click',()=>spatial?.zoom(1));
 $('#zoom-out').addEventListener('click',()=>spatial?.zoom(-1));
-$('#axie-talk-button')?.addEventListener('click',()=>spatial?.toggleAxie());
 $('#scene').addEventListener('keydown',event=>{
   const key=event.key.toLowerCase();
   if(key==='r'||key==='0'){event.preventDefault();spatial?.reset();}
@@ -239,22 +238,23 @@ async function boot(){
           group.style.opacity=String(.6+(axis.z+1)*.2);
         });},
         onAxieStatusChange(status,lang){
-          const button=$('#axie-talk-button');
           const statusLabel=$('#axie-status');
-          if(!button||!statusLabel)return;
+          if(!statusLabel)return;
           const labels={
-            idle:{en:'Talk to Axie',zh:'和Axie聊天'},
             connecting:{en:'Connecting...',zh:'正在连接...'},
             listening:{en:'Listening',zh:'正在听'},
             speaking:{en:'Speaking',zh:'正在说话'},
             error:{en:'Error',zh:'错误'}
           };
-          const label=labels[status]||labels.idle;
+          const label=labels[status];
+          if(!label){
+            statusLabel.hidden=true;
+            return;
+          }
           const text=lang==='zh'?label.zh:label.en;
-          button.textContent=label.en+' / '+label.zh;
           statusLabel.textContent=text;
           statusLabel.dataset.status=status;
-          statusLabel.hidden=status==='idle';
+          statusLabel.hidden=false;
         }
       });
       spatial.setColorMode(colorMode);

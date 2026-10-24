@@ -5,12 +5,12 @@ const MODEL_PATH = './assets/axie.glb';
 const AGENT_ID = 'agent_9201m5qk96heefevwfbmg8mp3y94';
 const ELEVENLABS_SDK = 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.0.0/+esm';
 
-export async function createAxie({ scene, camera, language = 'en', onStatusChange }) {
-  let model = null, mixer = null, idleAction = null;
+export async function createAxie({ scene, camera, language = 'en', onStatusChange, layoutBounds, requestRender }) {
+  let model = null, container = null;
   let conversation = null, conversationSdk = null;
   let speaking = false, volume = 0, targetVolume = 0;
   let originalScale = 1, originalEmissive = null;
-  const clock = new THREE.Clock();
+  let idleTime = 0;
   const raycaster = new THREE.Raycaster();
 
   // Load the model with graceful fallback
@@ -22,11 +22,11 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
         (gltf) => {
           model = gltf.scene;
           
-          // Auto-fit: compute bounding box and scale
+          // Auto-fit: scale to be similar to a project card (CARD.width ~3.2)
           const box = new THREE.Box3().setFromObject(model);
           const size = box.getSize(new THREE.Vector3());
           const maxDim = Math.max(size.x, size.y, size.z);
-          originalScale = 2.5 / maxDim; // Target size: ~2.5 units
+          originalScale = 2.8 / maxDim; // Slightly smaller than card width
           model.scale.setScalar(originalScale);
           
           // Center the model at its base
@@ -34,9 +34,16 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
           const center = box.getCenter(new THREE.Vector3());
           model.position.set(-center.x, -box.min.y, -center.z);
           
-          // Position in a visible corner (front-left, not blocking center)
-          const container = new THREE.Group();
-          container.position.set(-8, 0, 2);
+          // Position relative to layout: lower-right area of the view, clearly visible but not blocking cards
+          // Use the layout bounds to position intelligently
+          const bounds = layoutBounds;
+          container = new THREE.Group();
+          // Place at right edge + offset, slightly below center, and in front (positive Z)
+          container.position.set(
+            bounds.right + 2.5,  // Right edge with margin
+            bounds.bottom + 1.5, // Lower third
+            bounds.frontZ + 1    // In front of the front layer
+          );
           container.add(model);
           scene.add(container);
           
@@ -53,9 +60,6 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
             }
           });
           
-          // Add gentle idle float animation
-          addIdleAnimation(container);
-          
           resolve({ model, container });
         },
         undefined,
@@ -67,28 +71,21 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
     });
   }
   
-  function addIdleAnimation(container) {
-    const startY = container.position.y;
+  // Update function called from scene.js's render loop with delta time in seconds
+  function update(deltaSeconds) {
+    if (!model || !container || !container.parent) return;
+    
+    // Idle animation: gentle float and rotation
+    const startY = container.userData.startY;
+    const deltaMs = deltaSeconds * 1000;
+    idleTime += deltaMs;
     const amplitude = 0.15;
     const frequency = 0.0008;
-    let time = 0;
-    
-    function animate() {
-      if (!container.parent) return;
-      time += clock.getDelta() * 1000;
-      container.position.y = startY + Math.sin(time * frequency) * amplitude;
-      container.rotation.y = Math.sin(time * frequency * 0.5) * 0.08;
-      
-      requestAnimationFrame(animate);
-    }
-    animate();
-  }
-  
-  function updateVisuals(delta) {
-    if (!model) return;
+    container.position.y = startY + Math.sin(idleTime * frequency) * amplitude;
+    container.rotation.y = Math.sin(idleTime * frequency * 0.5) * 0.08;
     
     // Smooth volume transition
-    volume += (targetVolume - volume) * 5 * delta;
+    volume += (targetVolume - volume) * 5 * deltaSeconds;
     
     // Scale pulse based on volume (speaking)
     const scalePulse = speaking ? 1 + volume * 0.15 : 1;
@@ -110,16 +107,8 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
         });
       }
     });
-  }
-  
-  function startAnimationLoop() {
-    function animate() {
-      if (!model || !model.parent) return;
-      const delta = clock.getDelta();
-      updateVisuals(delta);
-      requestAnimationFrame(animate);
-    }
-    animate();
+    
+    requestRender();
   }
   
   async function lazyLoadElevenLabs() {
@@ -220,13 +209,16 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
   
   // Initialize
   const result = await loadModel();
-  if (result) {
-    startAnimationLoop();
+  if (result && result.container) {
+    // Store the starting Y position for idle animation
+    result.container.userData.startY = result.container.position.y;
+    requestRender();
   }
   
   return {
     isVisible: () => !!model,
     isModelClicked,
+    update,
     toggleConversation: async () => {
       if (conversation) {
         await endConversation();

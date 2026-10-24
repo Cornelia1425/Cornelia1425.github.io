@@ -317,12 +317,13 @@ export function createSpatialCollection({container,projects,language='en',getNav
     const target=hit(event);
     const card=target?.type==='card'?target.item:null;
     const heading=target?.type==='layer'?target.item:null;
+    const isAxieHovered=target?.type==='axie';
     if(card!==hovered||heading!==hoveredHeading){
       clearHover();hovered=card;hoveredHeading=heading;
       if(card){card.border.material.color.setHex(0xff8a32);card.border.material.opacity=1;}
       if(heading)heading.glow.material.opacity=.22;
     }
-    renderer.domElement.style.cursor=target?'var(--cursor-action)':'var(--cursor-scene)';
+    renderer.domElement.style.cursor=(target&&target.type!=='axie')?'var(--cursor-action)':(isAxieHovered?'pointer':'var(--cursor-scene)');
     if(card)onHover?.({project:card.card.project,imageIndex:card.card.imageIndex,x:event.clientX,y:event.clientY});
     requestRender();
   });
@@ -370,7 +371,8 @@ export function createSpatialCollection({container,projects,language='en',getNav
     if(tween)controls.autoRotate=false;
     controls.update(delta);
     controls.autoRotate=autoRotate;
-    if(!renderPending&&!tween&&!controls.autoRotate)return;
+    if(axie)axie.update(delta);
+    if(!renderPending&&!tween&&!controls.autoRotate&&!axie?.isVisible())return;
     updateRoom();renderer.render(scene,camera);renderPending=false;
     if(now-lastAxis>50){
       lastAxis=now;
@@ -385,12 +387,20 @@ export function createSpatialCollection({container,projects,language='en',getNav
   document.addEventListener('visibilitychange',requestRender);
   renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();active=false;onUnavailable?.();});
   
-  // Initialize Axie asynchronously
+  // Initialize Axie asynchronously - compute bounds from existing layers
+  const allLayerBounds = layers.reduce((bounds, layer) => ({
+    right: Math.max(bounds.right, layer.right),
+    bottom: Math.min(bounds.bottom, layer.bottom),
+    frontZ: Math.max(bounds.frontZ || layer.z, layer.z)
+  }), { right: -Infinity, bottom: Infinity, frontZ: -Infinity });
+  
   createAxie({
     scene,
     camera,
     language,
-    onStatusChange: onAxieStatusChange
+    onStatusChange: onAxieStatusChange,
+    layoutBounds: allLayerBounds,
+    requestRender
   }).then(instance => {
     axie = instance;
     requestRender();
@@ -421,9 +431,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
       tween=null;const offset=camera.position.clone().sub(controls.target);
       offset.multiplyScalar(direction>0?.82:1.22).clampLength(controls.minDistance,controls.maxDistance);
       camera.position.copy(controls.target).add(offset);controls.update();requestRender();
-    },
-    toggleAxie(){
-      axie?.toggleConversation();
     }
   };
 }
