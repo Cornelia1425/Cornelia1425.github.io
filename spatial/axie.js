@@ -12,6 +12,14 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
   let originalScale = 1, originalEmissive = null;
   let idleTime = 0;
   const raycaster = new THREE.Raycaster();
+  
+  // Create lighting for Axie's PBR materials (doesn't affect MeshBasicMaterial cards)
+  const axieLight = new THREE.Group();
+  const hemisphere = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+  const directional = new THREE.DirectionalLight(0xffddbb, 0.8);
+  directional.position.set(2, 3, 1);
+  axieLight.add(hemisphere, directional);
+  scene.add(axieLight);
 
   // Load the model with graceful fallback
   async function loadModel() {
@@ -46,6 +54,9 @@ export async function createAxie({ scene, camera, language = 'en', onStatusChang
           );
           container.add(model);
           scene.add(container);
+          
+          // Position lights near Axie
+          axieLight.position.copy(container.position);
           
           // Store emissive colors for all materials
           model.traverse((child) => {
