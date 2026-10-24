@@ -41,5 +41,10 @@ html[data-color-mode=off]{--collection-blue:#d7dce3;--collection-strong:#d7dce3b
 .orientation .language-switch{position:static;top:auto;left:auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;justify-content:normal;gap:6px;width:132px;min-height:28px;color:#929292;font-size:9px;letter-spacing:.06em;text-shadow:none}.orientation .language-switch button{min-height:28px;padding:0;color:#929292}.orientation .language-switch button:first-child{text-align:right}.orientation .language-switch button:last-child{text-align:left}.orientation .language-switch button[aria-pressed=true],.orientation .language-switch button:hover,.orientation .language-switch button:focus-visible{color:#929292}
 html[data-color-mode=off] #scene canvas,html[data-color-mode=off] .index-image img,html[data-color-mode=off] .plate-thumbnails img{filter:grayscale(1)}
 .index-image img{transition:opacity .2s,filter .2s}.plate-thumbnails img{transition:filter .2s}
-.scene-tooltip{width:min(320px,calc(100vw - 20px));max-width:none;aspect-ratio:140/17;padding:0 16px;display:flex;align-items:center;justify-content:flex-start;text-align:left;border-radius:0}
-.scene-tooltip strong{width:100%;margin-bottom:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.scene-tooltip{width:min(420px,calc(100vw - 20px));max-width:none;max-height:min(450px,calc(100vh - 40px));padding:12px 16px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;text-align:left;border-radius:0;overflow:hidden}
+.scene-tooltip strong{width:100%;margin-bottom:8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;flex-shrink:0}
+.scene-tooltip span{display:block;width:100%;font-size:11px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;overflow-y:auto;max-height:380px;scrollbar-width:thin;scrollbar-color:rgba(255,138,50,0.3) rgba(255,255,255,0.05)}
+.scene-tooltip span::-webkit-scrollbar{width:4px}
+.scene-tooltip span::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
+.scene-tooltip span::-webkit-scrollbar-thumb{background:rgba(255,138,50,0.3);border-radius:2px}
+.scene-tooltip span::-webkit-scrollbar-thumb:hover{background:rgba(255,138,50,0.5)}
