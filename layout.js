@@ -82,7 +82,10 @@ export function roomBounds(layers) {
 export function archiveViewport(width, height, navigationRight=0) {
   const margin=.06;
   const inset=Math.max(0,(navigationRight+28-width*margin)/(1-margin));
-  const left=Math.min(inset,width*.25);
+  // Phones keep a 188px navigation rail. A 25% cap leaves that rail on top of
+  // the archive, so let the inset reach the rail without taking more than 62%.
+  const cap=width<700?Math.min(Math.max(navigationRight,width*.42),width*.62):width*.25;
+  const left=Math.min(inset,cap);
   return {left,width:width-left,height};
 }
 
