@@ -2,7 +2,9 @@ import { chromium } from 'playwright';
 
 const url = process.env.CONVAI_URL || 'http://127.0.0.1:5173/';
 const origin = new URL(url).origin;
+const mode = process.env.CONVAI_MODE || 'text';
 const statusPattern = /talk to interrupt|listening|connecting|connected|speaking|正在聆听|正在连接|正在说话|聆听中|连接中/i;
+const transcriptPattern = /talk to interrupt|send a message|start a call|portfolio guide|powered by|connecting|listening/i;
 
 const browser = await chromium.launch({
   headless: true,
@@ -60,20 +62,24 @@ try {
 
   await page.getByRole('button', { name: 'End', exact: true }).waitFor({ timeout: 15000 });
   await conversationSocket;
-  await page.getByText(/Talk to interrupt|Listening|正在聆听/).first().waitFor({ timeout: 15000 });
+  if (mode === 'text') {
+    await page.getByText(/Talk to interrupt|Listening|正在聆听/).first().waitFor({ timeout: 15000 });
+  }
 
   const widgetText = await page.evaluate(() => {
     const root = document.querySelector('elevenlabs-convai')?.shadowRoot;
     if (!root) return '';
-    return [...root.querySelectorAll('button, p, span, div')]
+    return [...root.querySelectorAll('button, p, span, div, a')]
+      .filter((element) => element.tagName !== 'STYLE')
       .map((element) => {
-        const own = [...element.childNodes]
+        const style = getComputedStyle(element);
+        if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) return '';
+        if (element.getClientRects().length === 0) return '';
+        return [...element.childNodes]
           .filter((node) => node.nodeType === Node.TEXT_NODE)
           .map((node) => node.textContent.trim())
           .filter(Boolean)
           .join(' ');
-        const label = element.getAttribute('aria-label') || '';
-        return [label, own].filter(Boolean).join(' ');
       })
       .filter(Boolean)
       .join('\n');
@@ -81,10 +87,14 @@ try {
   const blockingErrors = consoleErrors.filter((entry) => !/favicon|Download the React DevTools/i.test(entry));
   const apiOk = elevenRequests.some((entry) => entry.startsWith('200 ') && entry.includes('/convai/'));
   const socketOk = sockets.some((entry) => entry.includes('/v1/convai/conversation'));
-  const inConversation = statusPattern.test(widgetText);
+  const inConversation = mode === 'orb'
+    ? socketOk
+    : statusPattern.test(widgetText) || /portfolio guide/i.test(widgetText);
+  const noTranscript = mode !== 'orb' || !transcriptPattern.test(widgetText);
   const report = {
     url,
-    status: widgetText.split('\n').map((line) => line.replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 12),
+    mode,
+    visibleText: widgetText.split('\n').map((line) => line.replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 12),
     elevenRequests,
     sockets,
     failedRequests,
@@ -92,7 +102,8 @@ try {
     apiOk,
     socketOk,
     inConversation,
-    ok: apiOk && socketOk && inConversation && blockingErrors.length === 0 && failedRequests.length === 0,
+    noTranscript,
+    ok: apiOk && socketOk && inConversation && noTranscript && blockingErrors.length === 0 && failedRequests.length === 0,
   };
   console.log(JSON.stringify(report, null, 2));
   if (process.env.CONVAI_SCREENSHOT) await page.screenshot({ path: process.env.CONVAI_SCREENSHOT });
