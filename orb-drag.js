@@ -56,6 +56,15 @@
     root.appendChild(style);
   }
 
+  function paintOpacity(root) {
+    if (root.getElementById("orb-opacity")) return;
+    var style = document.createElement("style");
+    style.id = "orb-opacity";
+    // The round ElevenLabs disk only. Cards, terms, and errors stay solid.
+    style.textContent = ".relative.shrink-0:has(canvas) { opacity: 0.8 !important; }";
+    root.appendChild(style);
+  }
+
   function arm(sheet) {
     if (sheet.dataset.orbDrag) return;
     sheet.dataset.orbDrag = "1";
@@ -109,6 +118,7 @@
     var root = host.shadowRoot;
     if (!root) return;
     paintScale(root);
+    paintOpacity(root);
     var sheet = sheetOf(root);
     if (sheet) arm(sheet);
   }
