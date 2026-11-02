@@ -10,6 +10,7 @@
     "check": "node scripts/check-site.mjs",
     "lint": "eslint .",
     "preview": "vite preview --outDir dist --base /",
+    "test:convai": "node scripts/test-convai.mjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
