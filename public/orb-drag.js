@@ -50,7 +50,7 @@
     var style = document.createElement("style");
     style.id = "orb-scale";
     style.textContent = [
-      ".rounded-sheet:has(canvas) { zoom: 0.6; touch-action: none; cursor: grab; }",
+      ".rounded-sheet:has(canvas) { zoom: 0.6; touch-action: none; cursor: grab; user-select: none; }",
       "@media (max-width: 700px) { .rounded-sheet:has(canvas) { zoom: 0.3333; } }"
     ].join("\n");
     root.appendChild(style);
