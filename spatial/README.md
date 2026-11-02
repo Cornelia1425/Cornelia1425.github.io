@@ -22,9 +22,9 @@ When adding projects, also check the static index in `index.html` and related te
 
 Push to `codex/portfolio-3d-home` before merging the migration, then to `react-version`. 3D and 2D share the same source branch.
 
-在**仓库根目录**运行 `npm run build`、`npm run preview`，打开本地首页。正式发布使用根目录的 `npm run deploy`，它会一起发布所有版本到 `gh-pages`。
+在**仓库根目录**运行 `npm run dev`，打开打印出的本地地址就是这个 3D 首页；`/2d/` 是平面作品集。完整构建用 `npm run build`、`npm run preview`。正式发布使用根目录的 `npm run deploy`，它会一起发布所有版本到 `gh-pages`。
 
-Run `npm run build` and `npm run preview` from the **repository root**, then open the local homepage. The root `npm run deploy` publishes all views together to `gh-pages`.
+Run `npm run dev` from the **repository root** and open the printed local address for this 3D homepage; `/2d/` is the flat portfolio. Use `npm run build` and `npm run preview` for a full build. The root `npm run deploy` publishes all views together to `gh-pages`.
 
 运行时不需要 ChatGPT 登录或 API key。Three.js 许可证在 `vendor/THREE-LICENSE.txt`。
 

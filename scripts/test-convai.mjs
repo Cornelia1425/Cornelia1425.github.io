@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 
 const url = process.env.CONVAI_URL || 'http://127.0.0.1:5173/';
 const origin = new URL(url).origin;
-const mode = process.env.CONVAI_MODE || 'text';
+const mode = process.env.CONVAI_MODE || (new URL(url).pathname.includes('/2d') ? 'text' : 'orb');
 const statusPattern = /talk to interrupt|listening|connecting|connected|speaking|正在聆听|正在连接|正在说话|聆听中|连接中/i;
 const transcriptPattern = /talk to interrupt|send a message|start a call|portfolio guide|powered by|connecting|listening/i;
 
