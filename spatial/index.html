@@ -115,6 +115,7 @@
   <elevenlabs-convai agent-id="agent_8501m5fwdgphf6x8c1bxkhrrndds" variant="tiny" transcript="false" text-input="false" show-language-selector-on-trigger="false" avatar-orb-color-1="#2792dc" avatar-orb-color-2="#9ce6e6"></elevenlabs-convai>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
   <script src="/mic-gesture.js"></script>
+  <script src="/orb-drag.js"></script>
   <script>
     (function () {
       var host = document.querySelector("elevenlabs-convai");
@@ -122,10 +123,11 @@
       var css = [
         "p { display: none !important; }",
         ".terms p { display: block !important; }",
-        ".rounded-compact-sheet { position: relative !important; width: 76px !important; height: 76px !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: 0 !important; overflow: visible !important; }",
-        "@media (max-width: 700px) { .rounded-compact-sheet { position: fixed !important; right: 16px !important; bottom: calc(76px + env(safe-area-inset-bottom)) !important; top: auto !important; left: auto !important; margin: 0 !important; } }",
-        ".rounded-compact-sheet .w-9.h-9 { width: 76px !important; height: 76px !important; margin: 0 !important; }",
-        ".rounded-compact-sheet > button { position: absolute !important; inset: 0 !important; width: 76px !important; height: 76px !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important; background: transparent !important; border: 0 !important; color: transparent !important; box-shadow: none !important; z-index: 2 !important; }",
+        ".rounded-compact-sheet { position: relative !important; width: calc(76px * 0.6) !important; height: calc(76px * 0.6) !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: 0 !important; overflow: visible !important; touch-action: none !important; cursor: grab !important; }",
+        "@media (max-width: 700px) { .rounded-compact-sheet { width: calc(76px / 3) !important; height: calc(76px / 3) !important; position: fixed !important; right: 16px !important; bottom: calc(76px + env(safe-area-inset-bottom)) !important; top: auto !important; left: auto !important; margin: 0 !important; } }",
+        ".rounded-compact-sheet .w-9.h-9 { width: calc(76px * 0.6) !important; height: calc(76px * 0.6) !important; margin: 0 !important; }",
+        ".rounded-compact-sheet > button { position: absolute !important; inset: 0 !important; width: calc(76px * 0.6) !important; height: calc(76px * 0.6) !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important; background: transparent !important; border: 0 !important; color: transparent !important; box-shadow: none !important; z-index: 2 !important; }",
+        "@media (max-width: 700px) { .rounded-compact-sheet .w-9.h-9, .rounded-compact-sheet > button { width: calc(76px / 3) !important; height: calc(76px / 3) !important; } }",
         ".rounded-compact-sheet > button svg { opacity: 0 !important; }",
         "[aria-label='Mute microphone'] { display: none !important; }"
       ].join("\n");
