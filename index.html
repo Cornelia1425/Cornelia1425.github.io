@@ -112,5 +112,41 @@
   <dialog id="image-dialog" class="image-dialog" aria-label="Full image" data-label-en="Full image" data-label-zh="完整图片"><button id="image-close" class="close-button" aria-label="Close full image" data-label-en="Close full image" data-label-zh="关闭完整图片">×</button><img id="full-image" alt=""></dialog>
   <dialog id="about-dialog" class="about-dialog" aria-labelledby="about-title"><div class="dialog-header"><span class="eyebrow" data-en="ABOUT / CONTACT" data-zh="关于 / 联系">ABOUT / CONTACT</span><button id="about-close" class="close-button" aria-label="Close about" data-label-en="Close about" data-label-zh="关闭关于页面">×</button></div><div class="about-body"><h2 id="about-title">Yiran Shu</h2><p data-en="Architectural and digital designer based in New York. Working across architecture, virtual spaces and digital fabrication." data-zh="生活在纽约的建筑与数字设计师。创作涵盖建筑、虚拟空间与数字制造。">Architectural and digital designer based in New York. Working across architecture, virtual spaces and digital fabrication.</p><p data-en="Master of Architecture, Boston Architectural College. A background in software engineering and performance brings interaction and movement into my spatial practice." data-zh="波士顿建筑学院建筑学硕士。软件工程与表演研究的学习经历，让交互与运动融入我的空间设计实践。">Master of Architecture, Boston Architectural College. A background in software engineering and performance brings interaction and movement into my spatial practice.</p><a class="contact-email" href="mailto:yiranshu11@gmail.com">yiranshu11@gmail.com ↗</a><a href="./2d/" target="_blank" rel="noopener" data-en="Open the 2D portfolio ↗" data-zh="访问平面作品集 ↗">Open the 2D portfolio ↗</a></div></dialog>
   <noscript><div class="noscript-note">Enable JavaScript for the 3D portfolio. <a href="./2d/">View the 2D portfolio ↗</a></div></noscript>
+  <elevenlabs-convai agent-id="agent_8501m5fwdgphf6x8c1bxkhrrndds" variant="tiny" transcript="false" text-input="false" show-language-selector-on-trigger="false" avatar-orb-color-1="#2792dc" avatar-orb-color-2="#9ce6e6"></elevenlabs-convai>
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+  <script>
+    (function () {
+      var host = document.querySelector("elevenlabs-convai");
+      if (!host) return;
+      var css = [
+        "p { display: none !important; }",
+        ".rounded-compact-sheet { position: relative !important; width: 76px !important; height: 76px !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; border: 0 !important; overflow: visible !important; }",
+        ".rounded-compact-sheet .w-9.h-9 { width: 76px !important; height: 76px !important; margin: 0 !important; }",
+        ".rounded-compact-sheet > button { position: absolute !important; inset: 0 !important; width: 76px !important; height: 76px !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important; background: transparent !important; border: 0 !important; color: transparent !important; box-shadow: none !important; z-index: 2 !important; }",
+        ".rounded-compact-sheet > button svg { opacity: 0 !important; }",
+        "[aria-label='Mute microphone'] { display: none !important; }"
+      ].join("\n");
+      function paint() {
+        var root = host.shadowRoot;
+        if (!root || root.getElementById("voice-orb-only")) return;
+        var style = document.createElement("style");
+        style.id = "voice-orb-only";
+        style.textContent = css;
+        root.appendChild(style);
+      }
+      function watch() {
+        paint();
+        new MutationObserver(paint).observe(host.shadowRoot, { childList: true });
+      }
+      if (host.shadowRoot) watch();
+      else {
+        var timer = setInterval(function () {
+          if (!host.shadowRoot) return;
+          clearInterval(timer);
+          watch();
+        }, 50);
+      }
+    })();
+  </script>
 </body>
 </html>
