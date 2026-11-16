@@ -491,7 +491,7 @@
         "project": "summer-breeze",
         "name": "11_summerbreeze.png",
         "image": "assets/developer/11_summerbreeze.png",
-        "thumb": "assets/developer/11_summerbreeze.png",
+        "thumb": "assets/developer/11_summerbreeze-thumb.webp",
         "width": 1100,
         "height": 662,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/11_summerbreeze.png"
@@ -516,7 +516,7 @@
         "project": "moptop-universal",
         "name": "4_moptopuniversal.png",
         "image": "assets/developer/4_moptopuniversal.png",
-        "thumb": "assets/developer/4_moptopuniversal.png",
+        "thumb": "assets/developer/4_moptopuniversal-thumb.webp",
         "width": 2704,
         "height": 1514,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/4_moptopuniversal.png"
@@ -541,7 +541,7 @@
         "project": "escape-orbit",
         "name": "10_escapeorbit.png",
         "image": "assets/developer/10_escapeorbit.png",
-        "thumb": "assets/developer/10_escapeorbit.png",
+        "thumb": "assets/developer/10_escapeorbit-thumb.webp",
         "width": 2704,
         "height": 1756,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/10_escapeorbit.png"
@@ -566,7 +566,7 @@
         "project": "dance-galaxy",
         "name": "6_dancetogether.png",
         "image": "assets/developer/6_dancetogether.png",
-        "thumb": "assets/developer/6_dancetogether.png",
+        "thumb": "assets/developer/6_dancetogether-thumb.webp",
         "width": 2462,
         "height": 1476,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/6_dancetogether.png"
@@ -591,7 +591,7 @@
         "project": "sector77-spaceship-museum",
         "name": "5_sector77.png",
         "image": "assets/developer/5_sector77.png",
-        "thumb": "assets/developer/5_sector77.png",
+        "thumb": "assets/developer/5_sector77-thumb.webp",
         "width": 2704,
         "height": 1520,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/5_sector77.png"
@@ -616,7 +616,7 @@
         "project": "my-mind-palace",
         "name": "7_mymindpalace.png",
         "image": "assets/developer/7_mymindpalace.png",
-        "thumb": "assets/developer/7_mymindpalace.png",
+        "thumb": "assets/developer/7_mymindpalace-thumb.webp",
         "width": 2704,
         "height": 1490,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/7_mymindpalace.png"
@@ -641,7 +641,7 @@
         "project": "the-spells",
         "name": "1_thespells.png",
         "image": "assets/developer/1_thespells.png",
-        "thumb": "assets/developer/1_thespells.png",
+        "thumb": "assets/developer/1_thespells-thumb.webp",
         "width": 2704,
         "height": 1500,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/1_thespells.png"
@@ -666,7 +666,7 @@
         "project": "architheatre",
         "name": "2_architheatre.png",
         "image": "assets/developer/2_architheatre.png",
-        "thumb": "assets/developer/2_architheatre.png",
+        "thumb": "assets/developer/2_architheatre-thumb.webp",
         "width": 1960,
         "height": 1204,
         "sourceUrl": "https://www.yiranshu.com/images/8_developer/2_architheatre.png"
