@@ -308,16 +308,15 @@ function mountElevenIcon(){
   };
   const timer=setInterval(()=>{hideLauncher();if(widget.shadowRoot?.getElementById('eleven-hide'))clearInterval(timer);},200);
   setTimeout(()=>clearInterval(timer),8000);
-  const open=()=>{icon.classList.add('is-hidden');widget.classList.add('is-open');};
-  const close=()=>{widget.classList.remove('is-open');icon.classList.remove('is-hidden');};
+  const close=()=>widget.classList.remove('is-open');
   icon.addEventListener('click',event=>{
     if(moved){moved=false;event.preventDefault();event.stopPropagation();return;}
+    if(widget.classList.contains('is-open'))return;
     const start=callButton();if(!start)return;
     widget.classList.add('is-open');
     start.click();
-    setTimeout(()=>{if(guideVisible())icon.classList.add('is-hidden');else close();},400);
+    setTimeout(()=>{if(!guideVisible())close();},700);
   });
-  widget.addEventListener('elevenlabs-convai:call',()=>icon.classList.add('is-hidden'));
   widget.addEventListener('conversationEnded',close);
 }
 async function boot(){
