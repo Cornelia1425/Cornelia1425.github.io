@@ -1,4 +1,5 @@
 import { LAYERS } from './layout.js';
+import { mountVoiceOrb } from './voice-orb.js?v=orb12';
 const $=selector=>document.querySelector(selector);
 const $$=selector=>[...document.querySelectorAll(selector)];
 let language='en';
@@ -224,28 +225,9 @@ function unavailable(){
 function mountElevenIcon(){
   const widget=$('#elevenlabs-widget'),icon=$('#eleven-icon');
   if(!widget||!icon)return;
-  const canvas=icon.querySelector('canvas'),ctx=canvas.getContext('2d');
+  const canvas=icon.querySelector('canvas'),close=$('#eleven-close');
   icon.style.cursor='grab';
-  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const paint=time=>{
-    const s=canvas.width,h=s/2,t=time*.001;
-    ctx.clearRect(0,0,s,s);
-    ctx.save();
-    ctx.globalCompositeOperation='lighter';
-    [[255,28,28,.95,.85,.6,.48],[226,226,226,.9,-.6,.75,.44],[255,70,70,.5,1.15,-.45,.3],[190,190,190,.65,-.95,-.7,.28]].forEach(([r,g,b,a,sx,sy,rad],i)=>{
-      const x=h+Math.cos(t*sx+i)*s*.24,y=h+Math.sin(t*sy+i)*s*.24,radius=s*rad;
-      const glow=ctx.createRadialGradient(x,y,0,x,y,radius);
-      glow.addColorStop(0,`rgba(${r},${g},${b},${a})`);glow.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle=glow;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();
-    });
-    ctx.globalCompositeOperation='destination-in';
-    const mask=ctx.createRadialGradient(h,h,s*.2,h,h,h);
-    mask.addColorStop(0,'#fff');mask.addColorStop(.8,'#fff');mask.addColorStop(1,'#0000');
-    ctx.fillStyle=mask;ctx.fillRect(0,0,s,s);
-    ctx.restore();
-    if(!reduced)requestAnimationFrame(paint);
-  };
-  requestAnimationFrame(paint);
+  mountVoiceOrb(canvas);
   const keepInside=()=>{
     if(!icon.style.left)return;
     const size=icon.offsetWidth||46;
@@ -285,39 +267,94 @@ function mountElevenIcon(){
     const box=icon.getBoundingClientRect();
     try{localStorage.setItem('yiran-eleven-icon',JSON.stringify({x:box.left,y:box.top}));}catch{}
   });
-  const callButton=()=>{
+  const shadowButton=(pattern,visible=true)=>{
     const root=widget.shadowRoot;if(!root)return null;
-    return [...root.querySelectorAll('button')].find(button=>/start a call|开始通话/i.test(button.getAttribute('aria-label')||''));
-  };
-  const guideVisible=()=>{
-    const root=widget.shadowRoot;if(!root)return false;
-    return [...root.querySelectorAll('button')].some(button=>{
+    return [...root.querySelectorAll('button')].find(button=>{
+      const label=`${button.textContent||''} ${button.getAttribute('aria-label')||''}`;
+      if(!pattern.test(label))return false;
+      if(!visible)return true;
       const box=button.getBoundingClientRect();
-      return box.width>20&&box.height>12&&/accept|agree|cancel|end call|接受|同意|取消|结束/i.test(`${button.textContent} ${button.getAttribute('aria-label')||''}`);
+      return box.width>8&&box.height>8;
     });
   };
-  const hideLauncher=()=>{
-    const root=widget.shadowRoot;if(!root||root.getElementById('eleven-hide'))return;
-    const style=document.createElement('style');style.id='eleven-hide';
-    style.textContent='.rounded-compact-sheet{display:none!important}.overlay,button{pointer-events:auto}';
-    root.addEventListener('click',event=>{
-      const button=event.target.closest?.('button');if(!button)return;
-      if(/cancel|取消/i.test(`${button.textContent} ${button.getAttribute('aria-label')||''}`))close();
-    });
+  const glass=()=>{
+    const root=widget.shadowRoot;if(!root||root.getElementById('eleven-glass'))return;
+    const style=document.createElement('style');style.id='eleven-glass';
+    style.textContent=':host{--el-base:rgba(8,8,10,.28)!important;--el-base-hover:rgba(255,255,255,.08)!important;--el-base-active:rgba(255,255,255,.12)!important;--el-base-border:rgba(255,255,255,.22)!important;--el-base-subtle:rgba(255,255,255,.7)!important;--el-base-primary:#f6f6f6!important;--el-base-error:#ffb4b4!important;--el-overlay-padding:0px!important}.rounded-compact-sheet,p.whitespace-nowrap{display:none!important}.overlay{background:transparent!important;color:#f4f4f4}.bg-base{background-color:rgba(8,8,10,.34)!important;backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);box-shadow:none!important;border:1px solid rgba(255,255,255,.16);padding-right:34px!important}input,textarea{background:rgba(255,255,255,.08)!important;color:#fff!important}';
     root.appendChild(style);
   };
-  const timer=setInterval(()=>{hideLauncher();if(widget.shadowRoot?.getElementById('eleven-hide'))clearInterval(timer);},200);
+  const timer=setInterval(()=>{glass();if(widget.shadowRoot?.getElementById('eleven-glass'))clearInterval(timer);},200);
   setTimeout(()=>clearInterval(timer),8000);
-  const close=()=>widget.classList.remove('is-open');
+  const placeClose=()=>{
+    if(!close||close.hidden)return;
+    const box=widget.getBoundingClientRect();
+    close.style.left=`${box.right-32}px`;
+    close.style.top=`${box.top+8}px`;
+  };
+  const shut=()=>{widget.classList.remove('is-open');['left','top','right','bottom'].forEach(edge=>widget.style.removeProperty(edge));if(close)close.hidden=true;};
+  const dismiss=()=>{
+    const cancel=shadowButton(/cancel|取消/i),end=shadowButton(/(^|\s)(end|结束通话|结束)(\s|$)/i);
+    if(cancel)cancel.click();
+    else if(end)end.click();
+    shut();
+  };
+  try{
+    const saved=JSON.parse(localStorage.getItem('yiran-eleven-panel')||'null');
+    if(saved&&Number.isFinite(saved.x)&&Number.isFinite(saved.y)){widget.dataset.placed='1';}
+  }catch{}
+  const reveal=()=>{
+    widget.classList.add('is-open');
+    if(widget.dataset.placed){
+      try{
+        const saved=JSON.parse(localStorage.getItem('yiran-eleven-panel')||'null');
+        widget.style.setProperty('left',`${saved.x}px`,'important');
+        widget.style.setProperty('top',`${saved.y}px`,'important');
+        widget.style.setProperty('right','auto','important');
+        widget.style.setProperty('bottom','auto','important');
+      }catch{}
+    }
+    if(close)close.hidden=false;
+    requestAnimationFrame(placeClose);
+  };
+  let panelDrag=false,panelMoved=false,px=0,py=0,panelX=0,panelY=0;
+  widget.addEventListener('pointerdown',event=>{
+    if(!widget.classList.contains('is-open'))return;
+    if(event.composedPath().some(node=>node.matches?.('button,a,input,textarea')))return;
+    panelDrag=true;panelMoved=false;px=event.clientX;py=event.clientY;
+    const box=widget.getBoundingClientRect();panelX=box.left;panelY=box.top;
+    widget.style.cursor='grabbing';
+    try{widget.setPointerCapture(event.pointerId);}catch{}
+  });
+  widget.addEventListener('pointermove',event=>{
+    if(!panelDrag)return;
+    const dx=event.clientX-px,dy=event.clientY-py;
+    if(Math.hypot(dx,dy)>5)panelMoved=true;
+    const left=Math.min(Math.max(0,panelX+dx),innerWidth-widget.offsetWidth);
+    const top=Math.min(Math.max(0,panelY+dy),innerHeight-widget.offsetHeight);
+    widget.style.setProperty('left',`${left}px`,'important');
+    widget.style.setProperty('top',`${top}px`,'important');
+    widget.style.setProperty('right','auto','important');
+    widget.style.setProperty('bottom','auto','important');
+    placeClose();
+  });
+  widget.addEventListener('pointerup',()=>{
+    if(!panelDrag)return;
+    panelDrag=false;widget.style.cursor='grab';
+    if(!panelMoved)return;
+    widget.dataset.placed='1';
+    const box=widget.getBoundingClientRect();
+    try{localStorage.setItem('yiran-eleven-panel',JSON.stringify({x:box.left,y:box.top}));}catch{}
+  });
+  addEventListener('resize',placeClose);
   icon.addEventListener('click',event=>{
     if(moved){moved=false;event.preventDefault();event.stopPropagation();return;}
-    if(widget.classList.contains('is-open'))return;
-    const start=callButton();if(!start)return;
-    widget.classList.add('is-open');
+    if(widget.classList.contains('is-open')){dismiss();return;}
+    const start=shadowButton(/start a call|开始通话/i,false);if(!start)return;
+    reveal();
     start.click();
-    setTimeout(()=>{if(!guideVisible())close();},700);
   });
-  widget.addEventListener('conversationEnded',close);
+  close?.addEventListener('click',dismiss);
+  widget.addEventListener('conversationEnded',shut);
 }
 async function boot(){
   translate();
