@@ -225,6 +225,7 @@ function mountElevenIcon(){
   const widget=$('#elevenlabs-widget'),icon=$('#eleven-icon');
   if(!widget||!icon)return;
   const canvas=icon.querySelector('canvas'),ctx=canvas.getContext('2d');
+  icon.style.cursor='grab';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const paint=time=>{
     const s=canvas.width,h=s/2,t=time*.001;
@@ -261,7 +262,7 @@ function mountElevenIcon(){
     dragging=true;moved=false;sx=event.clientX;sy=event.clientY;
     const box=icon.getBoundingClientRect();ox=box.left;oy=box.top;
     try{icon.setPointerCapture(event.pointerId);}catch{}
-    icon.classList.add('is-dragging');
+    icon.classList.add('is-dragging');icon.style.cursor='grabbing';
   });
   icon.addEventListener('pointermove',event=>{
     if(!dragging)return;
@@ -271,7 +272,7 @@ function mountElevenIcon(){
   });
   icon.addEventListener('pointerup',()=>{
     if(!dragging)return;
-    dragging=false;icon.classList.remove('is-dragging');
+    dragging=false;icon.classList.remove('is-dragging');icon.style.cursor='grab';
     if(!moved)return;
     const box=icon.getBoundingClientRect();
     try{localStorage.setItem('yiran-eleven-icon',JSON.stringify({x:box.left,y:box.top}));}catch{}
