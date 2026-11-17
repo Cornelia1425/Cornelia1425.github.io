@@ -17,6 +17,11 @@ const Footer: React.FC = () => {
       name: 'x',
       url: 'https://x.com/MonsterSea7',
       label: 'X'
+    },
+    {
+      name: 'github',
+      url: 'https://github.com/Cornelia1425',
+      label: 'GitHub'
     }
   ];
 

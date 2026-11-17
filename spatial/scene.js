@@ -26,7 +26,8 @@ export function createSpatialCollection({container,projects,language='en',getNav
   controls.autoRotateSpeed = -.18;
 
   const layers = buildLayout(projects,container.clientWidth<700);
-  const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [];
+  const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [], linkTargets = [];
+  let essayLink=null;
   const loader = new THREE.TextureLoader();
   const imageGeometry = new THREE.PlaneGeometry(CARD.width,CARD.height);
   const borderGeometry = new THREE.EdgesGeometry(new THREE.PlaneGeometry(CARD.width+.025,CARD.height+.025));
@@ -231,6 +232,41 @@ export function createSpatialCollection({container,projects,language='en',getNav
     heading.position.set((titleBounds.left+titleBounds.right)/2,(titleBounds.bottom+titleBounds.top)/2,.01);
     heading.userData.layerId=layer.id;
     group.add(heading);
+    if(layer.id==='digital'){
+      const essayWidth=11.2, essayHeight=.36;
+      const essayCanvas=document.createElement('canvas');
+      essayCanvas.width=2048;essayCanvas.height=Math.max(64,Math.round(essayCanvas.width*essayHeight/essayWidth));
+      const essayContext=essayCanvas.getContext('2d');
+      const essayTexture=new THREE.CanvasTexture(essayCanvas);essayTexture.colorSpace=THREE.SRGBColorSpace;
+      essayTexture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+      const essay=new THREE.Mesh(new THREE.PlaneGeometry(essayWidth,essayHeight),new THREE.MeshBasicMaterial({
+        map:essayTexture,transparent:true,depthWrite:false,side:THREE.DoubleSide
+      }));
+      essay.userData.url='https://medium.com/@articNFT/the-axiebitat-gallery-is-officially-open-dea729146a5c';
+      essay.renderOrder=3;
+      function updateEssay(value){
+        essayContext.clearRect(0,0,essayCanvas.width,essayCanvas.height);
+        let pixels=Math.round(essayCanvas.height*.62);
+        const font=()=>`500 ${pixels}px Arial, Helvetica, sans-serif`;
+        essayContext.font=font();
+        const measured=essayContext.measureText(value).width;
+        if(measured>essayCanvas.width-8){pixels=Math.floor(pixels*(essayCanvas.width-8)/measured);essayContext.font=font();}
+        essayContext.fillStyle='#d2d2d2';essayContext.textAlign='left';essayContext.textBaseline='middle';
+        essayContext.fillText(value,0,essayCanvas.height*.46);
+        const ink=Math.min(essayContext.measureText(value).width,essayCanvas.width-4);
+        essayContext.strokeStyle='#d2d2d2';essayContext.lineWidth=Math.max(2,pixels*.045);
+        essayContext.beginPath();essayContext.moveTo(0,essayCanvas.height*.78);essayContext.lineTo(ink,essayCanvas.height*.78);essayContext.stroke();
+        essayTexture.needsUpdate=true;
+        essay.userData.inkWidth=ink*essayWidth/essayCanvas.width;
+      }
+      essay.userData.update=updateEssay;
+      updateEssay(language==='zh'?'Axiebitat 画廊正式开放 ↗':'The Axiebitat Gallery is officially open ↗');
+      essay.position.set(titleBounds.left+essayWidth/2,titleBounds.top+essayHeight/2+.05,.03);
+      essay.userData.hit=uv=>uv.x<=essay.userData.inkWidth/essayWidth+.015;
+      group.add(essay);
+      essayLink=essay;
+      linkTargets.push(essay);
+    }
     headings.push({layer,mesh:heading,glow,inkWidth,update,hitTest,topEdge,topStart,titleLeft:titleBounds.left});
     headingTargets.push(heading);
     const points=[];
@@ -286,6 +322,11 @@ export function createSpatialCollection({container,projects,language='en',getNav
     raycaster.setFromCamera(pointer,camera);
     const visibleCards=pickTargets.filter(plane=>groups.get(plane.userData.layerId).visible);
     const visibleHeadings=headingTargets.filter(heading=>groups.get(heading.userData.layerId).visible);
+    const linkHits=raycaster.intersectObjects(linkTargets.filter(link=>groups.get('digital').visible),false);
+    for(const intersection of linkHits){
+      if(!intersection.uv||intersection.object.userData.hit?.(intersection.uv)===false)continue;
+      return {type:'link',item:intersection.object.userData};
+    }
     const intersections=raycaster.intersectObjects([...visibleCards,...visibleHeadings],false);
     for(const intersection of intersections){
       const heading=headings.find(item=>item.mesh===intersection.object);
@@ -324,7 +365,8 @@ export function createSpatialCollection({container,projects,language='en',getNav
     renderer.domElement.style.cursor='var(--cursor-scene)';
     if(shouldOpen){
       const target=hit(event);
-      if(target?.type==='card')onOpen(target.item.card.project.id,target.item.card.imageIndex);
+      if(target?.type==='link')window.open(target.item.url,'_blank','noopener,noreferrer');
+      else if(target?.type==='card')onOpen(target.item.card.project.id,target.item.card.imageIndex);
       else if(target?.type==='layer')setLayer(target.item.layer.id);
     }
   });
@@ -381,6 +423,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       const next=value==='zh'?'zh':'en';
       if(next===language)return;
       language=next;
+      if(essayLink)essayLink.userData.update(language==='zh'?'Axiebitat 画廊正式开放 ↗':'The Axiebitat Gallery is officially open ↗');
       for(const item of headings){
         const inkWidth=item.update(language==='zh'?item.layer.titleZh:item.layer.title);
         item.inkWidth=inkWidth;

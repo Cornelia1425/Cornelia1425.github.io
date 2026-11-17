@@ -45,6 +45,7 @@ function translate(){
   $$('[data-language]').forEach(button=>button.ariaPressed=String(button.dataset.language===language));
   $('#load-label').textContent=t('Loading images','正在载入图片');
   spatial?.setLanguage(language);
+  document.querySelector('elevenlabs-convai')?.setAttribute('language',language);
   updateLayer(selectedLayer);updateOrbit(orbit);updateColorMode(colorMode);updateCount();
   if(activeProject)fillProjectInfo();
 }
@@ -94,6 +95,9 @@ function fillProjectInfo(){
   $('#dialog-index').textContent=`${t('PROJECT','项目')} ${String(index+1).padStart(2,'0')} / ${String(collection.length).padStart(2,'0')}`;
   $('#dialog-title').textContent=project.title;
   $('#dialog-category').textContent=t(project.categoryLabel,project.categoryLabelZh);
+  const essay=$('#axie-essay');
+  essay.hidden=project.id!=='axie-gallery';
+  essay.textContent=t('The Axiebitat Gallery is officially open ↗','Axiebitat 画廊正式开放 ↗');
   $('#dialog-subtitle').textContent=t(project.subtitle,project.subtitleZh);
   $('#dialog-description').textContent=t(project.description,project.descriptionZh);
   $('#dialog-plates').textContent=t(`${project.images.length} DRAWINGS & IMAGES`,`${project.images.length} 张图纸与作品图`);
@@ -217,8 +221,78 @@ function unavailable(){
   $('#scene-loading').hidden=true;$('#scene-fallback').hidden=false;
   $$('.scene-actions button,[data-layer]').forEach(button=>button.disabled=true);
 }
+function mountElevenIcon(){
+  const widget=$('#elevenlabs-widget'),icon=$('#eleven-icon');
+  if(!widget||!icon)return;
+  const canvas=icon.querySelector('canvas'),ctx=canvas.getContext('2d');
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const paint=time=>{
+    const s=canvas.width,h=s/2,t=time*.001;
+    ctx.clearRect(0,0,s,s);
+    ctx.save();
+    ctx.globalCompositeOperation='lighter';
+    [[255,28,28,.95,.85,.6,.48],[226,226,226,.9,-.6,.75,.44],[255,70,70,.5,1.15,-.45,.3],[190,190,190,.65,-.95,-.7,.28]].forEach(([r,g,b,a,sx,sy,rad],i)=>{
+      const x=h+Math.cos(t*sx+i)*s*.24,y=h+Math.sin(t*sy+i)*s*.24,radius=s*rad;
+      const glow=ctx.createRadialGradient(x,y,0,x,y,radius);
+      glow.addColorStop(0,`rgba(${r},${g},${b},${a})`);glow.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=glow;ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();
+    });
+    ctx.globalCompositeOperation='destination-in';
+    const mask=ctx.createRadialGradient(h,h,s*.2,h,h,h);
+    mask.addColorStop(0,'#fff');mask.addColorStop(.8,'#fff');mask.addColorStop(1,'#0000');
+    ctx.fillStyle=mask;ctx.fillRect(0,0,s,s);
+    ctx.restore();
+    if(!reduced)requestAnimationFrame(paint);
+  };
+  requestAnimationFrame(paint);
+  try{
+    const saved=JSON.parse(localStorage.getItem('yiran-eleven-icon')||'null');
+    if(saved&&Number.isFinite(saved.x)&&Number.isFinite(saved.y)){icon.style.left=`${saved.x}px`;icon.style.top=`${saved.y}px`;icon.style.right='auto';icon.style.bottom='auto';}
+  }catch{}
+  let dragging=false,moved=false,sx=0,sy=0,ox=0,oy=0;
+  const place=(x,y)=>{
+    const size=icon.offsetWidth;
+    const left=Math.min(Math.max(0,x),innerWidth-size),top=Math.min(Math.max(0,y),innerHeight-size);
+    icon.style.left=`${left}px`;icon.style.top=`${top}px`;icon.style.right='auto';icon.style.bottom='auto';
+    return {x:left,y:top};
+  };
+  icon.addEventListener('pointerdown',event=>{
+    if(event.button!=null&&event.button!==0)return;
+    dragging=true;moved=false;sx=event.clientX;sy=event.clientY;
+    const box=icon.getBoundingClientRect();ox=box.left;oy=box.top;
+    try{icon.setPointerCapture(event.pointerId);}catch{}
+    icon.classList.add('is-dragging');
+  });
+  icon.addEventListener('pointermove',event=>{
+    if(!dragging)return;
+    const dx=event.clientX-sx,dy=event.clientY-sy;
+    if(Math.hypot(dx,dy)>5)moved=true;
+    place(ox+dx,oy+dy);
+  });
+  icon.addEventListener('pointerup',()=>{
+    if(!dragging)return;
+    dragging=false;icon.classList.remove('is-dragging');
+    if(!moved)return;
+    const box=icon.getBoundingClientRect();
+    try{localStorage.setItem('yiran-eleven-icon',JSON.stringify({x:box.left,y:box.top}));}catch{}
+  });
+  const hideLauncher=()=>{
+    const root=widget.shadowRoot;if(!root||root.getElementById('eleven-hide'))return;
+    const style=document.createElement('style');style.id='eleven-hide';
+    style.textContent='.rounded-compact-sheet{display:none!important}';
+    root.appendChild(style);
+  };
+  const timer=setInterval(()=>{hideLauncher();if(widget.shadowRoot?.getElementById('eleven-hide'))clearInterval(timer);},200);
+  setTimeout(()=>clearInterval(timer),8000);
+  const open=()=>{icon.classList.add('is-hidden');widget.classList.add('is-open');};
+  const close=()=>{widget.classList.remove('is-open');icon.classList.remove('is-hidden');};
+  icon.addEventListener('click',event=>{if(moved){moved=false;event.preventDefault();event.stopPropagation();return;}open();widget.startConversation?.();});
+  widget.addEventListener('conversationStarted',open);
+  widget.addEventListener('conversationEnded',close);
+}
 async function boot(){
   translate();
+  mountElevenIcon();
   try{
     const response=await fetch('./projects.json');if(!response.ok)throw new Error('Project data unavailable');
     projects=await response.json();translate();readHash();
