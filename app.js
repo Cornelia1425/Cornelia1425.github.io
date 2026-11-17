@@ -246,10 +246,18 @@ function mountElevenIcon(){
     if(!reduced)requestAnimationFrame(paint);
   };
   requestAnimationFrame(paint);
+  const keepInside=()=>{
+    if(!icon.style.left)return;
+    const size=icon.offsetWidth||46;
+    const x=Math.min(Math.max(0,parseFloat(icon.style.left)||0),Math.max(0,innerWidth-size));
+    const y=Math.min(Math.max(0,parseFloat(icon.style.top)||0),Math.max(0,innerHeight-size));
+    icon.style.left=`${x}px`;icon.style.top=`${y}px`;
+  };
   try{
     const saved=JSON.parse(localStorage.getItem('yiran-eleven-icon')||'null');
-    if(saved&&Number.isFinite(saved.x)&&Number.isFinite(saved.y)){icon.style.left=`${saved.x}px`;icon.style.top=`${saved.y}px`;icon.style.right='auto';icon.style.bottom='auto';}
+    if(saved&&Number.isFinite(saved.x)&&Number.isFinite(saved.y)){icon.style.left=`${saved.x}px`;icon.style.top=`${saved.y}px`;icon.style.right='auto';icon.style.bottom='auto';keepInside();}
   }catch{}
+  addEventListener('resize',keepInside);
   let dragging=false,moved=false,sx=0,sy=0,ox=0,oy=0;
   const place=(x,y)=>{
     const size=icon.offsetWidth;
@@ -277,18 +285,39 @@ function mountElevenIcon(){
     const box=icon.getBoundingClientRect();
     try{localStorage.setItem('yiran-eleven-icon',JSON.stringify({x:box.left,y:box.top}));}catch{}
   });
+  const callButton=()=>{
+    const root=widget.shadowRoot;if(!root)return null;
+    return [...root.querySelectorAll('button')].find(button=>/start a call|开始通话/i.test(button.getAttribute('aria-label')||''));
+  };
+  const guideVisible=()=>{
+    const root=widget.shadowRoot;if(!root)return false;
+    return [...root.querySelectorAll('button')].some(button=>{
+      const box=button.getBoundingClientRect();
+      return box.width>20&&box.height>12&&/accept|agree|cancel|end call|接受|同意|取消|结束/i.test(`${button.textContent} ${button.getAttribute('aria-label')||''}`);
+    });
+  };
   const hideLauncher=()=>{
     const root=widget.shadowRoot;if(!root||root.getElementById('eleven-hide'))return;
     const style=document.createElement('style');style.id='eleven-hide';
-    style.textContent='.rounded-compact-sheet{display:none!important}';
+    style.textContent='.rounded-compact-sheet{display:none!important}.overlay,button{pointer-events:auto}';
+    root.addEventListener('click',event=>{
+      const button=event.target.closest?.('button');if(!button)return;
+      if(/cancel|取消/i.test(`${button.textContent} ${button.getAttribute('aria-label')||''}`))close();
+    });
     root.appendChild(style);
   };
   const timer=setInterval(()=>{hideLauncher();if(widget.shadowRoot?.getElementById('eleven-hide'))clearInterval(timer);},200);
   setTimeout(()=>clearInterval(timer),8000);
   const open=()=>{icon.classList.add('is-hidden');widget.classList.add('is-open');};
   const close=()=>{widget.classList.remove('is-open');icon.classList.remove('is-hidden');};
-  icon.addEventListener('click',event=>{if(moved){moved=false;event.preventDefault();event.stopPropagation();return;}open();widget.startConversation?.();});
-  widget.addEventListener('conversationStarted',open);
+  icon.addEventListener('click',event=>{
+    if(moved){moved=false;event.preventDefault();event.stopPropagation();return;}
+    const start=callButton();if(!start)return;
+    widget.classList.add('is-open');
+    start.click();
+    setTimeout(()=>{if(guideVisible())icon.classList.add('is-hidden');else close();},400);
+  });
+  widget.addEventListener('elevenlabs-convai:call',()=>icon.classList.add('is-hidden'));
   widget.addEventListener('conversationEnded',close);
 }
 async function boot(){
