@@ -133,9 +133,9 @@ const Architecture: React.FC = () => {
               className="architecture-cluster"
               aria-labelledby={`arch-cluster-${clusterIdx}`}
             >
-              <h3 className="cluster-title" id={`arch-cluster-${clusterIdx}`}>
+              <h2 className="cluster-title" id={`arch-cluster-${clusterIdx}`}>
                 {cluster.name}
-              </h3>
+              </h2>
               <div className="arch-gallery-stack">
                 {cluster.images.map((img, imageIdx) => (
                   <button
