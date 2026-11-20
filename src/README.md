@@ -20,8 +20,8 @@ Keep image URLs as `/images/...`, not `/2d/images/...`. The root `vite.config.ts
 
 Push to `codex/portfolio-3d-home` before merging the migration, then to `react-version`. Edit source here rather than generated files on `gh-pages`.
 
-在**仓库根目录**运行 `npm run dev` 开发 2D 页面。检查完整网站时，运行 `npm run build`、`npm run preview`，打开 `/2d/`。根目录的 `npm run deploy` 会一起发布所有版本。
+在**仓库根目录**运行 `npm run dev`，打开 `/2d/` 开发 2D 页面；同一地址的 `/` 是 3D 首页。完整构建用 `npm run build`、`npm run preview`。根目录的 `npm run deploy` 会一起发布所有版本。
 
-Run `npm run dev` from the **repository root** for 2D development. To review the complete site, run `npm run build`, then `npm run preview`, and open `/2d/`. The root `npm run deploy` publishes all views together.
+Run `npm run dev` from the **repository root** and open `/2d/` for 2D development; `/` on that same server is the 3D homepage. Use `npm run build` and `npm run preview` for a full build. The root `npm run deploy` publishes all views together.
 
 [返回总说明 / Main README](../README.md)

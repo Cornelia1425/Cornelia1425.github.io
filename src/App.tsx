@@ -18,6 +18,16 @@ interface SiteContextType {
 
 const SiteContext = createContext<SiteContextType | undefined>(undefined);
 
+// One name per route: it is the page's h1 and the start of the browser tab title.
+const SITE_NAME = 'Yiran Shu';
+const PAGE_NAMES: Record<string, string> = {
+  '/axie-gallery': 'Axie Gallery',
+  '/architecture': 'Architectural Design',
+  '/digital-fabrication': 'Digital Fabrication',
+  '/developer': 'Developer',
+  '/contact': 'Contact',
+};
+
 // Hook is consumed by Header/Footer; kept here next to provider for a single module boundary.
 // eslint-disable-next-line react-refresh/only-export-components -- Vite fast refresh: non-component export
 export const useSiteContext = () => {
@@ -41,11 +51,19 @@ function App() {
     }
   }, [location]);
 
+  const pageName = PAGE_NAMES[location.pathname];
+  const pageHeading = pageName ?? `${SITE_NAME} — Portfolio`;
+
+  useEffect(() => {
+    document.title = pageName ? `${pageName} — ${SITE_NAME}` : `${SITE_NAME} — Portfolio`;
+  }, [pageName]);
+
   return (
     <SiteContext.Provider value={{ isSiteOpen, setIsSiteOpen }}>
       <div className={`App ${isSiteOpen ? 'site-open' : 'site-closed'}`}>
         <Header />
         <main className={`main-content ${isSiteOpen ? 'with-header' : 'without-header'}`}>
+          <h1 className="visually-hidden">{pageHeading}</h1>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/axie-gallery" element={<AxieGallery />} />

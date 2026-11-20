@@ -49,9 +49,9 @@ npm run build
 npm run preview
 ```
 
-打开命令输出的本地地址查看 3D；加 `/2d/` 或 `/studio/` 查看其他版本。`npm run dev` 只启动 2D 开发页面；`npm run check` 检查已有构建。
+打开命令输出的本地地址查看 3D；加 `/2d/` 或 `/studio/` 查看其他版本。`npm run dev` 同样以 3D 为首页，`/2d/` 是带热更新的平面作品集；`npm run check` 检查已有构建。
 
-Open the printed local URL for 3D, then `/2d/` or `/studio/` for the other views. `npm run dev` starts only the 2D development app; `npm run check` checks an existing build.
+Open the printed local URL for 3D, then `/2d/` or `/studio/` for the other views. `npm run dev` also opens the 3D homepage; `/2d/` is the flat portfolio with hot reload. `npm run check` checks an existing build.
 
 **迁移合并前 / Before the migration is merged:**
 

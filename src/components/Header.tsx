@@ -11,6 +11,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
   const lastScrollY = useRef(0);
+  const navRef = useRef<HTMLElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { isSiteOpen, setIsSiteOpen } = useSiteContext();
@@ -19,6 +20,16 @@ const Header: React.FC = () => {
     lastScrollY.current = window.scrollY;
     setHeaderHidden(false);
   }, [location.pathname]);
+
+  // On a phone the links scroll sideways; bring the current page's link into view.
+  useEffect(() => {
+    const nav = navRef.current;
+    const active = nav?.querySelector<HTMLElement>('.nav-link.active');
+    if (!nav || !active) return;
+    const navBox = nav.getBoundingClientRect();
+    const linkBox = active.getBoundingClientRect();
+    nav.scrollLeft += linkBox.left - navBox.left - (navBox.width - linkBox.width) / 2;
+  }, [location.pathname, isSiteOpen]);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -102,13 +113,14 @@ const Header: React.FC = () => {
         </button>
         
         {isSiteOpen && (
-          <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
+          <nav ref={navRef} className={`nav ${isMenuOpen ? 'nav-open' : ''}`} aria-label="Sections">
             <ul className="nav-list">
               {navItems.map((item) => (
                 <li key={item.path} className="nav-item">
                   <Link 
                     to={item.path} 
                     className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                    aria-current={location.pathname === item.path ? 'page' : undefined}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}

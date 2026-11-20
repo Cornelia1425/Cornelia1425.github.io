@@ -86,7 +86,7 @@ const Developer: React.FC = () => {
                 />
               )}
             </div>
-            <div className="developer-label">{project.title}</div>
+            <h2 className="developer-label">{project.title}</h2>
           </a>
         ))}
       </div>

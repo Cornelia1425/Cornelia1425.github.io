@@ -1858,3 +1858,73 @@ h1, h2, h3 {
 .portfolio-view-switch [aria-current=page] { color: #222; }
 .portfolio-view-switch > span[aria-hidden="true"] { display: block; align-self: center; flex: 0 0 1px; width: 1px; height: 11px; background: currentColor; font-size: 0; line-height: 0; }
 @media (max-width: 600px) { .portfolio-view-switch { top: 22px; right: 16px; } }
+
+/* Accessibility pass, November 2026. Kept together at the end so each rule
+   overrides the earlier one it corrects. */
+
+/* The page name for screen readers and outlines; the nav already shows it to sighted visitors. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Project names are headings now; keep them looking like the labels they were. */
+h2.developer-label {
+  margin: 0.55rem 0 0;
+  font-family: inherit;
+  text-transform: none;
+}
+
+/* Keyboard focus was removed with outline: none in several places. Show it again. */
+.App :focus-visible {
+  outline: 2px solid #1a1a1a !important;
+  outline-offset: 3px;
+}
+.matrix-landing :focus-visible {
+  outline-color: #e8ffe8 !important;
+}
+
+/* The current page was #888, lighter than the other links, so it read as disabled. */
+.nav-link:hover,
+.nav-link.active {
+  color: #111;
+}
+.nav-link.active {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+.social-link:hover {
+  color: #111;
+}
+
+/* Field edges need 3:1 against the paper background to be seen. */
+.contact-input,
+.contact-submit {
+  border-color: #808080;
+}
+.contact-input:focus {
+  border-color: #1a1a1a;
+}
+.contact-submit:hover {
+  border-color: #1a1a1a;
+}
+
+/* Phones: a centred row wider than the screen puts its first link off the left
+   edge, where scrolling cannot reach it. Start at the left; centre only when it fits. */
+@media (max-width: 600px) {
+  .nav {
+    justify-content: flex-start;
+  }
+  .nav-list {
+    justify-content: flex-start;
+    margin: 0 auto;
+  }
+}
