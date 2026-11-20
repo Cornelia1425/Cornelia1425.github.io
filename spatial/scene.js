@@ -29,10 +29,10 @@ export function createSpatialCollection({container,projects,language='en',getNav
   const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [], linkTargets = [];
   let essayLink=null;
   const loader = new THREE.TextureLoader();
-  // Trial, off by default: open the homepage with ?video=1 and the Developer cards play
-  // their clips instead of showing the still. Each clip starts loading only after its
-  // still is on screen, so the first view is no slower.
-  const clipNames = !reducedMotion && new URLSearchParams(location.search).has('video') ? {
+  // The Developer cards play short clips instead of showing a still. Each clip starts
+  // loading only after its still is on screen, so the first view is no slower.
+  // Reduced-motion visitors keep the stills; ?video=0 turns the clips off for testing.
+  const clipNames = !reducedMotion && new URLSearchParams(location.search).get('video') !== '0' ? {
     'beyond-the-mountains':'voyage','nuwa-creation':'nuwa','moptop-universal':'moptop','escape-orbit':'escapeorbit',
     'dance-galaxy':'dancetogether','sector77-spaceship-museum':'sector77','my-mind-palace':'mymindpalace',
   } : {};
