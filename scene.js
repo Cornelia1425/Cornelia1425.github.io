@@ -29,6 +29,28 @@ export function createSpatialCollection({container,projects,language='en',getNav
   const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [], linkTargets = [];
   let essayLink=null;
   const loader = new THREE.TextureLoader();
+  // Trial, off by default: open the homepage with ?video=1 and the Developer cards play
+  // their clips instead of showing the still. Each clip starts loading only after its
+  // still is on screen, so the first view is no slower.
+  const clipNames = !reducedMotion && new URLSearchParams(location.search).has('video') ? {
+    'beyond-the-mountains':'voyage','nuwa-creation':'nuwa','moptop-universal':'moptop','escape-orbit':'escapeorbit',
+    'dance-galaxy':'dancetogether','sector77-spaceship-museum':'sector77','my-mind-palace':'mymindpalace',
+  } : {};
+  const clips = [];
+  function attachClip(material,still,name){
+    const video=document.createElement('video');
+    video.muted=true;video.loop=true;video.playsInline=true;video.preload='auto';
+    video.src=`./assets/developer/video/${name}.mp4`;
+    video.addEventListener('canplay',()=>{
+      const clip=new THREE.VideoTexture(video);
+      clip.colorSpace=THREE.SRGBColorSpace;clip.anisotropy=still.anisotropy;
+      const crop=coverWindow(video.videoWidth,video.videoHeight);
+      clip.repeat.set(crop.repeatX,crop.repeatY);clip.offset.set(crop.offsetX,crop.offsetY);
+      video.play().then(()=>{material.map=clip;material.needsUpdate=true;clips.push(video);requestRender();})
+        .catch(()=>clip.dispose()); // Autoplay refused: the still stays.
+    },{once:true});
+    video.load();
+  }
   const imageGeometry = new THREE.PlaneGeometry(CARD.width,CARD.height);
   const borderGeometry = new THREE.EdgesGeometry(new THREE.PlaneGeometry(CARD.width+.025,CARD.height+.025));
   let active=true, renderPending=true, tween=null, layerId='all', hovered=null, hoveredHeading=null;
@@ -206,6 +228,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
         texture.offset.set(crop.offsetX,crop.offsetY);
         material.color.setHex(0xffffff); material.map=texture; material.needsUpdate=true;
         loaded++; onProgress?.({loaded,failed,total}); requestRender();
+        if(clipNames[card.project.id])attachClip(material,texture,clipNames[card.project.id]);
       },undefined,()=>{failed++;onProgress?.({loaded,failed,total});requestRender();});
       texture.colorSpace=THREE.SRGBColorSpace;
       texture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
@@ -404,7 +427,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     if(tween)controls.autoRotate=false;
     controls.update(delta);
     controls.autoRotate=autoRotate;
-    if(!renderPending&&!tween&&!controls.autoRotate)return;
+    if(!renderPending&&!tween&&!controls.autoRotate&&!clips.some(video=>!video.paused))return;
     updateRoom();renderer.render(scene,camera);renderPending=false;
     if(now-lastAxis>50){
       lastAxis=now;
