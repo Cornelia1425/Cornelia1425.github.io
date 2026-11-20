@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Raw screen recordings for the Developer thumbnails. Only the compressed clips in
+# public/images/8_developer/video/ are published.
+video-originals/
