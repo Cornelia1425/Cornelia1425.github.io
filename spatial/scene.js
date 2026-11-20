@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { CARD, LAYER_HEADING, ROOM_GRID, archiveViewport, buildLayout, coverWindow, fitView, headingBounds, roomBounds } from './layout.js';
 
-export function createSpatialCollection({container,projects,language='en',getNavigationRight,onOpen,onHover,onLayerChange,onOrbitChange,onProgress,onUnavailable,onCamera}) {
+export function createSpatialCollection({container,projects,getNavigationRight,onOpen,onHover,onLayerChange,onOrbitChange,onProgress,onUnavailable,onCamera}) {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer = new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});
   renderer.setClearColor(0x000000,1);
@@ -26,8 +26,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
   controls.autoRotateSpeed = -.18;
 
   const layers = buildLayout(projects,container.clientWidth<700);
-  const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [], linkTargets = [];
-  let essayLink=null;
+  const groups = new Map(), cards = [], pickTargets = [], headings = [], headingTargets = [];
   const loader = new THREE.TextureLoader();
   // The Developer cards play short clips instead of showing a still. Each clip starts
   // loading only after its still is on screen, so the first view is no slower.
@@ -158,7 +157,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
       let pixels=Math.round(fontSize*canvas.width/width);
       const font=()=>`600 ${pixels}px Arial, Helvetica, sans-serif`;
       context.font=font();
-      // Measure either language in the actual canvas font without stretching.
+      // Measure the title in the actual canvas font without stretching.
       const measured=context.measureText(value).width;
       if(measured>canvas.width-8){pixels=Math.floor(pixels*(canvas.width-8)/measured);context.font=font();}
       context.fillStyle='#f2f2f2';context.textAlign='left';context.textBaseline='middle';
@@ -242,7 +241,7 @@ export function createSpatialCollection({container,projects,language='en',getNav
     ]),new THREE.LineBasicMaterial({color:0x626262,transparent:true,opacity:.22}));
     group.add(frame);
     const titleBounds=headingBounds(layer);
-    const {mesh:heading,glow,inkWidth,update,hitTest}=layerHeading(language==='zh'?layer.titleZh:layer.title);
+    const {mesh:heading,glow,inkWidth,update,hitTest}=layerHeading(layer.title);
     // Stop just after the final visible letter, using the actual rendered font.
     const topRight=titleBounds.left+inkWidth+.035;
     const topStart=left-layerEdgeThickness/2;
@@ -255,41 +254,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
     heading.position.set((titleBounds.left+titleBounds.right)/2,(titleBounds.bottom+titleBounds.top)/2,.01);
     heading.userData.layerId=layer.id;
     group.add(heading);
-    if(layer.id==='digital'){
-      const essayWidth=11.2, essayHeight=.36;
-      const essayCanvas=document.createElement('canvas');
-      essayCanvas.width=2048;essayCanvas.height=Math.max(64,Math.round(essayCanvas.width*essayHeight/essayWidth));
-      const essayContext=essayCanvas.getContext('2d');
-      const essayTexture=new THREE.CanvasTexture(essayCanvas);essayTexture.colorSpace=THREE.SRGBColorSpace;
-      essayTexture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
-      const essay=new THREE.Mesh(new THREE.PlaneGeometry(essayWidth,essayHeight),new THREE.MeshBasicMaterial({
-        map:essayTexture,transparent:true,depthWrite:false,side:THREE.DoubleSide
-      }));
-      essay.userData.url='https://medium.com/@articNFT/the-axiebitat-gallery-is-officially-open-dea729146a5c';
-      essay.renderOrder=3;
-      function updateEssay(value){
-        essayContext.clearRect(0,0,essayCanvas.width,essayCanvas.height);
-        let pixels=Math.round(essayCanvas.height*.62);
-        const font=()=>`500 ${pixels}px Arial, Helvetica, sans-serif`;
-        essayContext.font=font();
-        const measured=essayContext.measureText(value).width;
-        if(measured>essayCanvas.width-8){pixels=Math.floor(pixels*(essayCanvas.width-8)/measured);essayContext.font=font();}
-        essayContext.fillStyle='#d2d2d2';essayContext.textAlign='left';essayContext.textBaseline='middle';
-        essayContext.fillText(value,0,essayCanvas.height*.46);
-        const ink=Math.min(essayContext.measureText(value).width,essayCanvas.width-4);
-        essayContext.strokeStyle='#d2d2d2';essayContext.lineWidth=Math.max(2,pixels*.045);
-        essayContext.beginPath();essayContext.moveTo(0,essayCanvas.height*.78);essayContext.lineTo(ink,essayCanvas.height*.78);essayContext.stroke();
-        essayTexture.needsUpdate=true;
-        essay.userData.inkWidth=ink*essayWidth/essayCanvas.width;
-      }
-      essay.userData.update=updateEssay;
-      updateEssay(language==='zh'?'Axiebitat 画廊正式开放 ↗':'The Axiebitat Gallery is officially open ↗');
-      essay.position.set(titleBounds.left+essayWidth/2,titleBounds.top+essayHeight/2+.05,.03);
-      essay.userData.hit=uv=>uv.x<=essay.userData.inkWidth/essayWidth+.015;
-      group.add(essay);
-      essayLink=essay;
-      linkTargets.push(essay);
-    }
     headings.push({layer,mesh:heading,glow,inkWidth,update,hitTest,topEdge,topStart,titleLeft:titleBounds.left});
     headingTargets.push(heading);
     const points=[];
@@ -346,11 +310,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
     
     const visibleCards=pickTargets.filter(plane=>groups.get(plane.userData.layerId).visible);
     const visibleHeadings=headingTargets.filter(heading=>groups.get(heading.userData.layerId).visible);
-    const linkHits=raycaster.intersectObjects(linkTargets.filter(link=>groups.get('digital').visible),false);
-    for(const intersection of linkHits){
-      if(!intersection.uv||intersection.object.userData.hit?.(intersection.uv)===false)continue;
-      return {type:'link',item:intersection.object.userData};
-    }
     const intersections=raycaster.intersectObjects([...visibleCards,...visibleHeadings],false);
     for(const intersection of intersections){
       const heading=headings.find(item=>item.mesh===intersection.object);
@@ -389,9 +348,14 @@ export function createSpatialCollection({container,projects,language='en',getNav
     renderer.domElement.style.cursor='var(--cursor-scene)';
     if(shouldOpen){
       const target=hit(event);
-      if(target?.type==='link')window.open(target.item.url,'_blank','noopener,noreferrer');
-      else if(target?.type==='card')onOpen(target.item.card.project.id,target.item.card.imageIndex);
-      else if(target?.type==='layer')setLayer(target.item.layer.id);
+      if(target?.type==='card')onOpen(target.item.card.project.id,target.item.card.imageIndex);
+      else if(target?.type==='layer'){
+        // First click on a title opens that layer. A second click, once it is open,
+        // follows the title's own link (only Axie Gallery has one).
+        const layer=target.item.layer;
+        if(layer.url&&layerId===layer.id)window.open(layer.url,'_blank','noopener,noreferrer');
+        else setLayer(layer.id);
+      }
     }
   });
   renderer.domElement.addEventListener('pointercancel',()=>{pointerDown=null;pointerCount=0;dragged=false;clearHover();});
@@ -444,20 +408,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
   
   return {
     setLayer,
-    setLanguage(value){
-      const next=value==='zh'?'zh':'en';
-      if(next===language)return;
-      language=next;
-      if(essayLink)essayLink.userData.update(language==='zh'?'Axiebitat 画廊正式开放 ↗':'The Axiebitat Gallery is officially open ↗');
-      for(const item of headings){
-        const inkWidth=item.update(language==='zh'?item.layer.titleZh:item.layer.title);
-        item.inkWidth=inkWidth;
-        const end=item.titleLeft+inkWidth+.035;
-        item.topEdge.scale.x=end-item.topStart;
-        item.topEdge.position.x=(item.topStart+end)/2;
-      }
-      clearHover();requestRender();
-    },
     reset(){setLayer('all');},
     front(){stopOrbit();move(fittedView(layerId,true));},
     setColorMode,

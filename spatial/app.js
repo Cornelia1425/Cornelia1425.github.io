@@ -1,9 +1,6 @@
 import { LAYERS } from './layout.js';
 const $=selector=>document.querySelector(selector);
 const $$=selector=>[...document.querySelectorAll(selector)];
-let language='en';
-try{language=localStorage.getItem('yiran-language')==='zh'?'zh':'en';}catch{}
-const t=(en,zh)=>language==='zh'?zh:en;
 let projects=[],spatial=null,activeProject=null,plate=0,orbit=!matchMedia('(prefers-reduced-motion: reduce)').matches,colorMode=true,selectedLayer='all',lastProjectFocus=null;
 try{colorMode=localStorage.getItem('yiran-color-mode')!=='off';}catch{}
 document.documentElement.dataset.colorMode=colorMode?'on':'off';
@@ -18,33 +15,28 @@ function updateLayer(id){
   $$('[data-link]').forEach(link=>link.classList.toggle('active',id==='all'||link.dataset.link.split(' ').includes(id)));
   $('.layer-nav').dataset.selected=id;
   const layer=LAYERS.find(layer=>layer.id===id);
-  $('#view-label').textContent=layer?t(layer.title.toUpperCase(),layer.titleZh):t('ALL LAYERS','全部层');
+  $('#view-label').textContent=layer?layer.title.toUpperCase():'ALL LAYERS';
 }
 function updateOrbit(value){
   orbit=value;$('#auto-orbit').ariaPressed=String(value);
-  $('#orbit-label').textContent=value?t('Pause orbit','暂停旋转'):t('Auto orbit','自动旋转');
+  $('#orbit-label').textContent=value?'Pause orbit':'Auto orbit';
   $('#auto-orbit').ariaLabel=$('#orbit-label').textContent;
 }
 function updateColorMode(value){
   colorMode=Boolean(value);document.documentElement.dataset.colorMode=colorMode?'on':'off';
   $('#color-mode').ariaPressed=String(colorMode);
-  $('#color-mode').ariaLabel=t(`Color Mode ${colorMode?'On':'Off'}`,`色彩模式${colorMode?'开启':'关闭'}`);
+  $('#color-mode').ariaLabel=`Color Mode ${colorMode?'On':'Off'}`;
   $('#color-mode-state').textContent=colorMode?'ON':'OFF';
   spatial?.setColorMode(colorMode);
 }
 function updateCount(){
   const visible=$$('.project-card').filter(card=>!card.hidden);
   const count=visible.reduce((n,card)=>n+(projects.find(project=>project.id===card.dataset.id)?.images.length||0),0);
-  $('#gallery-count').textContent=t(`${String(visible.length).padStart(2,'0')} PROJECTS / ${count} IMAGES`,`${visible.length} 个项目 / ${count} 张作品图`);
+  $('#gallery-count').textContent=`${String(visible.length).padStart(2,'0')} PROJECTS / ${count} IMAGES`;
 }
 function translate(){
-  document.documentElement.lang=language==='zh'?'zh-Hans':'en';
-  document.title=t('Yiran Shu — 3D Portfolio','Yiran Shu — 三维作品集');
-  $$('[data-en][data-zh]').forEach(element=>element.textContent=element.dataset[language]);
-  $$('[data-label-en][data-label-zh]').forEach(element=>element.ariaLabel=element.dataset[language==='zh'?'labelZh':'labelEn']);
-  $$('[data-language]').forEach(button=>button.ariaPressed=String(button.dataset.language===language));
-  $('#load-label').textContent=t('Loading images','正在载入图片');
-  spatial?.setLanguage(language);
+  $$('[data-en]').forEach(element=>element.textContent=element.dataset.en);
+  $$('[data-label-en]').forEach(element=>element.ariaLabel=element.dataset.labelEn);
   updateLayer(selectedLayer);updateOrbit(orbit);updateColorMode(colorMode);updateCount();
   if(activeProject)fillProjectInfo();
 }
@@ -78,28 +70,28 @@ function updatePlate(updateHash=true){
   if(!activeProject)return;
   const image=activeProject.images[plate];
   $('#dialog-image').src=image.image;
-  $('#dialog-image').alt=`${activeProject.title} — ${t('image','作品图')} ${plate+1}`;
+  $('#dialog-image').alt=`${activeProject.title} — image ${plate+1}`;
   $('#plate-counter').textContent=`${String(plate+1).padStart(2,'0')} / ${String(activeProject.images.length).padStart(2,'0')}`;
   $('#plate-prev').disabled=activeProject.images.length<2;
   $('#plate-next').disabled=activeProject.images.length<2;
   $$('#plate-thumbnails button').forEach((button,i)=>{
     button.classList.toggle('active',i===plate);button.ariaPressed=String(i===plate);
-    button.ariaLabel=t(`View ${activeProject.title}, image ${i+1}`,`查看 ${activeProject.title} 第 ${i+1} 张作品图`);
+    button.ariaLabel=`View ${activeProject.title}, image ${i+1}`;
   });
   if(imageDialog.open){$('#full-image').src=image.image;$('#full-image').alt=$('#dialog-image').alt;}
   if(updateHash)writeProjectHash();
 }
 function fillProjectInfo(){
   const project=activeProject,collection=imageProjects(),index=collection.indexOf(project);
-  $('#dialog-index').textContent=`${t('PROJECT','项目')} ${String(index+1).padStart(2,'0')} / ${String(collection.length).padStart(2,'0')}`;
+  $('#dialog-index').textContent=`PROJECT ${String(index+1).padStart(2,'0')} / ${String(collection.length).padStart(2,'0')}`;
   $('#dialog-title').textContent=project.title;
-  $('#dialog-category').textContent=t(project.categoryLabel,project.categoryLabelZh);
+  $('#dialog-category').textContent=project.categoryLabel;
   const essay=$('#axie-essay');
   essay.hidden=project.id!=='axie-gallery';
-  essay.textContent=t('The Axiebitat Gallery is officially open ↗','Axiebitat 画廊正式开放 ↗');
-  $('#dialog-subtitle').textContent=t(project.subtitle,project.subtitleZh);
-  $('#dialog-description').textContent=t(project.description,project.descriptionZh);
-  $('#dialog-plates').textContent=t(`${project.images.length} DRAWINGS & IMAGES`,`${project.images.length} 张图纸与作品图`);
+  essay.textContent='The Axiebitat Gallery is officially open ↗';
+  $('#dialog-subtitle').textContent=project.subtitle;
+  $('#dialog-description').textContent=project.description;
+  $('#dialog-plates').textContent=`${project.images.length} DRAWINGS & IMAGES`;
   $('#original-project').href=project.category==='architecture'?'./2d/#/architecture':project.category==='objects'?'./2d/#/digital-fabrication':'./2d/#/axie-gallery';
   $('#next-project-title').textContent=collection[(index+1)%collection.length].title;
   updatePlate(false);
@@ -193,11 +185,6 @@ $('#scene').addEventListener('keydown',event=>{
   else if(key==='-'){event.preventDefault();spatial?.zoom(-1);}
   else if(['1','2','3','4'].includes(key)){event.preventDefault();spatial?.setLayer(LAYERS[Number(key)-1].id);}
 });
-$$('[data-language]').forEach(button=>button.addEventListener('click',()=>{
-  language=button.dataset.language;
-  try{localStorage.setItem('yiran-language',language);}catch{}
-  translate();
-}));
 function readHash(){
   const match=location.hash.match(/^#work\/([a-z0-9-]+)(?:\/(\d+))?$/);
   if(match)openProject(match[1],match[2]?Number(match[2])-1:0,false);
@@ -209,7 +196,7 @@ function onHover(item){
   const tooltip=$('#scene-tooltip');tooltip.hidden=!item;
   if(!item)return;
   $('#hover-title').textContent=item.project.title;
-  const description=t(item.project.description,item.project.descriptionZh);
+  const description=item.project.description;
   $('#hover-description').textContent=description||'';
   $('#hover-description').hidden=!description;
   tooltip.style.left=`${Math.max(10,Math.min(item.x+18,innerWidth-tooltip.offsetWidth-14))}px`;
@@ -228,7 +215,7 @@ async function boot(){
     try{
       const {createSpatialCollection}=await import('./scene.js');
       spatial=createSpatialCollection({
-        container:$('#scene'),projects,language,onOpen:activateProject,onHover,onLayerChange:updateLayer,onOrbitChange:updateOrbit,onUnavailable:unavailable,
+        container:$('#scene'),projects,onOpen:activateProject,onHover,onLayerChange:updateLayer,onOrbitChange:updateOrbit,onUnavailable:unavailable,
         getNavigationRight:()=>$('.layer-nav').getBoundingClientRect().right,
         onProgress({loaded,failed,total}){
           $('#load-count').textContent=`${String(loaded+failed).padStart(2,'0')} / ${total}`;
