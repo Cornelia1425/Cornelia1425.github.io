@@ -439,12 +439,12 @@
     "images": [
       {
         "project": "beyond-the-mountains",
-        "name": "13_beyondthemountains.png",
+        "name": "13_voyage.png",
         "image": "assets/developer/13_beyondthemountains.png",
         "thumb": "assets/developer/13_beyondthemountains.png",
         "width": 1440,
         "height": 900,
-        "sourceUrl": "https://www.yiranshu.com/images/8_developer/13_beyondthemountains.png"
+        "sourceUrl": "https://www.yiranshu.com/images/8_developer/13_voyage.png"
       }
     ]
   },
