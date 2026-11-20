@@ -1891,15 +1891,11 @@ h2.developer-label {
   outline-color: #e8ffe8 !important;
 }
 
-/* The current page was #888, lighter than the other links, so it read as disabled. */
+/* The current page was #888, lighter than the other links, so it read as disabled.
+   It is marked by the darker colour alone; no underline, by Yiran's decision. */
 .nav-link:hover,
 .nav-link.active {
   color: #111;
-}
-.nav-link.active {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
 }
 .social-link:hover {
   color: #111;
