@@ -5,10 +5,10 @@ export const ROOM_GRID = Object.freeze({step:CARD.width+CARD.gapX, opacity:.325,
 export const LAYER_HEADING = Object.freeze({width:14.5, height:1.9, fontSize:1.4, gap:.35, gridColumn:5});
 const VIEW_FIT = .78;
 export const LAYERS = Object.freeze([
-  {id:'digital', title:'Axie Gallery', titleZh:'Axie 画廊', z:0, category:'digital'},
-  {id:'architecture', title:'Architecture', sourceTitle:'Architectural Design', titleZh:'建筑设计', z:-5, category:'architecture'},
-  {id:'fabrication', title:'Digital Fabrication', titleZh:'数字制造', z:-10, category:'objects'},
-  {id:'developer', title:'Developer', titleZh:'开发项目', z:-15, category:'developer'}
+  {id:'digital', title:'Axie Gallery', z:0, category:'digital', url:'https://medium.com/@articNFT/the-axiebitat-gallery-is-officially-open-dea729146a5c'},
+  {id:'architecture', title:'Architecture', sourceTitle:'Architectural Design', z:-5, category:'architecture'},
+  {id:'fabrication', title:'Digital Fabrication', z:-10, category:'objects'},
+  {id:'developer', title:'Developer', z:-15, category:'developer'}
 ]);
 
 // Offset complete collections only along X. Every block shares the same top
