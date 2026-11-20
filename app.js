@@ -1,5 +1,4 @@
 import { LAYERS } from './layout.js';
-import { mountVoiceOrb } from './voice-orb.js?v=orb12';
 const $=selector=>document.querySelector(selector);
 const $$=selector=>[...document.querySelectorAll(selector)];
 let language='en';
@@ -46,7 +45,6 @@ function translate(){
   $$('[data-language]').forEach(button=>button.ariaPressed=String(button.dataset.language===language));
   $('#load-label').textContent=t('Loading images','正在载入图片');
   spatial?.setLanguage(language);
-  document.querySelector('elevenlabs-convai')?.setAttribute('language',language);
   updateLayer(selectedLayer);updateOrbit(orbit);updateColorMode(colorMode);updateCount();
   if(activeProject)fillProjectInfo();
 }
@@ -222,143 +220,8 @@ function unavailable(){
   $('#scene-loading').hidden=true;$('#scene-fallback').hidden=false;
   $$('.scene-actions button,[data-layer]').forEach(button=>button.disabled=true);
 }
-function mountElevenIcon(){
-  const widget=$('#elevenlabs-widget'),icon=$('#eleven-icon');
-  if(!widget||!icon)return;
-  const canvas=icon.querySelector('canvas'),close=$('#eleven-close');
-  icon.style.cursor='grab';
-  mountVoiceOrb(canvas);
-  const keepInside=()=>{
-    if(!icon.style.left)return;
-    const size=icon.offsetWidth||46;
-    const x=Math.min(Math.max(0,parseFloat(icon.style.left)||0),Math.max(0,innerWidth-size));
-    const y=Math.min(Math.max(0,parseFloat(icon.style.top)||0),Math.max(0,innerHeight-size));
-    icon.style.left=`${x}px`;icon.style.top=`${y}px`;
-  };
-  try{
-    const saved=JSON.parse(localStorage.getItem('yiran-eleven-icon')||'null');
-    if(saved&&Number.isFinite(saved.x)&&Number.isFinite(saved.y)){icon.style.left=`${saved.x}px`;icon.style.top=`${saved.y}px`;icon.style.right='auto';icon.style.bottom='auto';keepInside();}
-  }catch{}
-  addEventListener('resize',keepInside);
-  let dragging=false,moved=false,sx=0,sy=0,ox=0,oy=0;
-  const place=(x,y)=>{
-    const size=icon.offsetWidth;
-    const left=Math.min(Math.max(0,x),innerWidth-size),top=Math.min(Math.max(0,y),innerHeight-size);
-    icon.style.left=`${left}px`;icon.style.top=`${top}px`;icon.style.right='auto';icon.style.bottom='auto';
-    return {x:left,y:top};
-  };
-  icon.addEventListener('pointerdown',event=>{
-    if(event.button!=null&&event.button!==0)return;
-    dragging=true;moved=false;sx=event.clientX;sy=event.clientY;
-    const box=icon.getBoundingClientRect();ox=box.left;oy=box.top;
-    try{icon.setPointerCapture(event.pointerId);}catch{}
-    icon.classList.add('is-dragging');icon.style.cursor='grabbing';
-  });
-  icon.addEventListener('pointermove',event=>{
-    if(!dragging)return;
-    const dx=event.clientX-sx,dy=event.clientY-sy;
-    if(Math.hypot(dx,dy)>5)moved=true;
-    place(ox+dx,oy+dy);
-  });
-  icon.addEventListener('pointerup',()=>{
-    if(!dragging)return;
-    dragging=false;icon.classList.remove('is-dragging');icon.style.cursor='grab';
-    if(!moved)return;
-    const box=icon.getBoundingClientRect();
-    try{localStorage.setItem('yiran-eleven-icon',JSON.stringify({x:box.left,y:box.top}));}catch{}
-  });
-  const shadowButton=(pattern,visible=true)=>{
-    const root=widget.shadowRoot;if(!root)return null;
-    return [...root.querySelectorAll('button')].find(button=>{
-      const label=`${button.textContent||''} ${button.getAttribute('aria-label')||''}`;
-      if(!pattern.test(label))return false;
-      if(!visible)return true;
-      const box=button.getBoundingClientRect();
-      return box.width>8&&box.height>8;
-    });
-  };
-  const glass=()=>{
-    const root=widget.shadowRoot;if(!root||root.getElementById('eleven-glass'))return;
-    const style=document.createElement('style');style.id='eleven-glass';
-    style.textContent=':host{--el-base:rgba(8,8,10,.28)!important;--el-base-hover:rgba(255,255,255,.08)!important;--el-base-active:rgba(255,255,255,.12)!important;--el-base-border:rgba(255,255,255,.22)!important;--el-base-subtle:rgba(255,255,255,.7)!important;--el-base-primary:#f6f6f6!important;--el-base-error:#ffb4b4!important;--el-overlay-padding:0px!important}.rounded-compact-sheet,p.whitespace-nowrap{display:none!important}.overlay{background:transparent!important;color:#f4f4f4}.bg-base{background-color:rgba(8,8,10,.34)!important;backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);box-shadow:none!important;border:1px solid rgba(255,255,255,.16);padding-right:34px!important}input,textarea{background:rgba(255,255,255,.08)!important;color:#fff!important}';
-    root.appendChild(style);
-  };
-  const timer=setInterval(()=>{glass();if(widget.shadowRoot?.getElementById('eleven-glass'))clearInterval(timer);},200);
-  setTimeout(()=>clearInterval(timer),8000);
-  const placeClose=()=>{
-    if(!close||close.hidden)return;
-    const box=widget.getBoundingClientRect();
-    close.style.left=`${box.right-32}px`;
-    close.style.top=`${box.top+8}px`;
-  };
-  const shut=()=>{widget.classList.remove('is-open');['left','top','right','bottom'].forEach(edge=>widget.style.removeProperty(edge));if(close)close.hidden=true;};
-  const dismiss=()=>{
-    const cancel=shadowButton(/cancel|取消/i),end=shadowButton(/(^|\s)(end|结束通话|结束)(\s|$)/i);
-    if(cancel)cancel.click();
-    else if(end)end.click();
-    shut();
-  };
-  try{
-    const saved=JSON.parse(localStorage.getItem('yiran-eleven-panel')||'null');
-    if(saved&&Number.isFinite(saved.x)&&Number.isFinite(saved.y)){widget.dataset.placed='1';}
-  }catch{}
-  const reveal=()=>{
-    widget.classList.add('is-open');
-    if(widget.dataset.placed){
-      try{
-        const saved=JSON.parse(localStorage.getItem('yiran-eleven-panel')||'null');
-        widget.style.setProperty('left',`${saved.x}px`,'important');
-        widget.style.setProperty('top',`${saved.y}px`,'important');
-        widget.style.setProperty('right','auto','important');
-        widget.style.setProperty('bottom','auto','important');
-      }catch{}
-    }
-    if(close)close.hidden=false;
-    requestAnimationFrame(placeClose);
-  };
-  let panelDrag=false,panelMoved=false,px=0,py=0,panelX=0,panelY=0;
-  widget.addEventListener('pointerdown',event=>{
-    if(!widget.classList.contains('is-open'))return;
-    if(event.composedPath().some(node=>node.matches?.('button,a,input,textarea')))return;
-    panelDrag=true;panelMoved=false;px=event.clientX;py=event.clientY;
-    const box=widget.getBoundingClientRect();panelX=box.left;panelY=box.top;
-    widget.style.cursor='grabbing';
-    try{widget.setPointerCapture(event.pointerId);}catch{}
-  });
-  widget.addEventListener('pointermove',event=>{
-    if(!panelDrag)return;
-    const dx=event.clientX-px,dy=event.clientY-py;
-    if(Math.hypot(dx,dy)>5)panelMoved=true;
-    const left=Math.min(Math.max(0,panelX+dx),innerWidth-widget.offsetWidth);
-    const top=Math.min(Math.max(0,panelY+dy),innerHeight-widget.offsetHeight);
-    widget.style.setProperty('left',`${left}px`,'important');
-    widget.style.setProperty('top',`${top}px`,'important');
-    widget.style.setProperty('right','auto','important');
-    widget.style.setProperty('bottom','auto','important');
-    placeClose();
-  });
-  widget.addEventListener('pointerup',()=>{
-    if(!panelDrag)return;
-    panelDrag=false;widget.style.cursor='grab';
-    if(!panelMoved)return;
-    widget.dataset.placed='1';
-    const box=widget.getBoundingClientRect();
-    try{localStorage.setItem('yiran-eleven-panel',JSON.stringify({x:box.left,y:box.top}));}catch{}
-  });
-  addEventListener('resize',placeClose);
-  icon.addEventListener('click',event=>{
-    if(moved){moved=false;event.preventDefault();event.stopPropagation();return;}
-    if(widget.classList.contains('is-open')){dismiss();return;}
-    const start=shadowButton(/start a call|开始通话/i,false);if(!start)return;
-    reveal();
-    start.click();
-  });
-  close?.addEventListener('click',dismiss);
-  widget.addEventListener('conversationEnded',shut);
-}
 async function boot(){
   translate();
-  mountElevenIcon();
   try{
     const response=await fetch('./projects.json');if(!response.ok)throw new Error('Project data unavailable');
     projects=await response.json();translate();readHash();
