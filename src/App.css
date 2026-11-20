@@ -1901,18 +1901,6 @@ h2.developer-label {
   color: #111;
 }
 
-/* Field edges need 3:1 against the paper background to be seen. */
-.contact-input,
-.contact-submit {
-  border-color: #808080;
-}
-.contact-input:focus {
-  border-color: #1a1a1a;
-}
-.contact-submit:hover {
-  border-color: #1a1a1a;
-}
-
 /* Phones: a centred row wider than the screen puts its first link off the left
    edge, where scrolling cannot reach it. Start at the left; centre only when it fits. */
 @media (max-width: 600px) {
