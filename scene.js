@@ -320,7 +320,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
     const rect=renderer.domElement.getBoundingClientRect();
     pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);
     raycaster.setFromCamera(pointer,camera);
-    
     const visibleCards=pickTargets.filter(plane=>groups.get(plane.userData.layerId).visible);
     const visibleHeadings=headingTargets.filter(heading=>groups.get(heading.userData.layerId).visible);
     const linkHits=raycaster.intersectObjects(linkTargets.filter(link=>groups.get('digital').visible),false);
@@ -418,7 +417,6 @@ export function createSpatialCollection({container,projects,language='en',getNav
   requestAnimationFrame(frame);
   document.addEventListener('visibilitychange',requestRender);
   renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();active=false;onUnavailable?.();});
-  
   return {
     setLayer,
     setLanguage(value){

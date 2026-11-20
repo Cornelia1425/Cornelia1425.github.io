@@ -54,9 +54,5 @@ html[data-color-mode=off] #scene canvas,html[data-color-mode=off] .index-image i
 .project-essay:not([hidden])+h2{margin-top:8px}
 .about-links{display:flex;flex-wrap:wrap;gap:10px 18px}
 .about-links a{font-size:11px;color:#bbb}
-/* Accessibility pass, November 2026: index metadata was 9px in greys below 4.5:1 on #090909; the 2D link was #747474. */
-.filters{color:#999}
-#gallery-count,.index-caption>span,.project-card p{font-size:11px;color:#999}
-.index-footer{font-size:11px;color:#999}
-.portfolio-view-switch{color:#a8a8a8}
-.portfolio-view-switch a:hover,.portfolio-view-switch a:focus-visible{color:#eee}
+
+#eleven-icon{position:fixed;right:18px;bottom:92px;z-index:8;width:29px;height:29px;padding:0;border:0;border-radius:50%;overflow:hidden;background:transparent;opacity:.8;touch-action:none;outline:none;box-shadow:0 0 0 1px rgba(255,255,255,.2)}#eleven-icon:focus,#eleven-icon:focus-visible{outline:none}#eleven-icon canvas{width:100%;height:100%;display:block}#eleven-close{position:fixed;z-index:9;width:26px;height:26px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font:18px/24px sans-serif}#eleven-close[hidden]{display:none}elevenlabs-convai{position:fixed;left:auto!important;top:auto!important;right:16px;bottom:88px;z-index:6;width:0;height:0;overflow:hidden;opacity:0;pointer-events:none}elevenlabs-convai.is-open{right:16px!important;bottom:152px!important;width:min(268px,calc(100vw - 28px));height:min(300px,calc(100dvh - 180px));overflow:visible;opacity:1;pointer-events:auto}@media(max-width:700px){#eleven-icon{right:14px;bottom:max(84px,calc(env(safe-area-inset-bottom) + 72px));width:26px;height:26px}elevenlabs-convai{right:12px!important;bottom:max(84px,calc(env(safe-area-inset-bottom) + 72px))!important}elevenlabs-convai.is-open{right:12px!important;bottom:calc(max(84px,env(safe-area-inset-bottom) + 72px) + 58px)!important;width:min(250px,calc(100vw - 20px));height:min(270px,calc(100dvh - 180px))}}
